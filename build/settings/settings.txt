@@ -1,0 +1,12 @@
+./source_image/image.jpg
+516 392
+485 620
+485 646
+MS Shell Dlg 2
+99 Bold 0 0 0
+MS Shell Dlg 2
+20 Bold 255 0 255
+MS Shell Dlg 2
+30 Bold 255 0 255
+257
+C:\Users\toruk\OneDrive\Рабочий стол\delete
