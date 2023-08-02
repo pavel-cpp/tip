@@ -16,28 +16,28 @@
 #                                                                      #
 #                                                                      #
 ########################################################################
-#											     #
-#    It is recommended to use Clion to build a proct successfully	     #
-#											     #
-#If the project is going under Linux/Unix/Mac OS:			     #
-# 1. Install Qt5 									     #
-# 2. Remove the line CMAKE_PREFIX_PATH from this file			     #
+#											     					   #
+#    It is recommended to use Clion to build a proct successfully	   #
+#											     					   #
+#If the project is going under Linux/Unix/Mac OS:			     	   #
+# 1. Install Qt5 									     			   #
+# 2. Remove the line CMAKE_PREFIX_PATH from this file			       #
 # 3. Change the data for the build directory (if necessary)            #
 # 4. Open the terminal and go to the directory with the project        #
-# 5. Write cmake. 								     #
-# 6. make										     #
+# 5. Write cmake. 								     				   #
+# 6. make										     				   #
 # 7. Congratulations! The project has been successfully assembled!     #
-#											     #
-#if the project is going under Windows:					     #
-# 1. Install Qt5									     #
+#											     					   #
+#if the project is going under Windows:					     		   #
+# 1. Install Qt5									     			   #
 # 2. Specify the directory with Qt5 in the CMAKE_PREFIX_PATH field,    #
-#    you can see an example below						     #
+#    you can see an example below						     		   #
 # 3. Change the data for the build directory (if necessary)            #
 # 4. Open the terminal and go to the directory with the project        #
-# 5. Write cmake . 								     #
-# 6. make                 							     #
+# 5. Write cmake . 								     				   #
+# 6. make                 							     			   #
 # 7. Congratulations! The project has been successfully assembled!     #
-#											     #
+#											     					   #
 ########################################################################
 
 
