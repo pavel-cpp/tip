@@ -48,5 +48,5 @@ and for **non-commercial** purposes.
 
 [1]: https://vk.com/pavel.cmake
 [2]: https://t.me/pavel_cpp
-[3]: @pavel.cpp
+[3]: https://discordapp.com/users/427479608321900545/
 [4]: https://cybersoft.ru/razrabotka/redaktory/208-qt.html
