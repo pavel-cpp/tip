@@ -44,7 +44,7 @@ and for **non-commercial** purposes.
 
 #### Contacts
 
-[VK][1], [Telegramm][2], [Discord][3]
+[VK][1], [Telegram][2], [Discord][3]
 
 [1]: https://vk.com/pavel.cmake
 [2]: https://t.me/pavel_cpp
