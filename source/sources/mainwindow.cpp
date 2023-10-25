@@ -1,14 +1,10 @@
 #include "../headers/mainwindow.h"
 #include <ui_mainwindow.h>
 
-#ifndef SETTINGS_FILE
-#define SETTINGS_FILE "./settings/settings.txt"
-#endif
+const std::string SETTINGS_FILE "./settings/settings.txt"
 
-#ifndef DATABASE_FILE
-#define DATABASE_FILE "./database/database.db"
-#endif
-//1.686, 1.481
+const std::string DATABASE_FILE "./database/database.db"
+
 static const QSizeF dimensionFactor(1.686 * 1.15, 1.481 * 1.15);
 
 MainWindow::MainWindow(QWidget *parent)

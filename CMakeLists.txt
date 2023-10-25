@@ -16,33 +16,33 @@
 #                                                                      #
 #                                                                      #
 ########################################################################
-#								       #
+#								                                       #
 #    It is recommended to use Clion to build a proct successfully      #
-#	    		     					       #
-#If the project is going under Linux/Unix/Mac OS:		       #
-# 1. Install Qt5 						       #
+#	    		     					                               #
+#If the project is going under Linux/Unix/Mac OS:		               #
+# 1. Install Qt5 						                               #
 # 2. Remove the line CMAKE_PREFIX_PATH from this file	               #
 # 3. Change the data for the build directory (if necessary)            #
 # 4. Open the terminal and go to the directory with the project        #
-# 5. Write cmake.   		     				       #
-# 6. make			     				       #
+# 5. Write cmake.   		     				                       #
+# 6. make			     				                               #
 # 7. Congratulations! The project has been successfully assembled!     #
-#			     					       #
-#if the project is going under Windows:		      		       #
-# 1. Install Qt5			     			       #
-# 2. Specify the directory with Qt5 in the CMAKE_PREFIX_PATH field,    #
-#    you can see an example below	 	     		       #
+#			     					                                   #
+#if the project is going under Windows:		      		               #
+# 1. Install Qt5			     			                           #
+# 2. Specify the directory with Qt5 in the CMAKE_PREFIX_PATH field,     #
+#    you can see an example below	 	     		                   #
 # 3. Change the data for the build directory (if necessary)            #
 # 4. Open the terminal and go to the directory with the project        #
-# 5. Write cmake . 		     				       #
-# 6. make                 			     		       #
+# 5. Write cmake . 		     				                           #
+# 6. make                 			     		                       #
 # 7. Congratulations! The project has been successfully assembled!     #
-#			     					       #
+#			     					                                   #
 ########################################################################
 
 
 cmake_minimum_required(VERSION 3.23)
-project(TIP)
+project(TIP CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -52,18 +52,20 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-set(CMAKE_PREFIX_PATH D:/ProgramFiles/Qt/5.14.2/mingw73_64/lib/cmake/Qt5) # path/to/Qt5
+#set(CMAKE_PREFIX_PATH D:/ProgramFiles/Qt/5.14.2/mingw73_64/lib/cmake/Qt5) # path/to/Qt5
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../build) # path/to/build_directory
 
-find_package(Qt5 COMPONENTS
+find_package(
+        Qt5
+        COMPONENTS
         Core
         Gui
         Widgets
         Sql
         PrintSupport
         REQUIRED
-        )
+)
 
 add_executable(TIP
         WIN32
@@ -85,9 +87,9 @@ add_executable(TIP
         source/headers/records_on_first_start.h
         source/ui/records_on_first_start.ui
         source/sources/progressbar.cpp
-	  source/headers/progressbar.h
-	  source/ui/progressbar.ui
-	  )
+        source/headers/progressbar.h
+        source/ui/progressbar.ui
+        )
 
 target_link_libraries(TIP
         Qt5::Core
