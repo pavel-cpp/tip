@@ -1,11 +1,11 @@
 #include "../headers/mainwindow.h"
 #include <ui_mainwindow.h>
 
-const std::string SETTINGS_FILE "./settings/settings.txt"
+const QString SETTINGS_FILE = "./settings/settings.txt";
 
-const std::string DATABASE_FILE "./database/database.db"
+const QString DATABASE_FILE = "./database/database.db";
 
-static const QSizeF dimensionFactor(1.686 * 1.15, 1.481 * 1.15);
+const QSizeF dimensionFactor(1.686 * 1.15, 1.481 * 1.15);
 
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent), ui(std::make_unique<Ui::MainWindow>()) {
@@ -102,7 +102,7 @@ void MainWindow::init() {
     using std::ifstream;
     using std::string;
     using std::atoi;
-    ifstream file(SETTINGS_FILE);
+    ifstream file(SETTINGS_FILE.toStdString());
     if (!file.is_open()) {
         log->critical("Couldn't open settings file");
         exit(EXIT_FAILURE);
