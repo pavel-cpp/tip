@@ -1,4 +1,4 @@
-#include "../headers/options.h"
+#include "options.h"
 #include <ui_options.h>
 
 const string SETTINGS_FILE "./settings/settings.txt";

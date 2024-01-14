@@ -1,4 +1,4 @@
-#include "../headers/fontchanger.h"
+#include "fontchanger.h"
 #include <ui_fontchanger.h>
 
 FontChanger::FontChanger(QFont *font, QColor *color, QWidget *parent) :

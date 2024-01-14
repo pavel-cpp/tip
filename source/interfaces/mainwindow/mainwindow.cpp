@@ -1,4 +1,4 @@
-#include "../headers/mainwindow.h"
+#include "mainwindow.h"
 #include <ui_mainwindow.h>
 
 const QString SETTINGS_FILE = "./settings/settings.txt";

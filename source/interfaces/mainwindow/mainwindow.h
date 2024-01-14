@@ -15,9 +15,7 @@
 #include <QSqlRecord>
 
 #include "options.h"
-#include "records_ammount.h"
 #include "logger.h"
-#include "records_on_first_start.h"
 #include "progressbar.h"
 
 #include <string>
