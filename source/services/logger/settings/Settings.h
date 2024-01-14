@@ -1,18 +1,32 @@
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#pragma once
+
+#include <array>
+#include <cstddef>
 
 #include <QString>
 #include <QPointF>
 #include <QFont>
 #include <QColor>
 
-struct Settings {
-    QString fileIn;
-    QPointF point[3];
-    QFont font[3];
-    QColor colors[3];
-    unsigned long long startNumber;
-    QString fileOut;
+struct TextSettings
+{
+    QPointF text_position_;
+    QFont font_;
+    QColor color;
 };
 
-#endif // SETTINGS_H
+
+class Settings {
+    public:
+    
+
+
+    private:
+
+    QString input_image_path_;
+    std::array<TextSettings, 3> text_options_;
+    QString output_folder_;
+
+};
+
+

@@ -3,4 +3,4 @@ project(TIP_settings CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_library(${PROJECT_NAME} settings.cpp)
+add_library(${PROJECT_NAME} SHARED settings.cpp)
