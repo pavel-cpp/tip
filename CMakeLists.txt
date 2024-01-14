@@ -52,12 +52,12 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS source/ui/)
 #set(CMAKE_AUTORCC ON)
 #set(CMAKE_AUTOUIC ON)
 
-#set(CMAKE_PREFIX_PATH D:/ProgramFiles/Qt/5.14.2/mingw73_64/lib/cmake/Qt5) # path/to/Qt5
+set(CMAKE_PREFIX_PATH E:/Development/CPP/Libraries) # path/to/Qt5
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../build) # path/to/build_directory
 
 find_package(
-        Qt6
+        Qt5
         COMPONENTS
         Core
         Gui
@@ -92,11 +92,11 @@ add_executable(TIP
         )
 
 target_link_libraries(TIP
-        Qt6::Core
-        Qt6::Gui
-        Qt6::Widgets
-        Qt6::Sql
-        Qt6::PrintSupport
+        Qt5::Core
+        Qt5::Gui
+        Qt5::Widgets
+        Qt5::Sql
+        Qt5::PrintSupport
         )
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
