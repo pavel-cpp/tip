@@ -39,8 +39,6 @@ private:
 
     const std::string settings_file_path_ = "./settings/settings.ini";
 
-
-
 };
 
 

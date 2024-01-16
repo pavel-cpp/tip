@@ -15,12 +15,12 @@ public:
             path + "/log_" +
             std::to_string(QDate::currentDate().day()) + "_" +
             std::to_string(QDate::currentDate().month()) + "_" +
-            std::to_string(QDate::currentDate().year()) + "_" + ".log",
+            std::to_string(QDate::currentDate().year()) + "_" + ".log_",
             std::ios_base::app) {
         QStringList list = QDir((path + "/").c_str()).entryList(QDir::Files);
         QDate date;
         for(auto i : list) {
-            if(!i.contains("log")) continue;
+            if(!i.contains("log_")) continue;
             QStringList parse = i.split('_');
             date.setDate(parse[3].toInt(), parse[2].toInt(), parse[1].toInt());
             if(date.addDays(7) <= QDate::currentDate()) {
@@ -34,23 +34,23 @@ public:
     }
 
     template<class T>
-    void critical(const T &value) {
-        static_cast<std::ofstream &>(*this) << this->time() << " [CRITICAL]: " << value << std::endl;
+    void critical(const T &message) {
+        static_cast<std::ofstream &>(*this) << this->time() << " [CRITICAL]: " << message << std::endl;
     }
 
     template<class T>
-    void info(const T &value) {
-        static_cast<std::ofstream &>(*this) << this->time() << " [INFO]: " << value << std::endl;
+    void info(const T &message) {
+        static_cast<std::ofstream &>(*this) << this->time() << " [INFO]: " << message << std::endl;
     }
 
     template<class T>
-    void warn(const T &value) {
-        static_cast<std::ofstream &>(*this) << this->time() << " [WARN]: " << value << std::endl;
+    void warn(const T &message) {
+        static_cast<std::ofstream &>(*this) << this->time() << " [WARN]: " << message << std::endl;
     }
 
     template<class T>
-    void error(const T &value) {
-        static_cast<std::ofstream &>(*this) << this->time() << " [ERROR]: " << value << std::endl;
+    void error(const T &message) {
+        static_cast<std::ofstream &>(*this) << this->time() << " [ERROR]: " << message << std::endl;
     }
 
     template<class T>

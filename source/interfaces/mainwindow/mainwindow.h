@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QMenu>
 #include <QPainter>
 #include <QImage>
 #include <QClipboard>
@@ -14,14 +15,11 @@
 #include <QSqlTableModel>
 #include <QSqlRecord>
 
-#include "options.h"
-#include "logger.h"
-#include "progressbar.h"
+#include "../../services/settings/settings.h"
+#include "../../services/logger/logger.h"
 
 #include <string>
 #include <array>
-
-//#define GDB
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -71,23 +69,23 @@ private slots:
 
 private:
 
-    std::unique_ptr<Logger> log;
+    Logger log_ = Logger("logs");
 
-    Settings settings;
-    std::unique_ptr<QPainter> painter;
-    std::unique_ptr<QImage> image;
-    QSize current_size, size;
+    QPainter painter_;
+    QImage image_;
+    QSize current_image_size_;
+    QSize default_image_size_;
 
     std::array<QString, 3> items;
 
-    QSqlDatabase db;
-    std::unique_ptr<QSqlQuery> query;
-    std::unique_ptr<QSqlTableModel> model;
+    QSqlDatabase db_;
+    QSqlQuery db_query_;
+    std::unique_ptr<QSqlTableModel> db_model_;
 
-    std::unique_ptr<QMenu> menu;
-    std::unique_ptr<QAction> contextCopy;
+    QMenu context_menu_ = QMenu(this);
+    QAction context_action_copy_ = QAction(tr("Скопировать"), this);
 
-    bool access;
+    bool access_;
 
     std::unique_ptr<Ui::MainWindow> ui;
 

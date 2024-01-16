@@ -66,21 +66,25 @@ function(find_ui_files dir result)
     set(${result} ${ui_files} PARENT_SCOPE)
 endfunction()
 
-set(UI_FILES)
+set(UI_FILES
+        source/services/text-painter/text_painter.cpp
+        source/services/text-painter/text_painter.h)
 find_ui_files(source/ui UI_FILES)
 
 add_executable(
         ${PROJECT_NAME}
         WIN32
         source/main.cpp
-        source/interfaces/fontchanger/fontchanger.cpp
-        source/interfaces/fontchanger/fontchanger.h
+#        source/interfaces/fontchanger/fontchanger.cpp
+#        source/interfaces/fontchanger/fontchanger.h
         source/interfaces/mainwindow/mainwindow.cpp
         source/interfaces/mainwindow/mainwindow.h
-        source/interfaces/options/options.cpp
-        source/interfaces/options/options.h
+#        source/interfaces/options/options.cpp
+#        source/interfaces/options/options.h
         source/services/settings/settings.cpp
         source/services/settings/settings.h
+        source/services/text-painter/text_painter.cpp
+        source/services/text-painter/text_painter.h
         ${UI_FILES}
 )
 
