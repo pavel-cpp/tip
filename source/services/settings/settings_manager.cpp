@@ -1,6 +1,6 @@
 #pragma once
 
-#include "settings.h"
+#include "settings_manager.h"
 #include <fstream>
 #include <stdexcept>
 
@@ -21,7 +21,7 @@ SettingsManager::Settings SettingsManager::GetSettings() {
 }
 
 bool IsSection(string_view text) {
-    return text.find('[') == string_view::npos;
+    return text.find('[') != string_view::npos;
 }
 
 string_view ParseSection(string_view text) {
@@ -37,7 +37,7 @@ bool IsString(string_view text) {
 }
 
 string ParseString(string_view text){
-    return string(text.substr(text.find('\"'), text.rfind('\"')));
+    return string(text.substr(text.find('\"') + 1, text.rfind('\"') - 2));
 }
 
 [[maybe_unused]]  bool ParseBool(string_view text){

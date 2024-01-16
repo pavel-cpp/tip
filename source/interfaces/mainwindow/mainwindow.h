@@ -10,12 +10,15 @@
 #include <QProgressBar>
 #include <QPrinter>
 #include <QPrintDialog>
+
+#include <QSqlDriver>
+#include <QSqlDriverCreator>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlTableModel>
 #include <QSqlRecord>
 
-#include "../../services/settings/settings.h"
+#include "../../services/settings/settings_manager.h"
 #include "../../services/logger/logger.h"
 #include "../../services/text-painter/text_painter.h"
 

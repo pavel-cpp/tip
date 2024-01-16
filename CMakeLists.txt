@@ -47,43 +47,40 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_AUTOUIC_SEARCH_PATHS "source/ui/windows")
 
 set(QT_PATH "E:/Development/CPP/Libraries/Qt/5.14.2/mingw73_64")
-set(CMAKE_PREFIX_PATH "${QT_PATH}/lib/cmake/Qt5")
+set(CMAKE_PREFIX_PATH ${QT_PATH})
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../build) # path/to/build_directory
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ../build)
+
+set(QT_COMPONENTS Core Gui Widgets Sql PrintSupport)
 
 find_package(
         Qt5
         COMPONENTS
-        Core
-        Gui
-        Widgets
-        Sql
-        PrintSupport
+        ${QT_COMPONENTS}
         REQUIRED
 )
 
-function(find_ui_files dir result)
-    file(GLOB_RECURSE ui_files LIST_DIRECTORIES false "${dir}/**/*.ui")
-    set(${result} ${ui_files} PARENT_SCOPE)
+function(find_files dir type result)
+    file(GLOB_RECURSE files LIST_DIRECTORIES false "${dir}/**/*.${type}")
+    set(${result} ${files} PARENT_SCOPE)
 endfunction()
 
-set(UI_FILES
-        source/services/text-painter/text_painter.cpp
-        source/services/text-painter/text_painter.h)
-find_ui_files(source/ui UI_FILES)
+set(UI_DIRECTORY "source/ui/windows")
+find_files(${UI_DIRECTORY} "ui" UI_FILES)
 
 add_executable(
         ${PROJECT_NAME}
-        WIN32
+        #        WIN32
         source/main.cpp
-#        source/interfaces/fontchanger/fontchanger.cpp
-#        source/interfaces/fontchanger/fontchanger.h
+        #        source/interfaces/fontchanger/fontchanger.cpp
+        #        source/interfaces/fontchanger/fontchanger.h
         source/interfaces/mainwindow/mainwindow.cpp
         source/interfaces/mainwindow/mainwindow.h
-#        source/interfaces/options/options.cpp
-#        source/interfaces/options/options.h
-        source/services/settings/settings.cpp
-        source/services/settings/settings.h
+        #        source/interfaces/options/options.cpp
+        #        source/interfaces/options/options.h
+        source/services/settings/settings_manager.cpp
+        source/services/settings/settings_manager.h
         source/services/text-painter/text_painter.cpp
         source/services/text-painter/text_painter.h
         ${UI_FILES}
@@ -100,3 +97,48 @@ target_link_libraries(
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 set_target_properties(${PROJECT_NAME} PROPERTIES AUTOMOC ON AUTORCC ON AUTOUIC ON)
+
+#file(COPY ${CMAKE_SOURCE_DIR}/build_folder_reference/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+
+# Копирование содержимого папки reference в build
+add_custom_command(
+        TARGET ${PROJECT_NAME}  # Укажите вашу цель
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/build_folder_reference/
+        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/bin")
+
+# Qt autoDLL
+if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+    set(DEBUG_SUFFIX)
+    if (MSVC AND CMAKE_BUILD_TYPE MATCHES "Debug")
+        set(DEBUG_SUFFIX "d")
+    endif ()
+    set(QT_INSTALL_PATH "${CMAKE_PREFIX_PATH}")
+    if (NOT EXISTS "${QT_INSTALL_PATH}/bin")
+        set(QT_INSTALL_PATH "${QT_INSTALL_PATH}/..")
+        if (NOT EXISTS "${QT_INSTALL_PATH}/bin")
+            set(QT_INSTALL_PATH "${QT_INSTALL_PATH}/..")
+        endif ()
+    endif ()
+    if (EXISTS "${QT_INSTALL_PATH}/plugins/platforms/qwindows${DEBUG_SUFFIX}.dll")
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E make_directory
+                "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/platforms/")
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy
+                "${QT_INSTALL_PATH}/plugins/platforms/qwindows${DEBUG_SUFFIX}.dll"
+                "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/platforms/")
+    endif ()
+    foreach (QT_LIB ${QT_COMPONENTS})
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy
+                "${QT_INSTALL_PATH}/bin/Qt5${QT_LIB}${DEBUG_SUFFIX}.dll"
+                "$<TARGET_FILE_DIR:${PROJECT_NAME}>")
+    endforeach (QT_LIB)
+endif ()

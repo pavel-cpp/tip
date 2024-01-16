@@ -1,9 +1,11 @@
 #include "mainwindow.h"
 #include <ui_mainwindow.h>
 
+#include <QDebug>
+
 const QString SETTINGS_FILE = "./settings/settings.txt";
 
-const QString DATABASE_FILE = "./database/database.db_";
+const QString DATABASE_FILE = "./database/database.db";
 
 const QSizeF dimensionFactor(1.686 * 1.15, 1.481 * 1.15);
 
@@ -11,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent), ui(std::make_unique<Ui::MainWindow>()) {
     ui->setupUi(this);
 
-    QFile qssFile("./themes/White.qss");
+    QFile qssFile("./themes/white.qss");
     qssFile.open(QFile::ReadOnly);
     QString qss = QLatin1String(qssFile.readAll());
     this->setStyleSheet(qss);
@@ -22,16 +24,20 @@ MainWindow::MainWindow(QWidget *parent)
     
     log_.info("Starting...");
 
-    db_ = QSqlDatabase::addDatabase("QSQLITE");
-    db_.setDatabaseName(DATABASE_FILE);
+    db_ = QSqlDatabase::addDatabase("QMYSQL");
+    db_.setHostName("localhost");
+    db_.setPort(3306);
+    db_.setUserName("root");
+    db_.setPassword("root");
+    db_.setDatabaseName("tip");
     db_.open();
     if (!db_.isOpen()) log_.warn("Database failed");
     db_query_ = QSqlQuery(db_);
-    db_query_.exec("CREATE TABLE Clients(Name TEXT, Phone TEXT, Status TEXT, Number TEXT)");
+//    db_query_.exec("CREATE TABLE Clients(Name TEXT, Phone TEXT, Status TEXT, Number TEXT)");
     log_.info("Database initialized");
 
     db_model_ = std::make_unique<QSqlTableModel>(this, db_);
-    db_model_->setTable("Clients");
+    db_model_->setTable("clients");
     db_model_->select();
 
     log_.info("Database db_model_ initialized");
@@ -45,6 +51,7 @@ MainWindow::MainWindow(QWidget *parent)
     log_.info("Database db_model_ set to table");
 
     settings_manager_.Load();
+
     text_painter_.SetImage(
             QImage(settings_manager_.GetSettings().input_image_path_)
                     );
@@ -52,6 +59,8 @@ MainWindow::MainWindow(QWidget *parent)
     current_image_size_ = default_image_size_ = text_painter_.GetOriginalImage().size();
 
     ui->progressBar->setVisible(false);
+
+    ui->screen->setPixmap(text_painter_.GetResultPixmap());
 
     log_.info("Initializing done!");
 }
