@@ -1,6 +1,6 @@
 ![TIP](icon.png)
 
-# Text Insertion Program
+# TextModel Insertion Program
 
 ---
 

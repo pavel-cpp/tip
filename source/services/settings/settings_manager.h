@@ -8,24 +8,35 @@
 #include <QFont>
 #include <QColor>
 
-struct TextSettings {
-    QPointF text_position_;
-    QFont font_;
-    QColor color;
-};
+#include "ini-parser/inicpp.h"
 
 class SettingsManager {
 private:
 
+    struct TextModel {
+        QPointF text_position;
+        QFont font;
+        QColor color;
+    };
+
+    struct DatabaseModel{
+        QString host;
+        uint16_t port;
+        QString username;
+        QString password;
+        QString name;
+        QString schema;
+    };
+
     struct Settings {
-        QString input_image_path_;
-        std::array<TextSettings, 3> text_options_;
-        QString output_folder_;
+        QString output_folder;
+        std::array<TextModel, 3> text_configs;
+        DatabaseModel database;
     };
 
 public:
 
-    void Load();
+    SettingsManager();
 
     Settings GetSettings();
 
@@ -36,6 +47,7 @@ public:
 private:
 
     Settings settings_;
+    ini::IniFile settings_file_;
 
     const std::string settings_file_path_ = "./settings/settings.ini";
 

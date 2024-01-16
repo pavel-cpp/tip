@@ -3,8 +3,6 @@
 
 #include <QDebug>
 
-const QString SETTINGS_FILE = "./settings/settings.txt";
-
 const QString DATABASE_FILE = "./database/database.db";
 
 const QSizeF dimensionFactor(1.686 * 1.15, 1.481 * 1.15);
@@ -13,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent), ui(std::make_unique<Ui::MainWindow>()) {
     ui->setupUi(this);
 
-    QFile qssFile("./themes/white.qss");
+    QFile qssFile("./themes/dark.qss");
     qssFile.open(QFile::ReadOnly);
     QString qss = QLatin1String(qssFile.readAll());
     this->setStyleSheet(qss);
@@ -24,23 +22,30 @@ MainWindow::MainWindow(QWidget *parent)
     
     log_.info("Starting...");
 
-    db_ = QSqlDatabase::addDatabase("QMYSQL");
-    db_.setHostName("localhost");
-    db_.setPort(3306);
-    db_.setUserName("root");
-    db_.setPassword("root");
-    db_.setDatabaseName("tip");
+    db_ = QSqlDatabase::addDatabase("QPSQL");
+    {
+        auto db_settings = settings_manager_.GetSettings().database;
+        db_.setHostName(db_settings.host);
+        db_.setPort(db_settings.port);
+        db_.setUserName(db_settings.username);
+        db_.setPassword(db_settings.password);
+        db_.setDatabaseName(db_settings.name);
+    }
     db_.open();
-    if (!db_.isOpen()) log_.warn("Database failed");
+    if (!db_.isOpen()) {
+        qDebug() << "DatabaseModel is not opened" << endl;
+    }
     db_query_ = QSqlQuery(db_);
 //    db_query_.exec("CREATE TABLE Clients(Name TEXT, Phone TEXT, Status TEXT, Number TEXT)");
-    log_.info("Database initialized");
+    log_.info("DatabaseModel initialized");
 
     db_model_ = std::make_unique<QSqlTableModel>(this, db_);
-    db_model_->setTable("clients");
+    db_model_->setTable("main.clients");
     db_model_->select();
 
-    log_.info("Database db_model_ initialized");
+    // TODO(Pavel): Доделать сервис для БД ну или как то это вынести в модуль
+
+    log_.info("DatabaseModel db_model_ initialized");
 
     connect(db_model_.get(), SIGNAL(dataChanged(
                                   const QModelIndex &, const QModelIndex &, const QVector<int> &)),
@@ -48,12 +53,11 @@ MainWindow::MainWindow(QWidget *parent)
                                const QModelIndex&)));
 
     ui->tableView->setModel(db_model_.get());
-    log_.info("Database db_model_ set to table");
-
-    settings_manager_.Load();
+    ui->tableView->setColumnHidden(0, true);
+    log_.info("DatabaseModel db_model_ set to table");
 
     text_painter_.SetImage(
-            QImage(settings_manager_.GetSettings().input_image_path_)
+            QImage("./resources/images/icon.png")
                     );
 
     current_image_size_ = default_image_size_ = text_painter_.GetOriginalImage().size();
@@ -91,7 +95,7 @@ void MainWindow::on_settings_triggered() {
 
 void MainWindow::on_save_triggered() {
     text_painter_.GetResultImage().save(
-            settings_manager_.GetSettings().output_folder_
+            settings_manager_.GetSettings().output_folder
             + "image_"
             + items[0]
             + ".jpg"
@@ -189,12 +193,12 @@ void MainWindow::on_textEdit_textChanged() {
 }
 
 void MainWindow::on_show_db_triggered() {
-    log_.info("Database visible: true");
+    log_.info("DatabaseModel visible: true");
     ui->dock_db->setVisible(1);
 }
 
 void MainWindow::on_hide_db_triggered() {
-    log_.info("Database visible: false");
+    log_.info("DatabaseModel visible: false");
     ui->dock_db->setVisible(0);
 }
 

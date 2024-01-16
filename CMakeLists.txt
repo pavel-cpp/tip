@@ -84,6 +84,7 @@ add_executable(
         source/services/text-painter/text_painter.cpp
         source/services/text-painter/text_painter.h
         ${UI_FILES}
+        source/services/settings/ini-parser/inicpp.h
 )
 
 target_link_libraries(
@@ -134,6 +135,15 @@ if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
                 COMMAND ${CMAKE_COMMAND} -E copy
                 "${QT_INSTALL_PATH}/plugins/platforms/qwindows${DEBUG_SUFFIX}.dll"
                 "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/platforms/")
+    endif ()
+    if (EXISTS "${QT_INSTALL_PATH}/plugins/sqldrivers/qsqlpsql${DEBUG_SUFFIX}.dll")
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E make_directory
+                "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/sqldrivers/")
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy
+                "${QT_INSTALL_PATH}/plugins/sqldrivers/qsqlpsql${DEBUG_SUFFIX}.dll"
+                "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/sqldrivers/")
     endif ()
     foreach (QT_LIB ${QT_COMPONENTS})
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
