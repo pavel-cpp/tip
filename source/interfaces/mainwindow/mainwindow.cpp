@@ -44,46 +44,16 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableView->setModel(db_model_.get());
     log_.info("Database db_model_ set to table");
 
-    log_.info("Starting system initialize");
-    this->init();
-    log_.info("System initialized");
-    this->apply();
-    current_image_size_ = default_image_size_ = image_.size();
+    settings_manager_.Load();
+    text_painter_.SetImage(
+            QImage(settings_manager_.GetSettings().input_image_path_)
+                    );
+
+    current_image_size_ = default_image_size_ = text_painter_.GetOriginalImage().size();
 
     ui->progressBar->setVisible(false);
 
-    QSqlRecord record = db_model_->record();
-    record.setValue("Name", "");
-    record.setValue("Phone", "");
-    record.setValue("Status", "");
-    unsigned ammount = 0;
-    if (db_model_->rowCount() <= 1) {
-        Records_on_first_start dialog(&ammount);
-        dialog.exec();
-        ProgressBar progressBar;
-        progressBar.show();
-        progressBar.setMax(ammount);
-        while (db_model_->rowCount() < ammount) {
-            record.setValue("Number", QString::fromStdString(std::to_string(db_model_->rowCount() + 1)));
-            db_model_->insertRecord(-1, record);
-            db_model_->submitAll();
-            progressBar.setValue(db_model_->rowCount());
-            QCoreApplication::processEvents();
-        }
-        progressBar.close();
-    }
-
-#ifndef GDB
-    ui->tableView->setColumnHidden(3, true);
-#endif
     log_.info("Initializing done!");
-}
-
-void MainWindow::apply() {
-    image_ = std::make_unique<QImage>(settings.fileIn);
-    painter_ = std::make_unique<QPainter>(image_.get());
-    ui->screen->setPixmap(QPixmap::fromImage(*image_));
-    log_.info("Image loaded!");
 }
 
 MainWindow::~MainWindow() {
@@ -92,41 +62,41 @@ MainWindow::~MainWindow() {
 
 void MainWindow::on_copy_triggered() {
     QClipboard *clipboard = QGuiApplication::clipboard();
-    clipboard->setImage(*image_, QClipboard::Clipboard);
+    clipboard->setImage(text_painter_.GetResultImage(), QClipboard::Clipboard);
     ui->statusbar->showMessage("Картинка успешно скопирована в буфер обмена!");
     log_.info("Image successfully copied");
 }
 
 void MainWindow::on_screen_customContextMenuRequested(const QPoint &pos) {
-    log_.info("Context menu requested");
-    menu->popup(ui->screen->mapToGlobal(pos));
+    log_.info("Context context_menu_ requested");
+    context_menu_.popup(ui->screen->mapToGlobal(pos));
 }
 
 void MainWindow::on_settings_triggered() {
-    Options window(&settings);
-    window.exec();
-    apply();
+//    Options window(&settings);
+//    window.exec();
+//    apply();
     ui->statusbar->showMessage("Настройки сохранены!");
     log_.info("Settngs saved");
 }
 
 void MainWindow::on_save_triggered() {
-    image_.save(settings.fileOut
-                + "\\editing_image_"
-                + items[0]
-                + ".jpg"
-    );
-    log_.info("Image_"
-               + items[0].toStdString()
-               + " successfully saved!");
-    ui->statusbar->showMessage("Image_"
+    text_painter_.GetResultImage().save(
+            settings_manager_.GetSettings().output_folder_
+            + "image_"
+            + items[0]
+            + ".jpg"
+            );
+//    log_.info("Image_"
+//               + items[0].toStdString()
+//               + " successfully saved!");
+    ui->statusbar->showMessage("image_"
                                + items[0]
                                + " успешно сохранена!");
-    draw();
 }
 
 void MainWindow::on_print_triggered() {
-    log_.info("Print triggered");
+    /*log_.info("Print triggered");
     QPrinter printer(QPrinter::HighResolution);
     printer.setOutputFormat(QPrinter::NativeFormat);
     printer.setPrinterName("EPSON L3210 Series");
@@ -183,7 +153,7 @@ void MainWindow::on_print_triggered() {
         painter.drawPixmap(150, 150, image_.width() * dimensionFactor.width(),
                            image_.height() * dimensionFactor.height(), QPixmap::fromImage(*image_));
     }
-    painter.end();
+    painter.end();*/
 }
 
 void MainWindow::on_tableView_clicked(const QModelIndex &index) {
@@ -191,7 +161,7 @@ void MainWindow::on_tableView_clicked(const QModelIndex &index) {
     items[0] = QString::fromStdString(std::to_string(index.row() + 1));
     items[1] = db_model_->index(index.row(), 0).data().toString();
     items[2] = db_model_->index(index.row(), 1).data().toString();
-    draw();
+//    draw();
 }
 
 void MainWindow::on_textEdit_textChanged() {
@@ -233,18 +203,18 @@ void MainWindow::on_imageScaleUp_triggered() {
     log_.info("Image scaled up");
     current_image_size_.setWidth(current_image_size_.width() + 50);
     current_image_size_.setHeight(current_image_size_.height() + 50);
-    draw();
+//    draw();
 }
 
 void MainWindow::on_imageScaleDown_triggered() {
     log_.info("Image scaled down");
     current_image_size_.setWidth(current_image_size_.width() - 50);
     current_image_size_.setHeight(current_image_size_.height() - 50);
-    draw();
+//    draw();
 }
 
 void MainWindow::on_saveSomeItems_triggered() {
-    log_.info("Save some items triggered!");
+    /*log_.info("Save some items triggered!");
     unsigned amount;
     log_.info("Records amount dialog opened!");
     RecordsAmmount dialog(&amount);
@@ -286,41 +256,41 @@ void MainWindow::on_saveSomeItems_triggered() {
     ui->progressBar->setVisible(false);
     db_model_->submitAll();
     ui->statusbar->showMessage("Запись успешно довалена!");
-    log_.info("Save some items end!");
+    log_.info("Save some items end!");*/
 }
 
 void MainWindow::on_saveSomeImages_triggered() {
-    log_.info("Save some images triggered!");
-    QModelIndexList selectedList = ui->tableView->selectionModel()->selectedRows();
-    if (!selectedList.empty()) {
-        ui->progressBar->setMaximum(selectedList.size());
-        int maximum = selectedList.size();
-        ui->progressBar->setVisible(true);
-        for (int i = 0; i < selectedList.size(); i++) {
-            QCoreApplication::processEvents();
-            ui->progressBar->setValue((i + 1) % maximum);
-
-            items[0] = QString::fromStdString(std::to_string(selectedList[i].row() + 1));
-            items[1] = db_model_->index(selectedList[i].row(), 0).data().toString();
-            items[2] = db_model_->index(selectedList[i].row(), 1).data().toString();
-            draw();
-
-            image_.save(settings.fileOut
-                        + "\\editing_image_"
-                        + items[0]
-                        + ".jpg"
-            );
-            ui->statusbar->showMessage("Image_"
-                                       + items[0]
-                                       + " успешно сохранена!");
-            log_.info("    Image_"
-                       + items[0].toStdString()
-                       + " saved successfully!");
-        }
-    }
-
-    ui->progressBar->setVisible(false);
-    log_.info("Save some images end!");
+//    log_.info("Save some images triggered!");
+//    QModelIndexList selectedList = ui->tableView->selectionModel()->selectedRows();
+//    if (!selectedList.empty()) {
+//        ui->progressBar->setMaximum(selectedList.size());
+//        int maximum = selectedList.size();
+//        ui->progressBar->setVisible(true);
+//        for (int i = 0; i < selectedList.size(); i++) {
+//            QCoreApplication::processEvents();
+//            ui->progressBar->setValue((i + 1) % maximum);
+//
+//            items[0] = QString::fromStdString(std::to_string(selectedList[i].row() + 1));
+//            items[1] = db_model_->index(selectedList[i].row(), 0).data().toString();
+//            items[2] = db_model_->index(selectedList[i].row(), 1).data().toString();
+//            draw();
+//
+//            image_.save(settings.fileOut
+//                        + "\\editing_image_"
+//                        + items[0]
+//                        + ".jpg"
+//            );
+//            ui->statusbar->showMessage("Image_"
+//                                       + items[0]
+//                                       + " успешно сохранена!");
+//            log_.info("    Image_"
+//                       + items[0].toStdString()
+//                       + " saved successfully!");
+//        }
+//    }
+//
+//    ui->progressBar->setVisible(false);
+//    log_.info("Save some images end!");
 }
 
 void MainWindow::tableView_dataChanged(const QModelIndex &Index) {
@@ -331,5 +301,5 @@ void MainWindow::tableView_dataChanged(const QModelIndex &Index) {
         items[i + 1] = db_model_->index(Index.row(), i).data().toString();
         log_.info("    " + items[i].toStdString());
     }
-    draw();
+//    draw();
 }

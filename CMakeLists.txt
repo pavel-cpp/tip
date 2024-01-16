@@ -46,7 +46,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_AUTOUIC_SEARCH_PATHS "source/ui/windows")
 
-set(CMAKE_PREFIX_PATH E:/Development/CPP/Libraries/Qt/5.14.2/mingw73_64/lib/cmake/Qt5) # path/to/Qt5
+set(QT_PATH "E:/Development/CPP/Libraries/Qt/5.14.2/mingw73_64")
+set(CMAKE_PREFIX_PATH "${QT_PATH}/lib/cmake/Qt5")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../build) # path/to/build_directory
 

@@ -26,6 +26,10 @@ QImage TextPainter::GetResultImage() {
     return editing_image_;
 }
 
+QImage TextPainter::GetOriginalImage() {
+    return original_image_;
+}
+
 
 /*
  * TODO(Pavel): Перенести в mainwinow для подготовки изображения, отвечает за центрирование объекта

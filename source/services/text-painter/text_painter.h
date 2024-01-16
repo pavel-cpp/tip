@@ -30,6 +30,8 @@ public:
 
     QImage GetResultImage();
 
+    QImage GetOriginalImage();
+
 private:
     QImage original_image_;
     QImage editing_image_;

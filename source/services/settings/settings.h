@@ -14,7 +14,7 @@ struct TextSettings {
     QColor color;
 };
 
-class SettingsLoader {
+class SettingsManager {
 private:
 
     struct Settings {

@@ -16,7 +16,7 @@ enum class TYPES{
     INT
 };
 
-SettingsLoader::Settings SettingsLoader::GetSettings() {
+SettingsManager::Settings SettingsManager::GetSettings() {
     return settings_;
 }
 
@@ -49,7 +49,7 @@ std::pair<string_view, string_view> ParseKeys(string_view text) {
     return {text.substr(0, eq_pos), text.substr(eq_pos)};
 }
 
-void SettingsLoader::Load() {
+void SettingsManager::Load() {
     ifstream ini_file(settings_file_path_);
     if (!ini_file) {
         throw std::runtime_error("Ini file was deleted");
@@ -73,11 +73,11 @@ void SettingsLoader::Load() {
     // TODO: Load from database
 }
 
-void SettingsLoader::SetSettings(const SettingsLoader::Settings &settings) {
+void SettingsManager::SetSettings(const SettingsManager::Settings &settings) {
     settings_ = settings;
 }
 
-void SettingsLoader::Save() {
+void SettingsManager::Save() {
     fstream file(settings_file_path_, std::ios::in);
     string file_content;
     while(file){

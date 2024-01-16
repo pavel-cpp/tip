@@ -37,7 +37,7 @@
      <height>20</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu">
+   <widget class="QMenu" name="context_menu_">
     <property name="title">
      <string>Файл</string>
     </property>
@@ -83,7 +83,7 @@
     <addaction name="imageScaleUp"/>
     <addaction name="imageScaleDown"/>
    </widget>
-   <addaction name="menu"/>
+   <addaction name="context_menu_"/>
    <addaction name="options"/>
    <addaction name="menu_2"/>
    <addaction name="menu_6"/>

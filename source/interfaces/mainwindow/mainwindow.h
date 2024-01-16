@@ -17,6 +17,7 @@
 
 #include "../../services/settings/settings.h"
 #include "../../services/logger/logger.h"
+#include "../../services/text-painter/text_painter.h"
 
 #include <string>
 #include <array>
@@ -71,8 +72,6 @@ private:
 
     Logger log_ = Logger("logs");
 
-    QPainter painter_;
-    QImage image_;
     QSize current_image_size_;
     QSize default_image_size_;
 
@@ -89,11 +88,8 @@ private:
 
     std::unique_ptr<Ui::MainWindow> ui;
 
-    void init();
-
-    void apply();
-
-    void draw();
+    TextPainter text_painter_;
+    SettingsManager settings_manager_;
 
 };
 
