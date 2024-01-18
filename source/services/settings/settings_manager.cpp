@@ -1,5 +1,3 @@
-#pragma once
-
 #include "settings_manager.h"
 
 #include <fstream>

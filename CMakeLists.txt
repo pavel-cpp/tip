@@ -52,7 +52,10 @@ set(CMAKE_PREFIX_PATH ${QT_PATH})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../build) # path/to/build_directory
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ../build)
 
-set(QT_COMPONENTS Core Gui Widgets Sql PrintSupport)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc")
+
+set(QT_COMPONENTS Core Gui Widgets Sql PrintSupport Network)
 
 find_package(
         Qt5
@@ -85,6 +88,8 @@ add_executable(
         source/services/text-painter/text_painter.h
         ${UI_FILES}
         source/services/settings/ini-parser/inicpp.h
+        source/services/image-downloader/image_downloader.h
+        source/services/image-downloader/image_downloader.cpp
 )
 
 target_link_libraries(
@@ -94,6 +99,7 @@ target_link_libraries(
         Qt5::Widgets
         Qt5::Sql
         Qt5::PrintSupport
+        Qt5::Network
 )
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)

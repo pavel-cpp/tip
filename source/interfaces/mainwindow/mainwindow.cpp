@@ -2,6 +2,7 @@
 #include <ui_mainwindow.h>
 
 #include <QDebug>
+#include "../../services/image-downloader/image_downloader.h"
 
 const QString DATABASE_FILE = "./database/database.db";
 
@@ -36,7 +37,6 @@ MainWindow::MainWindow(QWidget *parent)
         qDebug() << "DatabaseModel is not opened" << endl;
     }
     db_query_ = QSqlQuery(db_);
-//    db_query_.exec("CREATE TABLE Clients(Name TEXT, Phone TEXT, Status TEXT, Number TEXT)");
     log_.info("DatabaseModel initialized");
 
     db_model_ = std::make_unique<QSqlTableModel>(this, db_);
@@ -56,8 +56,16 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableView->setColumnHidden(0, true);
     log_.info("DatabaseModel db_model_ set to table");
 
+    if(!ImageDownloader::FetchImage("./resources/images/image.jpg", {"https://i.imgur.com/Oeh9w9D.png"})){
+        qDebug() << "Downloading failed" << endl;
+    }
+
+    QImage image;
+
+    image.load("./resources/images/image.jpg");
+
     text_painter_.SetImage(
-            QImage("./resources/images/icon.png")
+            image
                     );
 
     current_image_size_ = default_image_size_ = text_painter_.GetOriginalImage().size();
