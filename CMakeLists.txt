@@ -72,6 +72,8 @@ endfunction()
 set(UI_DIRECTORY "source/ui/windows")
 find_files(${UI_DIRECTORY} "ui" UI_FILES)
 
+include_directories(source)
+
 add_executable(
         ${PROJECT_NAME}
         #        WIN32
@@ -90,6 +92,9 @@ add_executable(
         source/services/settings/ini-parser/inicpp.h
         source/services/image-downloader/image_downloader.h
         source/services/image-downloader/image_downloader.cpp
+        source/services/database/database.h
+        source/services/database/models/font_settings_model.h
+        source/services/database/models.h
 )
 
 target_link_libraries(

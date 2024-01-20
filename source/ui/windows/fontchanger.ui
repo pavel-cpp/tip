@@ -6,16 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>769</width>
+    <width>733</width>
     <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>TIP: Font</string>
-  </property>
-  <property name="windowIcon">
-   <iconset>
-    <normaloff>:/YandexDisk/Work/Заказы/(7)/Beta 1.3/icon.png</normaloff>:/YandexDisk/Work/Заказы/(7)/Beta 1.3/icon.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>

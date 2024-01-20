@@ -18,9 +18,9 @@
 #include <QSqlTableModel>
 #include <QSqlRecord>
 
-#include "../../services/settings/settings_manager.h"
-#include "../../services/logger/logger.h"
-#include "../../services/text-painter/text_painter.h"
+#include <services/settings/settings_manager.h>
+#include <services/logger/logger.h>
+#include <services/text-painter/text_painter.h>
 
 #include <string>
 #include <array>
@@ -82,6 +82,7 @@ private:
 
     QSqlDatabase db_;
     QSqlQuery db_query_;
+    QString schema_;
     std::unique_ptr<QSqlTableModel> db_model_;
 
     QMenu context_menu_ = QMenu(this);
