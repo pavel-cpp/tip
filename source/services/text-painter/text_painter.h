@@ -3,18 +3,42 @@
 #include <QImage>
 #include <QPainter>
 
+#include <services/database/models/font_settings_model.h>
+
 class TextPainter {
 public:
 
-    struct TextTemplate {
+    struct ContentTemplate : public Models::FontSettings{
         QString content;
-        QFont font;
-        QColor color;
+
+        ContentTemplate() = default;
+
+        explicit ContentTemplate(const FontSettings& other) : FontSettings(other) {}
+
+        ContentTemplate(const ContentTemplate& other) : FontSettings(other) {
+            content = other.content;
+        }
+
+        ContentTemplate& operator=(const ContentTemplate& other) {
+            ContentTemplate copy(other);
+            swap(copy);
+        }
+        ContentTemplate& operator=(const Models::FontSettings& other) {
+            ContentTemplate copy(other);
+            swap(copy);
+        }
+
+        void swap(ContentTemplate& other){
+            std::swap(position, other.position);
+            std::swap(font, other.font);
+            std::swap(color, other.color);
+            std::swap(content, other.content);
+        }
     };
 
     TextPainter() = default;
 
-    TextPainter(const QImage &image);
+    explicit TextPainter(const QImage &image);
 
     TextPainter(const TextPainter &painter) = delete;
 
@@ -22,7 +46,7 @@ public:
 
     void SetImage(const QImage &image);
 
-    void DrawText(const TextTemplate &text, QPointF position);
+    void DrawText(const ContentTemplate &text);
 
     void Clear();
 

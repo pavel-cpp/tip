@@ -13,14 +13,15 @@ struct Database {
     QSqlQuery query;
     QString schema;
 
-    explicit Database(Models::Database settings) {
-        db = QSqlDatabase::addDatabase("QPSQL");
+    explicit Database(Models::Database settings, const QString &connection_name = "default") {
+        db = QSqlDatabase::addDatabase("QPSQL", connection_name);
         db.setHostName(settings.host);
         db.setPort(settings.port);
         db.setUserName(settings.username);
         db.setPassword(settings.password);
         db.setDatabaseName(settings.name);
         query = QSqlQuery(db);
+        schema = settings.schema;
     }
 
     Database(const Database &database) {
@@ -32,6 +33,13 @@ struct Database {
     Database &operator=(const Database &database) {
         Database tmp(database);
         swap(tmp);
+        return *this;
+    }
+
+    ~Database() {
+        if (db.isOpen()) {
+            db.close();
+        }
     }
 
     void swap(Database &database) {
@@ -40,15 +48,15 @@ struct Database {
         std::swap(schema, database.schema);
     }
 
-    bool connect(){
+    bool connect() {
         return db.open();
     }
 
-    void disconnect(){
+    void disconnect() {
         db.close();
     }
 
-    explicit operator bool() const{
+    explicit operator bool() const {
         return db.isOpen();
     }
 

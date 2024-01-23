@@ -78,7 +78,7 @@ private:
     QSize current_image_size_;
     QSize default_image_size_;
 
-    std::array<QString, 3> items_;
+    std::array<TextPainter::ContentTemplate, 3> items_;
 
     TextPainter text_painter_;
     SettingsManager settings_manager_;

@@ -6,7 +6,7 @@
 
 namespace Models {
     struct FontSettings {
-        QPointF text_position;
+        QPointF position;
         QFont font;
         QColor color;
     };

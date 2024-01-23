@@ -3,11 +3,10 @@
 TextPainter::TextPainter(const QImage &image) : original_image_(image), editing_image_(image),
                                                 painter_(&editing_image_) {}
 
-void TextPainter::DrawText(const TextPainter::TextTemplate &text, QPointF position) {
+void TextPainter::DrawText(const TextPainter::ContentTemplate &text) {
     painter_.setFont(text.font);
-    QFont font;
     painter_.setPen(text.color);
-    painter_.drawText(position, text.content);
+    painter_.drawText(text.position, text.content);
 }
 
 void TextPainter::SetImage(const QImage &image) {
@@ -29,7 +28,6 @@ QImage TextPainter::GetResultImage() {
 QImage TextPainter::GetOriginalImage() {
     return original_image_;
 }
-
 
 /*
  * TODO(Pavel): Перенести в mainwinow для подготовки изображения, отвечает за центрирование объекта

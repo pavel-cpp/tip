@@ -5,5 +5,5 @@
 namespace Models {
     struct Image {
         QUrl url;
-    }
-};
+    };
+}

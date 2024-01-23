@@ -11,17 +11,15 @@ const QString DATABASE_FILE = "./database/database.db";
 const QSizeF dimensionFactor(1.686 * 1.15, 1.481 * 1.15);
 
 MainWindow::MainWindow(QWidget *parent)
-        : QMainWindow(parent), ui_(std::make_unique<Ui::MainWindow>())
-        , settings_manager_()
-        , database_(settings_manager_.GetSettings().database)
-        {
+        : QMainWindow(parent), ui_(std::make_unique<Ui::MainWindow>()), settings_manager_(),
+          database_(settings_manager_.GetSettings().database) {
     ui_->setupUi(this);
-    
+
     this->setStyleSheet(Theme::Load(settings_manager_.GetSettings().theme));
-    
+
     connect(&context_action_copy_, SIGNAL(triggered()), this, SLOT(on_copy_triggered()));
     context_menu_.addAction(&context_action_copy_);
-    
+
     log_.info("Starting...");
 
     if (!database_.connect()) {
@@ -37,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
     log_.info("DatabaseModel table_model_ initialized");
 
     connect(table_model_.get(), SIGNAL(dataChanged(
-                                  const QModelIndex &, const QModelIndex &, const QVector<int> &)),
+                                               const QModelIndex &, const QModelIndex &, const QVector<int> &)),
             this, SLOT(tableView_dataChanged(
                                const QModelIndex&)));
 
@@ -45,7 +43,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui_->tableView->setColumnHidden(0, true);
     log_.info("DatabaseModel table_model_ set to table");
 
-    if(!ImageDownloader::FetchImage("./resources/images/image.jpg", {"https://i.imgur.com/Oeh9w9D.png"})){
+    if (!ImageDownloader::FetchImage(
+            "./resources/images/image.jpg",
+            settings_manager_.GetSettings().image.url
+    )) {
         qDebug() << "Downloading failed" << endl;
     }
 
@@ -55,7 +56,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     text_painter_.SetImage(
             image
-                    );
+    );
+
+    std::copy(settings_manager_.GetSettings().font_settings.begin(), settings_manager_.GetSettings().font_settings.end(), items_.begin());
+
+    for(auto item : items_){
+        text_painter_.DrawText(item);
+        qDebug() << item.color << endl;
+    }
 
     current_image_size_ = default_image_size_ = text_painter_.GetOriginalImage().size();
 
@@ -94,14 +102,14 @@ void MainWindow::on_save_triggered() {
     text_painter_.GetResultImage().save(
             settings_manager_.GetSettings().output_folder
             + "image_"
-            + items_[0]
+            + items_[0].content
             + ".jpg"
-            );
+    );
 //    log_.info("Image_"
 //               + items[0].toStdString()
 //               + " successfully saved!");
     ui_->statusbar->showMessage("image_"
-                                + items_[0]
+                                + items_[0].content
                                 + " успешно сохранена!");
 }
 
@@ -168,9 +176,9 @@ void MainWindow::on_print_triggered() {
 
 void MainWindow::on_tableView_clicked(const QModelIndex &index) {
     log_.info("On table clicked");
-    items_[0] = QString::fromStdString(std::to_string(index.row() + 1));
-    items_[1] = table_model_->index(index.row(), 0).data().toString();
-    items_[2] = table_model_->index(index.row(), 1).data().toString();
+    items_[0].content = QString::fromStdString(std::to_string(index.row() + 1));
+    items_[1].content = table_model_->index(index.row(), 0).data().toString();
+    items_[2].content = table_model_->index(index.row(), 1).data().toString();
 //    draw();
 }
 
@@ -189,12 +197,12 @@ void MainWindow::on_textEdit_textChanged() {
     }
 }
 
-void MainWindow::on_show_database_triggered() {
+void MainWindow::on_show_db_triggered() {
     log_.info("DatabaseModel visible: true");
     ui_->dock_db->setVisible(1);
 }
 
-void MainWindow::on_hide_database_triggered() {
+void MainWindow::on_hide_db_triggered() {
     log_.info("DatabaseModel visible: false");
     ui_->dock_db->setVisible(0);
 }
@@ -306,10 +314,10 @@ void MainWindow::on_saveSomeImages_triggered() {
 void MainWindow::tableView_dataChanged(const QModelIndex &Index) {
     log_.info("Table view data changed!");
     log_.info("Data: ");
-    items_[0] = QString::fromStdString(std::to_string(Index.row() + 1));
+    items_[0].content = QString::fromStdString(std::to_string(Index.row() + 1));
     for (int i = 0; i < 2; ++i) {
-        items_[i + 1] = table_model_->index(Index.row(), i).data().toString();
-        log_.info("    " + items_[i].toStdString());
+        items_[i + 1].content = table_model_->index(Index.row(), i).data().toString();
+        log_.info("    " + items_[i].content.toStdString());
     }
 //    draw();
 }
