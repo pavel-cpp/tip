@@ -33,17 +33,17 @@ class MainWindow : public QMainWindow {
 Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
 
-    ~MainWindow();
+    ~MainWindow() override;
 
 private slots:
 
-    void tableView_dataChanged(const QModelIndex&);
+    void on_database_table_view_data_changed(const QModelIndex& index);
 
-    void on_saveSomeImages_triggered();
+    void on_save_some_images_triggered();
 
-    void on_saveSomeItems_triggered();
+    void on_save_some_items_triggered();
 
     void on_copy_triggered();
 
@@ -51,25 +51,25 @@ private slots:
 
     void on_settings_triggered();
 
-    void on_save_triggered();
+    void on_save_image_triggered();
 
     void on_print_triggered();
 
-    void on_textEdit_textChanged();
+    void on_database_search_textChanged();
 
-    void on_show_db_triggered();
+    void on_show_database_triggered();
 
-    void on_hide_db_triggered();
+    void on_hide_database_triggered();
 
     void on_show_image_triggered();
 
     void on_hide_image_triggered();
 
-    void on_tableView_clicked(const QModelIndex &);
+    void on_database_table_view_clicked(const QModelIndex &);
 
-    void on_imageScaleUp_triggered();
+    void on_image_scale_up_triggered();
 
-    void on_imageScaleDown_triggered();
+    void on_image_scale_down_triggered();
 
 private:
 

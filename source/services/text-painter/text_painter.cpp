@@ -20,6 +20,9 @@ void TextPainter::SetImage(const QImage &image) {
 }
 
 void TextPainter::Clear() {
+    if(painter_.isActive()){
+        painter_.end();
+    }
     editing_image_ = original_image_;
     painter_.begin(&editing_image_);
 }

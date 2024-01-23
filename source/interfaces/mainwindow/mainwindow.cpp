@@ -36,11 +36,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(table_model_.get(), SIGNAL(dataChanged(
                                                const QModelIndex &, const QModelIndex &, const QVector<int> &)),
-            this, SLOT(tableView_dataChanged(
+            this, SLOT(on_database_table_view_data_changed(
                                const QModelIndex&)));
 
-    ui_->tableView->setModel(table_model_.get());
-    ui_->tableView->setColumnHidden(0, true);
+    ui_->database_table_view->setModel(table_model_.get());
+    ui_->database_table_view->setColumnHidden(0, true);
     log_.info("DatabaseModel table_model_ set to table");
 
     if (!ImageDownloader::FetchImage(
@@ -52,7 +52,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     QImage image;
 
-    if(!image.load("./resources/images/image.png")){
+    if (!image.load("./resources/images/image.png")) {
         assert(false);
     }
 
@@ -62,16 +62,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     for (int i = 0; i < 3; ++i) {
         items_[i].options = settings_manager_.GetSettings().font_settings[i];
-        items_[i].content = "Hello, World!";
     }
 
-    for (const auto& item : items_) {
+    for (const auto &item: items_) {
         text_painter_.DrawText(item);
     }
 
     current_image_size_ = default_image_size_ = text_painter_.GetOriginalImage().size();
 
-    ui_->progressBar->setVisible(false);
+    ui_->progress_bar->setVisible(false);
 
     ui_->screen->setPixmap(text_painter_.GetResultPixmap());
 
@@ -102,7 +101,7 @@ void MainWindow::on_settings_triggered() {
     log_.info("Settngs saved");
 }
 
-void MainWindow::on_save_triggered() {
+void MainWindow::on_save_image_triggered() {
     text_painter_.GetResultImage().save(
             settings_manager_.GetSettings().output_folder
             + "image_"
@@ -130,7 +129,7 @@ void MainWindow::on_print_triggered() {
     log_.info("Print started");
     QPainter painter(&printer);
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
-    QModelIndexList selectedList = ui->tableView->selectionModel()->selectedRows();
+    QModelIndexList selectedList = ui->database_table_view_->selectionModel()->selectedRows();
 
     if (!selectedList.empty()) {
         int intervalX = 0, intervalY = -(image_.height() * dimensionFactor.height() - 100);
@@ -178,64 +177,64 @@ void MainWindow::on_print_triggered() {
     painter.end();*/
 }
 
-void MainWindow::on_tableView_clicked(const QModelIndex &index) {
+void MainWindow::on_database_table_view_clicked(const QModelIndex &index) {
     log_.info("On table clicked");
-    items_[0].content = QString::fromStdString(std::to_string(index.row() + 1));
-    items_[1].content = table_model_->index(index.row(), 0).data().toString();
-    items_[2].content = table_model_->index(index.row(), 1).data().toString();
-//    draw();
+    for (int i = 0; i < 3; ++i) {
+        items_[i].content = table_model_->index(index.row(), i).data().toString();
+    }
+    ReDrawImage();
 }
 
-void MainWindow::on_textEdit_textChanged() {
-    log_.info("Searching " + ui_->textEdit->toPlainText().toStdString());
+void MainWindow::on_database_search_textChanged() {
+    log_.info("Searching " + ui_->database_search->toPlainText().toStdString());
     for (int i = 0; i <= table_model_->rowCount(); i++) {
         for (int j = 0; j <= table_model_->columnCount(); j++) {
-            if (table_model_->index(i, j).data().toString().contains(ui_->textEdit->toPlainText())) {
+            if (table_model_->index(i, j).data().toString().contains(ui_->database_search->toPlainText())) {
                 log_.info("Found: " + table_model_->index(i, j).data().toString().toStdString());
-                if (ui_->tableView->isRowHidden(i)) ui_->tableView->showRow(i);
+                if (ui_->database_table_view->isRowHidden(i)) ui_->database_table_view->showRow(i);
                 break;
             } else {
-                if (!ui_->tableView->isRowHidden(i)) ui_->tableView->hideRow(i);
+                if (!ui_->database_table_view->isRowHidden(i)) ui_->database_table_view->hideRow(i);
             }
         }
     }
 }
 
-void MainWindow::on_show_db_triggered() {
+void MainWindow::on_show_database_triggered() {
     log_.info("DatabaseModel visible: true");
-    ui_->dock_db->setVisible(1);
+    ui_->database_dock->setVisible(true);
 }
 
-void MainWindow::on_hide_db_triggered() {
+void MainWindow::on_hide_database_triggered() {
     log_.info("DatabaseModel visible: false");
-    ui_->dock_db->setVisible(0);
+    ui_->database_dock->setVisible(false);
 }
 
 void MainWindow::on_show_image_triggered() {
     log_.info("Image visible: true");
-    ui_->dock_screen->setVisible(1);
+    ui_->database_dock->setVisible(true);
 }
 
 void MainWindow::on_hide_image_triggered() {
     log_.info("Image visible: false");
-    ui_->dock_screen->setVisible(0);
+    ui_->database_dock->setVisible(false);
 }
 
-void MainWindow::on_imageScaleUp_triggered() {
+void MainWindow::on_image_scale_up_triggered() {
     log_.info("Image scaled up");
     current_image_size_.setWidth(current_image_size_.width() + 50);
     current_image_size_.setHeight(current_image_size_.height() + 50);
-//    draw();
+    ReDrawImage();
 }
 
-void MainWindow::on_imageScaleDown_triggered() {
+void MainWindow::on_image_scale_down_triggered() {
     log_.info("Image scaled down");
     current_image_size_.setWidth(current_image_size_.width() - 50);
     current_image_size_.setHeight(current_image_size_.height() - 50);
-//    draw();
+    ReDrawImage();
 }
 
-void MainWindow::on_saveSomeItems_triggered() {
+void MainWindow::on_save_some_items_triggered() {
     /*log_.info("Save some items triggered!");
     unsigned amount;
     log_.info("Records amount dialog opened!");
@@ -281,9 +280,9 @@ void MainWindow::on_saveSomeItems_triggered() {
     log_.info("Save some items end!");*/
 }
 
-void MainWindow::on_saveSomeImages_triggered() {
+void MainWindow::on_save_some_images_triggered() {
 //    log_.info("Save some images triggered!");
-//    QModelIndexList selectedList = ui->tableView->selectionModel()->selectedRows();
+//    QModelIndexList selectedList = ui->database_table_view_->selectionModel()->selectedRows();
 //    if (!selectedList.empty()) {
 //        ui->progressBar->setMaximum(selectedList.size());
 //        int maximum = selectedList.size();
@@ -315,21 +314,17 @@ void MainWindow::on_saveSomeImages_triggered() {
 //    log_.info("Save some images end!");
 }
 
-void MainWindow::tableView_dataChanged(const QModelIndex &Index) {
-    log_.info("Table view data changed!");
-    log_.info("Data: ");
-    items_[0].content = QString::fromStdString(std::to_string(Index.row() + 1));
-    for (int i = 0; i < 2; ++i) {
-        items_[i + 1].content = table_model_->index(Index.row(), i).data().toString();
-        log_.info("    " + items_[i].content.toStdString());
-    }
-//    draw();
-}
-
 void MainWindow::ReDrawImage() {
-    for (const auto& item : items_) {
+    text_painter_.Clear();
+    for (const auto &item: items_) {
         text_painter_.DrawText(item);
     }
+    ui_->screen->setPixmap(text_painter_.GetResultPixmap().scaled(current_image_size_, Qt::KeepAspectRatioByExpanding));
+}
 
-    ui_->screen->setPixmap(text_painter_.GetResultPixmap().scaled(current_image_size_));
+void MainWindow::on_database_table_view_data_changed(const QModelIndex &index) {
+    for (int i = 0; i < 3; ++i) {
+        items_[i].content = table_model_->index(index.row(), i).data().toString();
+    }
+    ReDrawImage();
 }
