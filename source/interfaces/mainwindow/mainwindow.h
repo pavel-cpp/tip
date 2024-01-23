@@ -93,6 +93,8 @@ private:
 
     std::unique_ptr<Ui::MainWindow> ui_;
 
+    void ReDrawImage();
+
 };
 
 #endif // MAINWINDOW_H

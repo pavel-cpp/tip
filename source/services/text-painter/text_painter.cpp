@@ -1,20 +1,27 @@
 #include "text_painter.h"
+#include <QDebug>
 
-TextPainter::TextPainter(const QImage &image) : original_image_(image), editing_image_(image),
-                                                painter_(&editing_image_) {}
+TextPainter::TextPainter(const QImage &image)
+        : original_image_(image),
+          editing_image_(image)
+          {
+              painter_.begin(&editing_image_);
+          }
 
 void TextPainter::DrawText(const TextPainter::ContentTemplate &text) {
-    painter_.setFont(text.font);
-    painter_.setPen(text.color);
-    painter_.drawText(text.position, text.content);
+    painter_.setFont(text.options.font);
+    painter_.setPen(text.options.color);
+    painter_.drawText(text.options.position, text.content);
 }
 
 void TextPainter::SetImage(const QImage &image) {
     editing_image_ = original_image_ = image;
+    painter_.begin(&editing_image_);
 }
 
 void TextPainter::Clear() {
     editing_image_ = original_image_;
+    painter_.begin(&editing_image_);
 }
 
 QPixmap TextPainter::GetResultPixmap() {

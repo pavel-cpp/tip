@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent)
     log_.info("DatabaseModel table_model_ set to table");
 
     if (!ImageDownloader::FetchImage(
-            "./resources/images/image.jpg",
+            "./resources/images/image.png",
             settings_manager_.GetSettings().image.url
     )) {
         qDebug() << "Downloading failed" << endl;
@@ -52,17 +52,21 @@ MainWindow::MainWindow(QWidget *parent)
 
     QImage image;
 
-    image.load("./resources/images/image.jpg");
+    if(!image.load("./resources/images/image.png")){
+        assert(false);
+    }
 
     text_painter_.SetImage(
             image
     );
 
-    std::copy(settings_manager_.GetSettings().font_settings.begin(), settings_manager_.GetSettings().font_settings.end(), items_.begin());
+    for (int i = 0; i < 3; ++i) {
+        items_[i].options = settings_manager_.GetSettings().font_settings[i];
+        items_[i].content = "Hello, World!";
+    }
 
-    for(auto item : items_){
+    for (const auto& item : items_) {
         text_painter_.DrawText(item);
-        qDebug() << item.color << endl;
     }
 
     current_image_size_ = default_image_size_ = text_painter_.GetOriginalImage().size();
@@ -320,4 +324,12 @@ void MainWindow::tableView_dataChanged(const QModelIndex &Index) {
         log_.info("    " + items_[i].content.toStdString());
     }
 //    draw();
+}
+
+void MainWindow::ReDrawImage() {
+    for (const auto& item : items_) {
+        text_painter_.DrawText(item);
+    }
+
+    ui_->screen->setPixmap(text_painter_.GetResultPixmap().scaled(current_image_size_));
 }
