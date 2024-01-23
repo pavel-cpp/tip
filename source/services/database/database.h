@@ -40,6 +40,14 @@ struct Database {
         std::swap(schema, database.schema);
     }
 
+    bool connect(){
+        return db.open();
+    }
+
+    void disconnect(){
+        db.close();
+    }
+
     explicit operator bool() const{
         return db.isOpen();
     }

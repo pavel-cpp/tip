@@ -1,7 +1,5 @@
 #include "settings_manager.h"
 
-#include <fstream>
-#include <stdexcept>
 #include <QSqlRecord>
 
 using std::string;
@@ -10,6 +8,7 @@ SettingsManager::SettingsManager() {
     settings_file_.load(SETTINGS_FILE_PATH_);
 
     settings_.output_folder = QString::fromStdString(settings_file_["general"]["path_to"].as<string>());
+    settings_.theme = QString::fromStdString(settings_file_["general"]["theme"].as<string>());
 
     settings_.database = {
             QString::fromStdString(settings_file_["database"]["host"].as<string>()),
@@ -22,7 +21,7 @@ SettingsManager::SettingsManager() {
 
     Database db(settings_.database);
 
-    if(!db){
+    if(!db.connect()){
         return;
     }
 
@@ -59,6 +58,7 @@ void SettingsManager::SetSettings(const SettingsManager::Settings &settings) {
 
 void SettingsManager::Save() {
     settings_file_["general"]["path_to"] = settings_.output_folder.toStdString();
+    settings_file_["general"]["theme"] = settings_.theme.toStdString();
 
     settings_file_["database"]["host"] = settings_.database.host.toStdString();
     settings_file_["database"]["port"] = settings_.database.port;
@@ -71,7 +71,7 @@ void SettingsManager::Save() {
 
     Database db(settings_.database);
 
-    if(!db){
+    if(!db.connect()){
         return;
     }
 

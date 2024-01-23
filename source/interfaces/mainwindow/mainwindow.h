@@ -78,22 +78,20 @@ private:
     QSize current_image_size_;
     QSize default_image_size_;
 
-    std::array<QString, 3> items;
+    std::array<QString, 3> items_;
 
-    QSqlDatabase db_;
-    QSqlQuery db_query_;
-    QString schema_;
-    std::unique_ptr<QSqlTableModel> db_model_;
+    TextPainter text_painter_;
+    SettingsManager settings_manager_;
+
+    Database database_;
+    std::unique_ptr<QSqlTableModel> table_model_;
 
     QMenu context_menu_ = QMenu(this);
     QAction context_action_copy_ = QAction(tr("Скопировать"), this);
 
     bool access_;
 
-    std::unique_ptr<Ui::MainWindow> ui;
-
-    TextPainter text_painter_;
-    SettingsManager settings_manager_;
+    std::unique_ptr<Ui::MainWindow> ui_;
 
 };
 

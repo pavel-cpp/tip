@@ -19,6 +19,7 @@ public:
 
     struct Settings {
         QString output_folder;
+        QString theme;
         std::array<Models::FontSettings, 3> font_settings;
         Models::Database database;
         Models::Image image;

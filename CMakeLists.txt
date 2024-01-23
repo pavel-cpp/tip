@@ -95,6 +95,7 @@ add_executable(
         source/services/database/database.h
         source/services/database/models/font_settings_model.h
         source/services/database/models.h
+        source/services/theme-loader/theme_loader.h
 )
 
 target_link_libraries(
