@@ -5,6 +5,7 @@
 using std::string;
 
 #include <QDebug>
+#include <QSqlError>
 
 SettingsManager::SettingsManager(const QString& connection_name) : connection_name_(connection_name) {
     settings_file_.load(SETTINGS_FILE_PATH_);
@@ -27,32 +28,35 @@ SettingsManager::SettingsManager(const QString& connection_name) : connection_na
         return;
     }
 
-    QString sql_request = SELECT_FONT_SETTINGS.arg(db.schema);
-    db.query.prepare(sql_request);
-    if(!db.query.exec()){
-        assert(false);
-    }
-    for(auto& item: settings_.font_settings){
-        if(!db.query.next()){
-            break;
+    {
+        QSqlQuery query(db.db);
+        QString sql_request = SELECT_FONT_SETTINGS.arg(db.schema);
+        query.prepare(sql_request);
+        if (!query.exec()) {
+            assert(false);
         }
-        QSqlRecord rec = db.query.record();
-        item.color = QColor(rec.value("color").toString());
-        item.position.setX(rec.value("position_x").toDouble());
-        item.position.setY(rec.value("position_y").toDouble());
-        item.font.setFamily(rec.value("font").toString());
-        item.font.setPixelSize(rec.value("size").toInt());
-        item.font.setBold(rec.value("bold").toBool());
-    }
+        for (auto &item: settings_.font_settings) {
+            if (!query.next()) {
+                break;
+            }
+            QSqlRecord rec = query.record();
+            item.color = QColor(rec.value("color").toString());
+            item.position.setX(rec.value("position_x").toDouble());
+            item.position.setY(rec.value("position_y").toDouble());
+            item.font.setFamily(rec.value("font").toString());
+            item.font.setPixelSize(rec.value("size").toInt());
+            item.font.setBold(rec.value("bold").toBool());
+        }
 
-    sql_request = SELECT_IMAGE.arg(db.schema);
-    db.query.prepare(sql_request);
-    db.query.exec();
-    if(!db.query.next()){
-        assert(false);
+        sql_request = SELECT_IMAGE.arg(db.schema);
+        query.prepare(sql_request);
+        query.exec();
+        if (!query.next()) {
+            assert(false);
+        }
+        QSqlRecord rec = query.record();
+        settings_.image.url = rec.value("url").toUrl();
     }
-    QSqlRecord rec = db.query.record();
-    settings_.image.url = rec.value("url").toUrl();
 }
 
 SettingsManager::Settings SettingsManager::GetSettings() {
@@ -85,24 +89,32 @@ void SettingsManager::Save() {
 
     int index = 1;
 
-    QString sql_request = UPDATE_FONT_SETTINGS.arg(db.schema);
+    {
+        QSqlQuery query(db.db);
+        QString sql_request = UPDATE_FONT_SETTINGS.arg(db.schema);
+        for (const auto &font: settings_.font_settings) {
+            query.prepare(
+                    sql_request
+                            .arg("\'" + font.font.family() + "\'")
+                            .arg("\'" + font.color.name(QColor::HexRgb) + "\'")
+                            .arg(font.position.x())
+                            .arg(font.position.y())
+                            .arg(font.font.pixelSize())
+                            .arg(font.font.bold() ? "true" : "false")
+                            .arg(index++)
+            );
+            if (!query.exec()) {
+                qDebug() << query.lastError();
+                qDebug() << query.executedQuery();
+            }
+        }
 
-    for(auto font: settings_.font_settings){
-        db.query.prepare(sql_request);
-        db.query.bindValue(0, font.font.family());
-        db.query.bindValue(1, font.color);
-        db.query.bindValue(2, font.position.x());
-        db.query.bindValue(3, font.position.y());
-        db.query.bindValue(4, font.font.pixelSize());
-        db.query.bindValue(5, font.font.bold());
-        db.query.bindValue(":id", index++);
-        db.query.exec();
+
+        sql_request = UPDATE_IMAGE.arg(db.schema);
+        query.prepare(sql_request.arg("\'" + settings_.image.url.toString() + "\'"));
+        if (!query.exec()) {
+            qDebug() << query.lastError();
+            qDebug() << query.executedQuery();
+        }
     }
-
-
-    sql_request = UPDATE_IMAGE.arg(db.schema);
-    db.query.prepare(sql_request);
-    db.query.bindValue(":url", settings_.image.url);
-    db.query.exec();
-
 }

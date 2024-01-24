@@ -11,7 +11,8 @@ const QString DATABASE_FILE = "./database/database.db";
 const QSizeF dimensionFactor(1.686 * 1.15, 1.481 * 1.15);
 
 MainWindow::MainWindow(QWidget *parent)
-        : QMainWindow(parent), ui_(std::make_unique<Ui::MainWindow>()), settings_manager_(),
+        : QMainWindow(parent), ui_(std::make_unique<Ui::MainWindow>()),
+          settings_manager_("mainwindow"),
           database_(settings_manager_.GetSettings().database) {
     ui_->setupUi(this);
 
@@ -96,7 +97,11 @@ void MainWindow::on_settings_triggered() {
 //    Options window(&settings);
 //    window.exec();
 //    apply();
-    win.show();
+    TextPositionSelector().exec();
+    for (int i = 0; i < 3; ++i) {
+        items_[i].options.position = settings_manager_.GetSettings().font_settings[i].position;
+    }
+    ReDrawImage();
     ui_->statusbar->showMessage("Настройки сохранены!");
     log_.info("Settngs saved");
 }
@@ -323,7 +328,7 @@ void MainWindow::on_save_some_images_triggered() {
         }
     }
 
-    if(progress_index != selected_rows.size()){
+    if (progress_index != selected_rows.size()) {
         ui_->statusbar->showMessage("Не все изображения были сохранены!");
         return;
     }

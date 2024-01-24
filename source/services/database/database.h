@@ -5,12 +5,12 @@
 #include <QSqlTableModel>
 
 #include <memory>
+#include <QCoreApplication>
 
 #include "models/database_options_model.h"
 
 struct Database {
     QSqlDatabase db;
-    QSqlQuery query;
     QString schema;
 
     explicit Database(Models::Database settings, const QString &connection_name = "default") {
@@ -20,13 +20,11 @@ struct Database {
         db.setUserName(settings.username);
         db.setPassword(settings.password);
         db.setDatabaseName(settings.name);
-        query = QSqlQuery(db);
         schema = settings.schema;
     }
 
     Database(const Database &database) {
         db = database.db;
-        query = QSqlQuery(db);
         schema = database.schema;
     }
 
@@ -44,7 +42,6 @@ struct Database {
 
     void swap(Database &database) {
         std::swap(db, database.db);
-        std::swap(query, database.query);
         std::swap(schema, database.schema);
     }
 

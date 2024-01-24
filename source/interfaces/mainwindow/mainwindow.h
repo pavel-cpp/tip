@@ -96,8 +96,6 @@ private:
 
     std::unique_ptr<Ui::MainWindow> ui_;
 
-    TextPositionSelector win;
-
     void ReDrawImage();
 
     void SetContents(const QModelIndex& index);

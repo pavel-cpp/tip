@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QWidget>
+#include <QDialog>
 
 #include <services/settings/settings_manager.h>
 #include <QGraphicsScene>
@@ -11,11 +11,11 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class TextPositionSelector; }
 QT_END_NAMESPACE
 
-class TextPositionSelector : public QWidget {
+class TextPositionSelector : public QDialog {
 Q_OBJECT
 
 public:
-    explicit TextPositionSelector(QWidget *parent = nullptr);
+    explicit TextPositionSelector(QDialog *parent = nullptr);
 
     ~TextPositionSelector() override;
 

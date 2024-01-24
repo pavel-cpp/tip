@@ -41,10 +41,3 @@ QImage TextPainter::GetResultImage() {
 QImage TextPainter::GetOriginalImage() {
     return original_image_;
 }
-
-/*
- * TODO(Pavel): Перенести в mainwinow для подготовки изображения, отвечает за центрирование объекта
- * buff.setX(settings.point[i].x()
- *                   - (((items[i].length()) * 0.25) * (settings.font[i].pixelSize()))
- *                   );
- */

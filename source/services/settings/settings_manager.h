@@ -42,11 +42,11 @@ private:
 
     const QString SELECT_FONT_SETTINGS = "SELECT * FROM %1.font_settings";
 
-    const QString UPDATE_FONT_SETTINGS = "UPDATE %1.font_settings (font, color, position_x, position_y, size, bold) VALUES(?,?,?,?,?,?) WHERE id = :id";
+    const QString UPDATE_FONT_SETTINGS = "UPDATE %1.font_settings SET font = %2, color = %3, position_x = %4, position_y = %5, size = %6, bold = %7 WHERE id = %8";
 
     const QString SELECT_IMAGE = "SELECT url FROM %1.image WHERE id = 1";
 
-    const QString UPDATE_IMAGE = "UPDATE %1.image SET url = :url WHERE id = 1;";
+    const QString UPDATE_IMAGE = "UPDATE %1.image SET url = %2 WHERE id = 1;";
 
     const std::string SETTINGS_FILE_PATH_ = "./settings/settings.ini";
 
