@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
     table_model_ = std::make_unique<QSqlTableModel>(this, database_.db);
     table_model_->setTable(database_.schema + ".clients");
     table_model_->select();
+    table_model_->sort(0, Qt::SortOrder::AscendingOrder);
 
     log_.info("DatabaseModel table_model_ initialized");
 
@@ -183,10 +184,10 @@ void MainWindow::on_database_table_view_clicked(const QModelIndex &index) {
 }
 
 void MainWindow::on_database_search_textChanged() {
-    log_.info("Searching " + ui_->database_search->toPlainText().toStdString());
+    log_.info("Searching " + ui_->database_search->text().toStdString());
     for (int i = 0; i <= table_model_->rowCount(); i++) {
         for (int j = 0; j <= table_model_->columnCount(); j++) {
-            if (table_model_->index(i, j).data().toString().contains(ui_->database_search->toPlainText())) {
+            if (table_model_->index(i, j).data().toString().contains(ui_->database_search->text())) {
                 log_.info("Found: " + table_model_->index(i, j).data().toString().toStdString());
                 if (ui_->database_table_view->isRowHidden(i)) ui_->database_table_view->showRow(i);
                 break;

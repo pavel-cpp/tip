@@ -103,7 +103,7 @@
    <property name="minimumSize">
     <size>
      <width>560</width>
-     <height>183</height>
+     <height>202</height>
     </size>
    </property>
    <property name="maximumSize">
@@ -130,18 +130,15 @@
    <widget class="QWidget" name="database_dock_widgets_contents">
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
-      <widget class="QTextEdit" name="database_search">
-       <property name="maximumSize">
+      <widget class="QLineEdit" name="database_search">
+       <property name="minimumSize">
         <size>
-         <width>16777215</width>
+         <width>0</width>
          <height>30</height>
         </size>
        </property>
-       <property name="tabChangesFocus">
-        <bool>false</bool>
-       </property>
        <property name="placeholderText">
-        <string>Посик...</string>
+        <string>Поиск...</string>
        </property>
       </widget>
      </item>
@@ -428,9 +425,6 @@
    </property>
   </action>
   <action name="image_scale_up">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
    <property name="text">
     <string>Увеличить картинку</string>
    </property>
