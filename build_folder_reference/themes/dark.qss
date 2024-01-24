@@ -25,7 +25,6 @@ QWidget
 {
 	background-color: qlineargradient(spread:repeat, x1:1, y1:0, x2:1, y2:1, stop:0 rgba(27, 39, 50, 255),stop:1 rgba(47, 53, 74, 255));
 	color: #000000;
-
 }
 
 
@@ -35,7 +34,6 @@ QLabel
 	background-color: transparent;
 	color: #c2c7d5;
 	font-size: 13px;
-
 }
 
 
@@ -49,14 +47,12 @@ QPushButton
 	border: none;
 	border-radius: 3px;
 	padding: 5px;
-
 }
 
 
 QPushButton::pressed
 {
 	background-color: qlineargradient(spread:pad, x1:0, y1:0.511, x2:1, y2:0.511, stop:0 rgba(0, 207, 179, 255),stop:1 rgba(70, 255, 230, 255));
-
 }
 
 
@@ -69,7 +65,6 @@ QCheckBox
 	font-weight: bold;
 	border: none;
 	border-radius: 5px;
-
 }
 
 
@@ -81,7 +76,6 @@ QCheckBox::indicator
     border: 1px solid darkgray;
     width: 12px;
     height: 12px;
-
 }
 
 
@@ -90,21 +84,18 @@ QCheckBox::indicator:checked
     image:url("./ressources/check.png");
 	background-color: qlineargradient(spread:pad, x1:0, y1:0.511, x2:1, y2:0.511, stop:0 rgba(0, 172, 149, 255),stop:0.995192 rgba(54, 197, 177, 255));;
     border: 1px solid #607cff;
-
 }
 
 
 QCheckBox::indicator:unchecked:hover
 {
     border: 1px solid #08b099;
-
 }
 
 
 QCheckBox::disabled
 {
 	color: #656565;
-
 }
 
 
@@ -113,7 +104,6 @@ QCheckBox::indicator:disabled
 	background-color: #656565;
 	color: #656565;
     border: 1px solid #656565;
-
 }
 
 
@@ -126,7 +116,6 @@ QLineEdit
 	border: none;
 	border-radius: 2px;
 	padding: 3px;
-
 }
 
 
@@ -139,7 +128,6 @@ QListView
 	font-weight: bold;
 	border: 1px solid #191919;
 	show-decoration-selected: 0;
-
 }
 
 
@@ -152,14 +140,12 @@ QListView::item
 	border-radius: 0px;
 	padding-left : 10px;
 	height: 42px;
-
 }
 
 QListView::item:selected
 {
 	color: #31cecb;
 	background-color: #454e5e;
-
 }
 
 
@@ -169,7 +155,6 @@ QListView::item:!selected
 	background-color: transparent;
 	border: none;
 	padding-left : 10px;
-
 }
 
 
@@ -179,7 +164,6 @@ QListView::item:!selected:hover
 	background-color: #454e5e;
 	border: none;
 	padding-left : 10px;
-
 }
 
 
@@ -189,7 +173,6 @@ QTreeView
 	background-color: #232939;
 	show-decoration-selected: 0;
 	color: #c2c8d7;
-
 }
 
 
@@ -197,7 +180,6 @@ QTreeView::item
 {
 	border-top-color: transparent;
 	border-bottom-color: transparent;
-
 }
 
 
@@ -205,7 +187,6 @@ QTreeView::item:hover
 {
 	background-color: #606060;
 	color: #fff;
-
 }
 
 
@@ -213,7 +194,6 @@ QTreeView::item:selected
 {
 	background-color: #0ab19a;
 	color: #fff;
-
 }
 
 
@@ -221,7 +201,6 @@ QTreeView::item:selected:active
 {
 	background-color: #0ab19a;
 	color: #fff;
-
 }
 
 
@@ -229,14 +208,12 @@ QTreeView::branch:has-children:!has-siblings:closed,
 QTreeView::branch:closed:has-children:has-siblings
 {
 	image: url(://tree-closed.png);
-
 }
 
 QTreeView::branch:open:has-children:!has-siblings,
 QTreeView::branch:open:has-children:has-siblings
 {
 	image: url(://tree-open.png);
-
 }
 
 
@@ -248,7 +225,6 @@ QTableView
     color: #f0f0f0;
     gridline-color: #232939;
     outline : 0;
-
 }
 
 
@@ -259,7 +235,6 @@ QTableView::disabled
     color: #656565;
     gridline-color: #656565;
     outline : 0;
-
 }
 
 
@@ -267,7 +242,6 @@ QTableView::item:hover
 {
     background-color: #606060;
     color: #f0f0f0;
-
 }
 
 
@@ -275,7 +249,6 @@ QTableView::item:selected
 {
 	background-color: #0ab19a;
     color: #F0F0F0;
-
 }
 
 
@@ -284,7 +257,6 @@ QTableView::item:selected:disabled
     background-color: #1a1b1c;
     border: 2px solid #525251;
     color: #656565;
-
 }
 
 
@@ -292,7 +264,6 @@ QTableCornerButton::section
 {
 	background-color: #343a49;
     color: #fff;
-
 }
 
 
@@ -306,7 +277,6 @@ QHeaderView::section
     margin-top:1px;
 	margin-bottom:1px;
 	padding: 5px;
-
 }
 
 
@@ -314,7 +284,6 @@ QHeaderView::section:disabled
 {
     background-color: #525251;
     color: #656565;
-
 }
 
 
@@ -322,7 +291,6 @@ QHeaderView::section:checked
 {
     color: #fff;
     background-color: #0ab19a;
-
 }
 
 
@@ -330,7 +298,6 @@ QHeaderView::section:checked:disabled
 {
     color: #656565;
     background-color: #525251;
-
 }
 
 
@@ -338,14 +305,12 @@ QHeaderView::section::vertical::first,
 QHeaderView::section::vertical::only-one
 {
     border-top: 1px solid #353635;
-
 }
 
 
 QHeaderView::section::vertical
 {
     border-top: 1px solid #353635;
-
 }
 
 
@@ -353,14 +318,12 @@ QHeaderView::section::horizontal::first,
 QHeaderView::section::horizontal::only-one
 {
     border-left: 1px solid #353635;
-
 }
 
 
 QHeaderView::section::horizontal
 {
     border-left: 1px solid #353635;
-
 }
 
 
@@ -371,7 +334,6 @@ QScrollBar:horizontal
     height: 8px;
     margin: 0px;
     padding: 0px;
-
 }
 
 
@@ -380,7 +342,6 @@ QScrollBar::handle:horizontal
     border: none;
 	min-width: 100px;
     background-color: #56576c;
-
 }
 
 
@@ -391,7 +352,6 @@ QScrollBar::sub-page:horizontal
 {
     width: 0px;
     background-color: transparent;
-
 }
 
 
@@ -400,7 +360,6 @@ QScrollBar:vertical
     background-color: transparent;
     width: 8px;
     margin: 0;
-
 }
 
 
@@ -409,7 +368,6 @@ QScrollBar::handle:vertical
     border: none;
 	min-height: 100px;
     background-color: #56576c;
-
 }
 
 
@@ -420,5 +378,4 @@ QScrollBar::sub-page:vertical
 {
     height: 0px;
     background-color: transparent;
-
 }

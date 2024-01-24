@@ -17,8 +17,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->setStyleSheet(Theme::Load(settings_manager_.GetSettings().theme));
 
-    connect(&context_action_copy_, SIGNAL(triggered()), this, SLOT(on_copy_triggered()));
-    context_menu_.addAction(&context_action_copy_);
+    ui_->screen->addAction(ui_->copy);
+    ui_->screen->addAction(ui_->save_image);
+    ui_->screen->addAction(ui_->image_scale_up);
+    ui_->screen->addAction(ui_->image_scale_down);
 
     log_.info("Starting...");
 
@@ -36,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(table_model_.get(), SIGNAL(dataChanged(
                                                const QModelIndex &, const QModelIndex &, const QVector<int> &)),
-            this, SLOT(on_database_table_view_data_changed(
+            this, SLOT(database_table_view_data_changed(
                                const QModelIndex&)));
 
     ui_->database_table_view->setModel(table_model_.get());
@@ -48,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent)
             settings_manager_.GetSettings().image.url
     )) {
         qDebug() << "Downloading failed" << endl;
+        // TODO(Pavel): Добавить диалоговое окно
     }
 
     QImage image;
@@ -88,11 +91,6 @@ void MainWindow::on_copy_triggered() {
     log_.info("Image successfully copied");
 }
 
-void MainWindow::on_screen_customContextMenuRequested(const QPoint &pos) {
-    log_.info("Context context_menu_ requested");
-    context_menu_.popup(ui_->screen->mapToGlobal(pos));
-}
-
 void MainWindow::on_settings_triggered() {
 //    Options window(&settings);
 //    window.exec();
@@ -102,15 +100,16 @@ void MainWindow::on_settings_triggered() {
 }
 
 void MainWindow::on_save_image_triggered() {
+    if (settings_manager_.GetSettings().output_folder == "default") {
+        ui_->statusbar->showMessage("Изображение не сохранено! Добавьте путь к папке с результатом!");
+        return;
+    }
     text_painter_.GetResultImage().save(
             settings_manager_.GetSettings().output_folder
-            + "image_"
+            + "/image_"
             + items_[0].content
             + ".jpg"
     );
-//    log_.info("Image_"
-//               + items[0].toStdString()
-//               + " successfully saved!");
     ui_->statusbar->showMessage("image_"
                                 + items_[0].content
                                 + " успешно сохранена!");
@@ -179,9 +178,7 @@ void MainWindow::on_print_triggered() {
 
 void MainWindow::on_database_table_view_clicked(const QModelIndex &index) {
     log_.info("On table clicked");
-    for (int i = 0; i < 3; ++i) {
-        items_[i].content = table_model_->index(index.row(), i).data().toString();
-    }
+    SetContents(index);
     ReDrawImage();
 }
 
@@ -281,37 +278,57 @@ void MainWindow::on_save_some_items_triggered() {
 }
 
 void MainWindow::on_save_some_images_triggered() {
-//    log_.info("Save some images triggered!");
-//    QModelIndexList selectedList = ui->database_table_view_->selectionModel()->selectedRows();
-//    if (!selectedList.empty()) {
-//        ui->progressBar->setMaximum(selectedList.size());
-//        int maximum = selectedList.size();
-//        ui->progressBar->setVisible(true);
-//        for (int i = 0; i < selectedList.size(); i++) {
-//            QCoreApplication::processEvents();
-//            ui->progressBar->setValue((i + 1) % maximum);
-//
-//            items[0] = QString::fromStdString(std::to_string(selectedList[i].row() + 1));
-//            items[1] = table_model_->index(selectedList[i].row(), 0).data().toString();
-//            items[2] = table_model_->index(selectedList[i].row(), 1).data().toString();
-//            draw();
-//
-//            image_.save(settings.fileOut
-//                        + "\\editing_image_"
-//                        + items[0]
-//                        + ".jpg"
-//            );
-//            ui->statusbar->showMessage("Image_"
-//                                       + items[0]
-//                                       + " успешно сохранена!");
-//            log_.info("    Image_"
-//                       + items[0].toStdString()
-//                       + " saved successfully!");
-//        }
-//    }
-//
-//    ui->progressBar->setVisible(false);
-//    log_.info("Save some images end!");
+    log_.info("Save some images triggered!");
+    QModelIndexList selected_rows = ui_->database_table_view->selectionModel()->selectedRows();
+    if (selected_rows.empty()) {
+        ui_->statusbar->showMessage("Вы не выделили строки!");
+        return;
+    }
+
+    if (settings_manager_.GetSettings().output_folder == "default") {
+        ui_->statusbar->showMessage("Изображения не сохранены! Добавьте путь к папке с результатом!");
+        return;
+    }
+
+    ui_->progress_bar->setMaximum(selected_rows.size());
+    ui_->progress_bar->setVisible(true);
+
+    int progress_index = 0;
+    for (const auto &selected_row: selected_rows) {
+        ui_->progress_bar->setValue(progress_index);
+        QCoreApplication::processEvents();
+
+        SetContents(selected_row);
+
+        text_painter_.Clear();
+        for (const auto &item: items_) {
+            text_painter_.DrawText(item);
+        }
+
+        if (text_painter_.GetResultImage().save(settings_manager_.GetSettings().output_folder
+                                                + "/image_"
+                                                + items_[0].content
+                                                + ".jpg"
+        )) {
+            ui_->statusbar->showMessage("image_"
+                                        + items_[0].content
+                                        + " успешно сохранена!");
+            ++progress_index;
+        } else {
+            ui_->statusbar->showMessage("image_"
+                                        + items_[0].content
+                                        + " не сохранена!");
+        }
+    }
+
+    if(progress_index != selected_rows.size()){
+        ui_->statusbar->showMessage("Не все изображения были сохранены!");
+        return;
+    }
+
+    ui_->statusbar->showMessage("Все изображения были успешно сохранены!");
+
+    ui_->progress_bar->setVisible(false);
 }
 
 void MainWindow::ReDrawImage() {
@@ -322,9 +339,28 @@ void MainWindow::ReDrawImage() {
     ui_->screen->setPixmap(text_painter_.GetResultPixmap().scaled(current_image_size_, Qt::KeepAspectRatioByExpanding));
 }
 
-void MainWindow::on_database_table_view_data_changed(const QModelIndex &index) {
+void MainWindow::database_table_view_data_changed(const QModelIndex &index) {
+    table_model_->submit();
+    table_model_->select();
+    SetContents(index);
+    ReDrawImage();
+}
+
+void MainWindow::on_refresh_database_action_triggered() {
+    table_model_->select();
+}
+
+void MainWindow::on_insert_single_record_triggered() {
+    table_model_->insertRows(table_model_->rowCount(), 1);
+    table_model_->submit();
+}
+
+void MainWindow::on_insert_same_records_triggered() {
+    // TODO(Pavel): Добавить диалоговое окно
+}
+
+void MainWindow::SetContents(const QModelIndex &index) {
     for (int i = 0; i < 3; ++i) {
         items_[i].content = table_model_->index(index.row(), i).data().toString();
     }
-    ReDrawImage();
 }

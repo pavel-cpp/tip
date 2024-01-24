@@ -79,10 +79,19 @@
     <addaction name="image_scale_up"/>
     <addaction name="image_scale_down"/>
    </widget>
+   <widget class="QMenu" name="database_menu">
+    <property name="title">
+     <string>База данных</string>
+    </property>
+    <addaction name="insert_single_record"/>
+    <addaction name="insert_same_records"/>
+    <addaction name="refresh_database_action"/>
+   </widget>
    <addaction name="file_menu"/>
    <addaction name="settings_menu"/>
    <addaction name="windows_menu"/>
    <addaction name="image_menu"/>
+   <addaction name="database_menu"/>
   </widget>
   <widget class="QDockWidget" name="database_dock">
    <property name="sizePolicy">
@@ -138,6 +147,9 @@
      </item>
      <item>
       <widget class="QTableView" name="database_table_view">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
        <property name="styleSheet">
         <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
        </property>
@@ -246,7 +258,7 @@
             <bool>true</bool>
            </property>
            <property name="contextMenuPolicy">
-            <enum>Qt::CustomContextMenu</enum>
+            <enum>Qt::ActionsContextMenu</enum>
            </property>
            <property name="autoFillBackground">
             <bool>false</bool>
@@ -450,7 +462,51 @@
     <string>Ctrl+Alt+S</string>
    </property>
   </action>
+  <action name="insert_single_record">
+   <property name="text">
+    <string>Добавить запись</string>
+   </property>
+   <property name="toolTip">
+    <string>Добавить</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="insert_same_records">
+   <property name="text">
+    <string>Добавить записи</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+A</string>
+   </property>
+  </action>
+  <action name="refresh_database_action">
+   <property name="text">
+    <string>Обновить</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+  </action>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>refresh_database</sender>
+   <signal>clicked()</signal>
+   <receiver>refresh_database_action</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>988</x>
+     <y>693</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
