@@ -6,7 +6,7 @@ using std::string;
 
 #include <QDebug>
 
-SettingsManager::SettingsManager() {
+SettingsManager::SettingsManager(const QString& connection_name) : connection_name_(connection_name) {
     settings_file_.load(SETTINGS_FILE_PATH_);
 
     settings_.output_folder = QString::fromStdString(settings_file_["general"]["path_to"].as<string>());
@@ -21,7 +21,7 @@ SettingsManager::SettingsManager() {
             QString::fromStdString(settings_file_["database"]["schema"].as<string>())
     };
 
-    Database db(settings_.database, "settings_select");
+    Database db(settings_.database, connection_name + "_select");
 
     if(!db.connect()){
         return;
@@ -76,7 +76,8 @@ void SettingsManager::Save() {
 
     settings_file_.save(SETTINGS_FILE_PATH_);
 
-    Database db(settings_.database, "settings_update");
+
+    Database db(settings_.database, connection_name_ + "_update");
 
     if(!db.connect()){
         return;

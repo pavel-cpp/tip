@@ -96,6 +96,9 @@ add_executable(
         source/services/database/models/font_settings_model.h
         source/services/database/models.h
         source/services/theme-loader/theme_loader.h
+        source/interfaces/text-position-selector/text_position_selector.cpp
+        source/interfaces/text-position-selector/text_position_selector.h
+        source/ui/windows/text_position_selector.ui
 )
 
 target_link_libraries(

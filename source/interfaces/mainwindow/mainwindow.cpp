@@ -96,6 +96,7 @@ void MainWindow::on_settings_triggered() {
 //    Options window(&settings);
 //    window.exec();
 //    apply();
+    win.show();
     ui_->statusbar->showMessage("Настройки сохранены!");
     log_.info("Settngs saved");
 }

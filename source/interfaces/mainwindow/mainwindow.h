@@ -22,6 +22,8 @@
 #include <services/logger/logger.h>
 #include <services/text-painter/text_painter.h>
 
+#include <interfaces/text-position-selector/text_position_selector.h>
+
 #include <string>
 #include <array>
 
@@ -93,6 +95,8 @@ private:
     bool access_;
 
     std::unique_ptr<Ui::MainWindow> ui_;
+
+    TextPositionSelector win;
 
     void ReDrawImage();
 

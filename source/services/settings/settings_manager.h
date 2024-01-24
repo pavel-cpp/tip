@@ -25,7 +25,7 @@ public:
         Models::Image image;
     };
 
-    SettingsManager();
+    explicit SettingsManager(const QString& connection_name = "default");
 
     Settings GetSettings();
 
@@ -34,6 +34,8 @@ public:
     void Save();
 
 private:
+
+    QString connection_name_;
 
     Settings settings_;
     ini::IniFile settings_file_;
