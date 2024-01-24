@@ -98,6 +98,7 @@ void MainWindow::on_settings_triggered() {
 //    window.exec();
 //    apply();
     TextPositionSelector().exec();
+    settings_manager_.ReloadSettings();
     for (int i = 0; i < 3; ++i) {
         items_[i].options.position = settings_manager_.GetSettings().font_settings[i].position;
     }

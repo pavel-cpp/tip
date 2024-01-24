@@ -2,8 +2,10 @@
 
 #include <QImage>
 #include <QPainter>
+#include <deque>
 
 #include <services/database/models/font_settings_model.h>
+#include <QGraphicsScene>
 
 class TextPainter {
 public:
@@ -34,8 +36,8 @@ public:
     QImage GetOriginalImage();
 
 private:
-    QImage original_image_;
-    QImage editing_image_;
-    QPainter painter_;
+    QImage image_;
+    QGraphicsScene scene_;
+    std::deque<std::unique_ptr<QGraphicsTextItem>> items_;
 };
 

@@ -22,41 +22,7 @@ SettingsManager::SettingsManager(const QString& connection_name) : connection_na
             QString::fromStdString(settings_file_["database"]["schema"].as<string>())
     };
 
-    Database db(settings_.database, connection_name + "_select");
-
-    if(!db.connect()){
-        return;
-    }
-
-    {
-        QSqlQuery query(db.db);
-        QString sql_request = SELECT_FONT_SETTINGS.arg(db.schema);
-        query.prepare(sql_request);
-        if (!query.exec()) {
-            assert(false);
-        }
-        for (auto &item: settings_.font_settings) {
-            if (!query.next()) {
-                break;
-            }
-            QSqlRecord rec = query.record();
-            item.color = QColor(rec.value("color").toString());
-            item.position.setX(rec.value("position_x").toDouble());
-            item.position.setY(rec.value("position_y").toDouble());
-            item.font.setFamily(rec.value("font").toString());
-            item.font.setPixelSize(rec.value("size").toInt());
-            item.font.setBold(rec.value("bold").toBool());
-        }
-
-        sql_request = SELECT_IMAGE.arg(db.schema);
-        query.prepare(sql_request);
-        query.exec();
-        if (!query.next()) {
-            assert(false);
-        }
-        QSqlRecord rec = query.record();
-        settings_.image.url = rec.value("url").toUrl();
-    }
+    LoadFromDatabase();
 }
 
 SettingsManager::Settings SettingsManager::GetSettings() {
@@ -116,5 +82,47 @@ void SettingsManager::Save() {
             qDebug() << query.lastError();
             qDebug() << query.executedQuery();
         }
+    }
+}
+
+void SettingsManager::ReloadSettings() {
+    LoadFromDatabase();
+}
+
+void SettingsManager::LoadFromDatabase() {
+    Database db(settings_.database, connection_name_ + "_select");
+
+    if(!db.connect()){
+        return;
+    }
+
+    {
+        QSqlQuery query(db.db);
+        QString sql_request = SELECT_FONT_SETTINGS.arg(db.schema);
+        query.prepare(sql_request);
+        if (!query.exec()) {
+            assert(false);
+        }
+        for (auto &item: settings_.font_settings) {
+            if (!query.next()) {
+                break;
+            }
+            QSqlRecord rec = query.record();
+            item.color = QColor(rec.value("color").toString());
+            item.position.setX(rec.value("position_x").toDouble());
+            item.position.setY(rec.value("position_y").toDouble());
+            item.font.setFamily(rec.value("font").toString());
+            item.font.setPixelSize(rec.value("size").toInt());
+            item.font.setBold(rec.value("bold").toBool());
+        }
+
+        sql_request = SELECT_IMAGE.arg(db.schema);
+        query.prepare(sql_request);
+        query.exec();
+        if (!query.next()) {
+            assert(false);
+        }
+        QSqlRecord rec = query.record();
+        settings_.image.url = rec.value("url").toUrl();
     }
 }

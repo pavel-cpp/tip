@@ -27,6 +27,8 @@ public:
 
     explicit SettingsManager(const QString& connection_name = "default");
 
+    void ReloadSettings();
+
     Settings GetSettings();
 
     void SetSettings(const Settings& settings);
@@ -34,6 +36,8 @@ public:
     void Save();
 
 private:
+
+    void LoadFromDatabase();
 
     QString connection_name_;
 
