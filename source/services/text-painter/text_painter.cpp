@@ -12,7 +12,6 @@ void TextPainter::DrawText(const TextPainter::ContentTemplate &text) {
     std::unique_ptr<QGraphicsTextItem> item = std::make_unique<QGraphicsTextItem>(text.content);
     item->setFont(text.options.font);
     item->setDefaultTextColor(text.options.color);
-    QRect rect(text.options.position, QFontMetrics(text.options.font).boundingRect(text.content).size());
     QPoint top_left = text.options.position;
     top_left.setX(top_left.x() - QFontMetrics(text.options.font).boundingRect(text.content).width() / 2);
     item->setPos(top_left);

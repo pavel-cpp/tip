@@ -22,7 +22,7 @@
 #include <services/logger/logger.h>
 #include <services/text-painter/text_painter.h>
 
-#include <interfaces/text-position-selector/text_position_selector.h>
+#include <interfaces/options/options.h>
 
 #include <string>
 #include <array>

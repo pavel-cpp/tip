@@ -6,13 +6,16 @@ TextPositionSelector::TextPositionSelector(QDialog *parent) :
         settings_manager_("positions"),
         scene_(this) {
     ui->setupUi(this);
+
     QImage img("./resources/images/image.png");
     scene_.setSceneRect(0, 0, img.width(), img.height());
     ui->graphics_view->setFixedSize(img.size());
     scene_.addPixmap(QPixmap::fromImage(img));
-    items_[0].setPlainText("Number");
-    items_[1].setPlainText("Name");
-    items_[2].setPlainText("Phone number");
+
+    items_[0].setPlainText("12345");
+    items_[1].setPlainText("Имя Фамилия");
+    items_[2].setPlainText("+1 (234)567-89-12");
+
     for (int i = 0; i < 3; ++i) {
         auto settings = settings_manager_.GetSettings().font_settings;
         items_[i].setFont(settings[i].font);
@@ -38,7 +41,6 @@ void TextPositionSelector::on_button_box_accepted() {
     auto settings = settings_manager_.GetSettings();
     for (int i = 0; i < 3; ++i) {
         QPoint text_pos = items_[i].scenePos().toPoint();
-
         text_pos.setX(text_pos.x() + items_[i].sceneBoundingRect().width() / 2);
         settings.font_settings[i].position = text_pos;
     }

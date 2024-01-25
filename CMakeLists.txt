@@ -78,12 +78,13 @@ add_executable(
         ${PROJECT_NAME}
         #        WIN32
         source/main.cpp
-        #        source/interfaces/fontchanger/fontchanger.cpp
-        #        source/interfaces/fontchanger/fontchanger.h
+#        source/interfaces/font-editor/font_editor.cpp
+#        source/interfaces/font-editor/font_editor.h
+        source/interfaces/options/options.cpp
+        source/interfaces/options/options.h
         source/interfaces/mainwindow/mainwindow.cpp
         source/interfaces/mainwindow/mainwindow.h
-        #        source/interfaces/options/options.cpp
-        #        source/interfaces/options/options.h
+        source/services/settings/const_options.h
         source/services/settings/settings_manager.cpp
         source/services/settings/settings_manager.h
         source/services/text-painter/text_painter.cpp
@@ -98,7 +99,6 @@ add_executable(
         source/services/theme-loader/theme_loader.h
         source/interfaces/text-position-selector/text_position_selector.cpp
         source/interfaces/text-position-selector/text_position_selector.h
-        source/ui/windows/text_position_selector.ui
 )
 
 target_link_libraries(

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>FontChanger</class>
- <widget class="QWidget" name="FontChanger">
+ <class>FontEditor</class>
+ <widget class="QWidget" name="FontEditor">
   <property name="geometry">
    <rect>
     <x>0</x>

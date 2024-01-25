@@ -9,20 +9,31 @@
 #include <QColor>
 
 #include "ini-parser/inicpp.h"
+#include "const_options.h"
 
 #include <services/database/database.h>
-
 #include <services/database/models.h>
 
 class SettingsManager {
 public:
 
     struct Settings {
+        const Constants consts;
         QString output_folder;
         QString theme;
         std::array<Models::FontSettings, 3> font_settings;
         Models::Database database;
         Models::Image image;
+
+        Settings& operator=(const Settings& other){
+            output_folder = other.output_folder;
+            theme = other.theme;
+            font_settings = other.font_settings;
+            database = other.database;
+            image = other.image;
+            return *this;
+        }
+
     };
 
     explicit SettingsManager(const QString& connection_name = "default");

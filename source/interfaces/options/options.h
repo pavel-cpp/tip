@@ -2,13 +2,8 @@
 #define OPTIONS_H
 
 #include <QDialog>
-#include <QFileSystemModel>
-#include <QFileDialog>
 
-#include <fstream>
-
-#include "Settings.h"
-#include "fontchanger.h"
+#include <services/settings/settings_manager.h>
 
 namespace Ui {
     class Options;
@@ -18,34 +13,34 @@ class Options : public QDialog {
 Q_OBJECT
 
 public:
-    explicit Options(Settings *settings, QWidget *parent = nullptr);
+    explicit Options(QWidget *parent = nullptr);
 
-    ~Options();
-
-public slots:
-
-    void on_pushButton_4_clicked();
+    ~Options() override;
 
 private slots:
 
-    void on_pushButton_5_clicked();
+    void on_path_to_edit_textEdited();
 
-    void on_pushButton_6_clicked();
+    void on_path_to_button_clicked();
 
-    void on_pushButton_clicked();
+    void on_theme_combo_box_currentIndexChanged(int);
 
-    void on_pushButton_2_clicked();
+    void on_change_button_ex_1_clicked();
 
-    void on_pushButton_3_clicked();
+    void on_change_button_ex_2_clicked();
 
-    void on_pathToRoot_textChanged(const QString &arg1);
+    void on_change_button_ex_3_clicked();
 
-    void on_pathTo_textChanged(const QString &arg1);
+    void on_change_text_position_button_clicked();
+
+    void on_database_edit_button_clicked();
+
+    void on_save_button_clicked();
 
 private:
-    QFileSystemModel *model;
-    Settings settings;
-    Settings *buffer;
+
+    SettingsManager settings_manager_;
+
     Ui::Options *ui;
 };
 

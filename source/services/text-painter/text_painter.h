@@ -2,10 +2,13 @@
 
 #include <QImage>
 #include <QPainter>
+
+#include <memory>
 #include <deque>
 
 #include <services/database/models/font_settings_model.h>
 #include <QGraphicsScene>
+#include <QGraphicsTextItem>
 
 class TextPainter {
 public:
