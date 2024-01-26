@@ -100,8 +100,9 @@ void MainWindow::on_settings_triggered() {
         items_[i].options.position = settings_manager_.GetSettings().font_settings[i].position;
     }
     ReDrawImage();
+    this->setStyleSheet(Theme::Load(settings_manager_.GetSettings().theme));
     ui_->statusbar->showMessage("Настройки сохранены!");
-    log_.info("Settngs saved");
+    log_.info("Settings saved");
 }
 
 void MainWindow::on_save_image_triggered() {

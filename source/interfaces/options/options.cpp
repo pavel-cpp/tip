@@ -71,7 +71,7 @@ void Options::on_change_text_position_button_clicked() {
 }
 
 void Options::on_database_edit_button_clicked() {
-    DatabaseSettings(this).exec();
+    DatabaseSettings(settings_buffer_.database, this).exec();
     settings_manager_.ReloadSettings();
     settings_buffer_.database = settings_manager_.GetSettings().database;
 }

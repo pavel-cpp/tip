@@ -6,6 +6,7 @@ using std::string;
 
 #include <QDebug>
 #include <QSqlError>
+#include <QSqlQuery>
 
 SettingsManager::SettingsManager(const QString& connection_name) {
     settings_file_.load(SETTINGS_FILE_PATH_);
