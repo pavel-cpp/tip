@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>644</width>
+    <width>666</width>
     <height>385</height>
    </rect>
   </property>
@@ -117,7 +117,7 @@
          <item>
           <widget class="QLabel" name="example_1">
            <property name="text">
-            <string>Пример</string>
+            <string>12345</string>
            </property>
           </widget>
          </item>
@@ -141,7 +141,7 @@
          <item>
           <widget class="QLabel" name="example_2">
            <property name="text">
-            <string>Пример</string>
+            <string>Фамилия Имя</string>
            </property>
           </widget>
          </item>
@@ -165,7 +165,7 @@
          <item>
           <widget class="QLabel" name="example_3">
            <property name="text">
-            <string>Пример</string>
+            <string>+1 (123) 456-78-12</string>
            </property>
           </widget>
          </item>

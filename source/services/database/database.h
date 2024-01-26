@@ -3,6 +3,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlTableModel>
+#include <QDebug>
 
 #include <memory>
 #include <QCoreApplication>
@@ -12,6 +13,8 @@
 struct Database {
     QSqlDatabase db;
     QString schema;
+
+    Database() = default;
 
     explicit Database(Models::Database settings, const QString &connection_name = "default") {
         db = QSqlDatabase::addDatabase("QPSQL", connection_name);
@@ -36,7 +39,9 @@ struct Database {
 
     ~Database() {
         if (db.isOpen()) {
+            QString connection_name = db.connectionName();
             db.close();
+            QSqlDatabase::removeDatabase(connection_name);
         }
     }
 

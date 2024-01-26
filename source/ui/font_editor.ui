@@ -30,7 +30,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QLabel" name="example">
+      <widget class="QLabel" name="example_label">
        <property name="text">
         <string>Пример</string>
        </property>
@@ -98,9 +98,9 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="red_spin_box">
-           <property name="maximum">
-            <number>255</number>
+          <widget class="QLabel" name="red_value_label">
+           <property name="text">
+            <string>0</string>
            </property>
           </widget>
          </item>
@@ -109,14 +109,14 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QLabel" name="label_3">
+          <widget class="QLabel" name="green_label">
            <property name="text">
             <string>G:</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSlider" name="green">
+          <widget class="QSlider" name="green_slider">
            <property name="maximum">
             <number>255</number>
            </property>
@@ -126,9 +126,9 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="greenSpinBox">
-           <property name="maximum">
-            <number>255</number>
+          <widget class="QLabel" name="green_value_label">
+           <property name="text">
+            <string>0</string>
            </property>
           </widget>
          </item>
@@ -137,14 +137,14 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <widget class="QLabel" name="label_4">
+          <widget class="QLabel" name="blue_label">
            <property name="text">
             <string>B:</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSlider" name="blue">
+          <widget class="QSlider" name="blue_slider">
            <property name="maximum">
             <number>255</number>
            </property>
@@ -154,9 +154,9 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="blueSpinBox">
-           <property name="maximum">
-            <number>255</number>
+          <widget class="QLabel" name="blue_value_label">
+           <property name="text">
+            <string>0</string>
            </property>
           </widget>
          </item>
@@ -200,10 +200,10 @@
         </spacer>
        </item>
        <item>
-        <widget class="QFontComboBox" name="fontComboBox"/>
+        <widget class="QFontComboBox" name="font_combo_box"/>
        </item>
        <item>
-        <widget class="QCheckBox" name="bold">
+        <widget class="QCheckBox" name="bold_check_box">
          <property name="font">
           <font>
            <weight>75</weight>
@@ -223,14 +223,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="size_label">
          <property name="text">
           <string>Размер:</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="spinBox">
+        <widget class="QSpinBox" name="size_spin_box">
          <property name="minimum">
           <number>1</number>
          </property>
@@ -272,7 +272,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="save">
+      <widget class="QPushButton" name="save_button">
        <property name="text">
         <string>Сохранить</string>
        </property>

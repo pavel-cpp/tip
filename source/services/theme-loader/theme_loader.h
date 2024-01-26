@@ -4,7 +4,7 @@
 #include <QFile>
 
 namespace Theme{
-    QString Load(const QString& theme_name){
+    static QString Load(const QString& theme_name) {
         QFile style_file("./themes/" + theme_name + ".qss");
         style_file.open(QFile::ReadOnly);
         if(!style_file.isOpen()){

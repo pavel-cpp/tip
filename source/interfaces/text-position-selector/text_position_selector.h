@@ -1,11 +1,13 @@
 #pragma once
 
 #include <QDialog>
-
-#include <services/settings/settings_manager.h>
 #include <QGraphicsScene>
 #include <QGraphicsTextItem>
 
+#include <array>
+
+#include <services/database/models/font_settings_model.h>
+#include <services/settings/const_options.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class TextPositionSelector; }
@@ -15,7 +17,7 @@ class TextPositionSelector : public QDialog {
 Q_OBJECT
 
 public:
-    explicit TextPositionSelector(QDialog *parent = nullptr);
+    explicit TextPositionSelector(std::array<Models::FontSettings, 3>& font_settings, QDialog *parent = nullptr);
 
     ~TextPositionSelector() override;
 
@@ -30,5 +32,6 @@ private:
 
     QGraphicsScene scene_;
     std::array<QGraphicsTextItem, 3> items_;
-    SettingsManager settings_manager_;
+
+    std::array<Models::FontSettings, 3>& font_settings_;
 };

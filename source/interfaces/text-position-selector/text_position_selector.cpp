@@ -1,13 +1,14 @@
 #include "text_position_selector.h"
 #include "ui_text_position_selector.h"
 
-TextPositionSelector::TextPositionSelector(QDialog *parent) :
-        QDialog(parent), ui(new Ui::TextPositionSelector),
-        settings_manager_("positions"),
+TextPositionSelector::TextPositionSelector(std::array<Models::FontSettings, 3>& font_settings, QDialog *parent) :
+        QDialog(parent), 
+        ui(new Ui::TextPositionSelector),
+        font_settings_(font_settings),
         scene_(this) {
     ui->setupUi(this);
-
-    QImage img("./resources/images/image.png");
+    
+    QImage img(Constants().source_image_path);
     scene_.setSceneRect(0, 0, img.width(), img.height());
     ui->graphics_view->setFixedSize(img.size());
     scene_.addPixmap(QPixmap::fromImage(img));
@@ -17,11 +18,10 @@ TextPositionSelector::TextPositionSelector(QDialog *parent) :
     items_[2].setPlainText("+1 (234)567-89-12");
 
     for (int i = 0; i < 3; ++i) {
-        auto settings = settings_manager_.GetSettings().font_settings;
-        items_[i].setFont(settings[i].font);
-        items_[i].setDefaultTextColor(settings[i].color);
-        QPoint top_left = settings[i].position;
-        top_left.setX(top_left.x() - QFontMetrics(settings[i].font).boundingRect(items_[i].toPlainText()).width() / 2);
+        items_[i].setFont(font_settings_[i].font);
+        items_[i].setDefaultTextColor(font_settings_[i].color);
+        QPoint top_left = font_settings_[i].position;
+        top_left.setX(top_left.x() - QFontMetrics(font_settings_[i].font).boundingRect(items_[i].toPlainText()).width() / 2);
         items_[i].setPos(top_left);
         items_[i].setFlag(QGraphicsTextItem::GraphicsItemFlag::ItemIsMovable);
         scene_.addItem(&items_[i]);
@@ -38,13 +38,10 @@ void TextPositionSelector::on_button_box_rejected() {
 }
 
 void TextPositionSelector::on_button_box_accepted() {
-    auto settings = settings_manager_.GetSettings();
     for (int i = 0; i < 3; ++i) {
         QPoint text_pos = items_[i].scenePos().toPoint();
         text_pos.setX(text_pos.x() + items_[i].sceneBoundingRect().width() / 2);
-        settings.font_settings[i].position = text_pos;
+        font_settings_[i].position = text_pos;
     }
-    settings_manager_.SetSettings(settings);
-    settings_manager_.Save();
     close();
 }

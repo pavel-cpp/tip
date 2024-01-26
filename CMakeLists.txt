@@ -44,7 +44,7 @@ project(TIP CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(CMAKE_AUTOUIC_SEARCH_PATHS "source/ui/windows")
+set(CMAKE_AUTOUIC_SEARCH_PATHS "source/ui")
 
 set(QT_PATH "E:/Development/CPP/Libraries/Qt/5.14.2/mingw73_64")
 set(CMAKE_PREFIX_PATH ${QT_PATH})
@@ -69,7 +69,7 @@ function(find_files dir type result)
     set(${result} ${files} PARENT_SCOPE)
 endfunction()
 
-set(UI_DIRECTORY "source/ui/windows")
+set(UI_DIRECTORY "source/ui")
 find_files(${UI_DIRECTORY} "ui" UI_FILES)
 
 include_directories(source)
@@ -78,8 +78,8 @@ add_executable(
         ${PROJECT_NAME}
         #        WIN32
         source/main.cpp
-#        source/interfaces/font-editor/font_editor.cpp
-#        source/interfaces/font-editor/font_editor.h
+        source/interfaces/font-editor/font_editor.cpp
+        source/interfaces/font-editor/font_editor.h
         source/interfaces/options/options.cpp
         source/interfaces/options/options.h
         source/interfaces/mainwindow/mainwindow.cpp
@@ -99,6 +99,8 @@ add_executable(
         source/services/theme-loader/theme_loader.h
         source/interfaces/text-position-selector/text_position_selector.cpp
         source/interfaces/text-position-selector/text_position_selector.h
+        source/interfaces/database-settings/database_settings.cpp
+        source/interfaces/database-settings/database_settings.h
 )
 
 target_link_libraries(

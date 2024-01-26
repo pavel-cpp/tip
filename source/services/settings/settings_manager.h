@@ -50,7 +50,7 @@ private:
 
     void LoadFromDatabase();
 
-    QString connection_name_;
+    Database database_;
 
     Settings settings_;
     ini::IniFile settings_file_;

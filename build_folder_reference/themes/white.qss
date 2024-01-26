@@ -71,7 +71,6 @@ QLabel
 	color: #454544;
 	font-weight: bold;
 	font-size: 13px;
-
 }
 
 

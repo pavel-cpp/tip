@@ -1,5 +1,4 @@
-#ifndef OPTIONS_H
-#define OPTIONS_H
+#pragma once
 
 #include <QDialog>
 
@@ -19,9 +18,9 @@ public:
 
 private slots:
 
-    void on_path_to_edit_textEdited();
-
     void on_path_to_button_clicked();
+
+    void on_path_to_edit_textChanged(QString text);
 
     void on_theme_combo_box_currentIndexChanged(int);
 
@@ -41,7 +40,7 @@ private:
 
     SettingsManager settings_manager_;
 
+    SettingsManager::Settings settings_buffer_;
+
     Ui::Options *ui;
 };
-
-#endif // OPTIONS_H

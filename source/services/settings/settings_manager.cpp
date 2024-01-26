@@ -7,7 +7,7 @@ using std::string;
 #include <QDebug>
 #include <QSqlError>
 
-SettingsManager::SettingsManager(const QString& connection_name) : connection_name_(connection_name) {
+SettingsManager::SettingsManager(const QString& connection_name) {
     settings_file_.load(SETTINGS_FILE_PATH_);
 
     settings_.output_folder = QString::fromStdString(settings_file_["general"]["path_to"].as<string>());
@@ -21,6 +21,8 @@ SettingsManager::SettingsManager(const QString& connection_name) : connection_na
             QString::fromStdString(settings_file_["database"]["name"].as<string>()),
             QString::fromStdString(settings_file_["database"]["schema"].as<string>())
     };
+
+    database_ = Database(settings_.database, connection_name);
 
     LoadFromDatabase();
 }
@@ -46,18 +48,17 @@ void SettingsManager::Save() {
 
     settings_file_.save(SETTINGS_FILE_PATH_);
 
+    database_.db.open();
 
-    Database db(settings_.database, connection_name_ + "_update");
-
-    if(!db.connect()){
+    if(!database_.connect()){
         return;
     }
 
     int index = 1;
 
     {
-        QSqlQuery query(db.db);
-        QString sql_request = UPDATE_FONT_SETTINGS.arg(db.schema);
+        QSqlQuery query(database_.db);
+        QString sql_request = UPDATE_FONT_SETTINGS.arg(database_.schema);
         for (const auto &font: settings_.font_settings) {
             query.prepare(
                     sql_request
@@ -76,13 +77,16 @@ void SettingsManager::Save() {
         }
 
 
-        sql_request = UPDATE_IMAGE.arg(db.schema);
+        sql_request = UPDATE_IMAGE.arg(database_.schema);
         query.prepare(sql_request.arg("\'" + settings_.image.url.toString() + "\'"));
         if (!query.exec()) {
             qDebug() << query.lastError();
             qDebug() << query.executedQuery();
         }
     }
+
+    database_.db.close();
+
 }
 
 void SettingsManager::ReloadSettings() {
@@ -90,15 +94,16 @@ void SettingsManager::ReloadSettings() {
 }
 
 void SettingsManager::LoadFromDatabase() {
-    Database db(settings_.database, connection_name_ + "_select");
 
-    if(!db.connect()){
+    database_.db.open();
+
+    if(!database_.connect()){
         return;
     }
 
     {
-        QSqlQuery query(db.db);
-        QString sql_request = SELECT_FONT_SETTINGS.arg(db.schema);
+        QSqlQuery query(database_.db);
+        QString sql_request = SELECT_FONT_SETTINGS.arg(database_.schema);
         query.prepare(sql_request);
         if (!query.exec()) {
             assert(false);
@@ -116,7 +121,7 @@ void SettingsManager::LoadFromDatabase() {
             item.font.setBold(rec.value("bold").toBool());
         }
 
-        sql_request = SELECT_IMAGE.arg(db.schema);
+        sql_request = SELECT_IMAGE.arg(database_.schema);
         query.prepare(sql_request);
         query.exec();
         if (!query.next()) {
@@ -125,4 +130,7 @@ void SettingsManager::LoadFromDatabase() {
         QSqlRecord rec = query.record();
         settings_.image.url = rec.value("url").toUrl();
     }
+
+    database_.db.close();
+
 }
