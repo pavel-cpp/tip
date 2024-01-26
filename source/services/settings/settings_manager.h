@@ -50,6 +50,8 @@ private:
 
     void LoadFromDatabase();
 
+    void LoadFromIni(const QString& connection_name);
+
     Database database_;
 
     Settings settings_;

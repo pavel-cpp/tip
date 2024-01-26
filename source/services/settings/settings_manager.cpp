@@ -9,22 +9,7 @@ using std::string;
 #include <QSqlQuery>
 
 SettingsManager::SettingsManager(const QString& connection_name) {
-    settings_file_.load(SETTINGS_FILE_PATH_);
-
-    settings_.output_folder = QString::fromStdString(settings_file_["general"]["path_to"].as<string>());
-    settings_.theme = QString::fromStdString(settings_file_["general"]["theme"].as<string>());
-
-    settings_.database = {
-            QString::fromStdString(settings_file_["database"]["host"].as<string>()),
-            settings_file_["database"]["port"].as<uint16_t>(),
-            QString::fromStdString(settings_file_["database"]["username"].as<string>()),
-            QString::fromStdString(settings_file_["database"]["password"].as<string>()),
-            QString::fromStdString(settings_file_["database"]["name"].as<string>()),
-            QString::fromStdString(settings_file_["database"]["schema"].as<string>())
-    };
-
-    database_ = Database(settings_.database, connection_name);
-
+    LoadFromIni(connection_name);
     LoadFromDatabase();
 }
 
@@ -91,6 +76,7 @@ void SettingsManager::Save() {
 }
 
 void SettingsManager::ReloadSettings() {
+    LoadFromIni(database_.db.connectionName());
     LoadFromDatabase();
 }
 
@@ -134,4 +120,22 @@ void SettingsManager::LoadFromDatabase() {
 
     database_.db.close();
 
+}
+
+void SettingsManager::LoadFromIni(const QString& connection_name) {
+    settings_file_.load(SETTINGS_FILE_PATH_);
+
+    settings_.output_folder = QString::fromStdString(settings_file_["general"]["path_to"].as<string>());
+    settings_.theme = QString::fromStdString(settings_file_["general"]["theme"].as<string>());
+
+    settings_.database = {
+            QString::fromStdString(settings_file_["database"]["host"].as<string>()),
+            settings_file_["database"]["port"].as<uint16_t>(),
+            QString::fromStdString(settings_file_["database"]["username"].as<string>()),
+            QString::fromStdString(settings_file_["database"]["password"].as<string>()),
+            QString::fromStdString(settings_file_["database"]["name"].as<string>()),
+            QString::fromStdString(settings_file_["database"]["schema"].as<string>())
+    };
+
+    database_ = Database(settings_.database, connection_name);
 }
