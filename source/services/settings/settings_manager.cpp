@@ -8,7 +8,7 @@ using std::string;
 #include <QSqlError>
 #include <QSqlQuery>
 
-SettingsManager::SettingsManager(const QString& connection_name) {
+SettingsManager::SettingsManager(const QString &connection_name) {
     LoadFromIni(connection_name);
     LoadFromDatabase();
 }
@@ -36,7 +36,7 @@ void SettingsManager::Save() {
 
     database_.db.open();
 
-    if(!database_.connect()){
+    if (!database_.connect()) {
         return;
     }
 
@@ -62,9 +62,12 @@ void SettingsManager::Save() {
             }
         }
 
-
-        sql_request = UPDATE_IMAGE.arg(database_.schema);
-        query.prepare(sql_request.arg("\'" + settings_.image.url.toString() + "\'"));
+        query.prepare(
+                UPDATE_IMAGE
+                        .arg(database_.schema)
+                        .arg("\'" + settings_.image.url.toString() + "\'")
+                        .arg("\'" + settings_.image.format + "\'")
+        );
         if (!query.exec()) {
             qDebug() << query.lastError();
             qDebug() << query.executedQuery();
@@ -84,7 +87,7 @@ void SettingsManager::LoadFromDatabase() {
 
     database_.db.open();
 
-    if(!database_.connect()){
+    if (!database_.connect()) {
         return;
     }
 
@@ -108,21 +111,21 @@ void SettingsManager::LoadFromDatabase() {
             item.font.setBold(rec.value("bold").toBool());
         }
 
-        sql_request = SELECT_IMAGE.arg(database_.schema);
-        query.prepare(sql_request);
+        query.prepare(SELECT_IMAGE.arg(database_.schema));
         query.exec();
         if (!query.next()) {
             assert(false);
         }
         QSqlRecord rec = query.record();
         settings_.image.url = rec.value("url").toUrl();
+        settings_.image.format = rec.value("format").toString();
     }
 
     database_.db.close();
 
 }
 
-void SettingsManager::LoadFromIni(const QString& connection_name) {
+void SettingsManager::LoadFromIni(const QString &connection_name) {
     settings_file_.load(SETTINGS_FILE_PATH_);
 
     settings_.output_folder = QString::fromStdString(settings_file_["general"]["path_to"].as<string>());
