@@ -97,7 +97,7 @@ void MainWindow::on_settings_triggered() {
     Options(this).exec();
     settings_manager_.ReloadSettings();
     for (int i = 0; i < 3; ++i) {
-        items_[i].options.position = settings_manager_.GetSettings().font_settings[i].position;
+        items_[i].options = settings_manager_.GetSettings().font_settings[i];
     }
     ReDrawImage();
     this->setStyleSheet(Theme::Load(settings_manager_.GetSettings().theme));

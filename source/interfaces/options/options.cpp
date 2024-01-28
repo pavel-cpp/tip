@@ -56,14 +56,20 @@ void Options::on_theme_combo_box_currentIndexChanged(int) {
 
 void Options::on_change_button_ex_1_clicked() {
     FontEditor(settings_buffer_.font_settings[0], this).exec();
+    ui->example_1->setFont(settings_buffer_.font_settings[0].font);
+    ui->example_1->setStyleSheet(QString("color: %1;\nfont-size: %2px;").arg(settings_buffer_.font_settings[0].color.name(QColor::HexRgb)).arg(settings_buffer_.font_settings[0].font.pixelSize()));
 }
 
 void Options::on_change_button_ex_2_clicked() {
     FontEditor(settings_buffer_.font_settings[1], this).exec();
+    ui->example_2->setFont(settings_buffer_.font_settings[1].font);
+    ui->example_2->setStyleSheet(QString("color: %1;\nfont-size: %2px;").arg(settings_buffer_.font_settings[1].color.name(QColor::HexRgb)).arg(settings_buffer_.font_settings[1].font.pixelSize()));
 }
 
 void Options::on_change_button_ex_3_clicked() {
     FontEditor(settings_buffer_.font_settings[2], this).exec();
+    ui->example_3->setFont(settings_buffer_.font_settings[2].font);
+    ui->example_3->setStyleSheet(QString("color: %1;\nfont-size: %2px;").arg(settings_buffer_.font_settings[2].color.name(QColor::HexRgb)).arg(settings_buffer_.font_settings[2].font.pixelSize()));
 }
 
 void Options::on_change_text_position_button_clicked() {
