@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent)
     log_.info("DatabaseModel table_model_ set to table");
 
     if (!ImageDownloader::FetchImage(
-            "./resources/images/image.png",
+            "./resources/images/image." + settings_manager_.GetSettings().image.format,
             settings_manager_.GetSettings().image.url
     )) {
         qDebug() << "Downloading failed" << endl;
@@ -114,14 +114,17 @@ void MainWindow::on_save_image_triggered() {
             settings_manager_.GetSettings().output_folder
             + "/image_"
             + items_[0].content
-            + ".png"
+            + "."
+            + settings_manager_.GetSettings().image.format
     );
     if (status) {
         ui_->statusbar->showMessage("image_"
                                     + items_[0].content
                                     + " успешно сохранена!");
-    }else{
+    } else {
         ui_->statusbar->showMessage("Ошибка сохранения картинки!");
+        qDebug() << settings_manager_.GetSettings().image.url << endl
+        << settings_manager_.GetSettings().image.format << endl;
     }
 }
 
@@ -315,10 +318,12 @@ void MainWindow::on_save_some_images_triggered() {
             text_painter_.DrawText(item);
         }
 
-        if (text_painter_.GetResultImage().save(settings_manager_.GetSettings().output_folder
-                                                + "/image_"
-                                                + items_[0].content
-                                                + ".png"
+        if (text_painter_.GetResultImage().save(
+                settings_manager_.GetSettings().output_folder
+                + "/image_"
+                + items_[0].content
+                + "."
+                + settings_manager_.GetSettings().image.format
         )) {
             ui_->statusbar->showMessage("image_"
                                         + items_[0].content
