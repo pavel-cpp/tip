@@ -78,8 +78,6 @@ void Options::on_change_text_position_button_clicked() {
 
 void Options::on_database_edit_button_clicked() {
     DatabaseSettings(settings_buffer_.database, this).exec();
-    settings_manager_.ReloadSettings();
-    settings_buffer_.database = settings_manager_.GetSettings().database;
 }
 
 void Options::on_save_button_clicked() {
@@ -88,7 +86,15 @@ void Options::on_save_button_clicked() {
     close();
 }
 
-void Options::on_path_to_edit_textChanged(QString text) {
+void Options::on_path_to_edit_textChanged(const QString& text) {
     settings_buffer_.output_folder = text;
+}
+
+void Options::on_image_url_edit_textChanged(const QString &text) {
+
+}
+
+void Options::on_image_format_edit_textChanged(const QString &text) {
+
 }
 
