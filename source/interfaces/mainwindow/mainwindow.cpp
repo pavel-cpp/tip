@@ -110,15 +110,19 @@ void MainWindow::on_save_image_triggered() {
         ui_->statusbar->showMessage("Изображение не сохранено! Добавьте путь к папке с результатом!");
         return;
     }
-    text_painter_.GetResultImage().save(
+    bool status = text_painter_.GetResultImage().save(
             settings_manager_.GetSettings().output_folder
             + "/image_"
             + items_[0].content
-            + ".jpg"
+            + ".png"
     );
-    ui_->statusbar->showMessage("image_"
-                                + items_[0].content
-                                + " успешно сохранена!");
+    if (status) {
+        ui_->statusbar->showMessage("image_"
+                                    + items_[0].content
+                                    + " успешно сохранена!");
+    }else{
+        ui_->statusbar->showMessage("Ошибка сохранения картинки!");
+    }
 }
 
 void MainWindow::on_print_triggered() {
@@ -314,7 +318,7 @@ void MainWindow::on_save_some_images_triggered() {
         if (text_painter_.GetResultImage().save(settings_manager_.GetSettings().output_folder
                                                 + "/image_"
                                                 + items_[0].content
-                                                + ".jpg"
+                                                + ".png"
         )) {
             ui_->statusbar->showMessage("image_"
                                         + items_[0].content
