@@ -1,18 +1,21 @@
-//
-// Created by green on 30-Jan-24.
-//
-
-// You may need to build the project (run Qt uic code generator) to get "ui_password_form.h" resolved
-
 #include "password_form.h"
 #include "ui_password_form.h"
 
+#include <QMessageBox>
 
-password_form::password_form(QWidget *parent) :
-        QDialog(parent), ui(new Ui::password_form) {
+PasswordForm::PasswordForm(QWidget *parent) :
+        QDialog(parent), ui(new Ui::PasswordForm) {
     ui->setupUi(this);
 }
 
-password_form::~password_form() {
+PasswordForm::~PasswordForm() {
     delete ui;
+}
+
+void PasswordForm::on_password_edit_returnPressed() {
+    if (ui->password_edit->text() == "test") {
+        accept();
+        return;
+    }
+    QMessageBox::warning(this, "Предупреждение", "Не верно введен пароль");
 }

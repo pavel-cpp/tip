@@ -1,28 +1,22 @@
-//
-// Created by green on 30-Jan-24.
-//
-
-#ifndef TIP_PASSWORD_FORM_H
-#define TIP_PASSWORD_FORM_H
+#pragma once
 
 #include <QDialog>
 
-
 QT_BEGIN_NAMESPACE
-namespace Ui { class password_form; }
+namespace Ui { class PasswordForm; }
 QT_END_NAMESPACE
 
-class password_form : public QDialog {
+class PasswordForm : public QDialog {
 Q_OBJECT
 
 public:
-    explicit password_form(QWidget *parent = nullptr);
+    explicit PasswordForm(QWidget *parent = nullptr);
 
-    ~password_form() override;
+    ~PasswordForm() override;
+
+private slots:
+    void on_password_edit_returnPressed();
 
 private:
-    Ui::password_form *ui;
+    Ui::PasswordForm *ui;
 };
-
-
-#endif //TIP_PASSWORD_FORM_H

@@ -11,6 +11,7 @@
 #include <interfaces/text-position-selector/text_position_selector.h>
 #include <interfaces/font-editor/font_editor.h>
 #include <interfaces/database-settings/database_settings.h>
+#include <interfaces/password-form/password_form.h>
 
 Options::Options(QWidget *parent) :
         QDialog(parent),
@@ -139,6 +140,9 @@ void Options::SetAdvancedSettingsVisible(bool state) {
 }
 
 void Options::on_advanced_settings_button_clicked() {
-    SetAdvancedSettingsVisible(true);
-    ui->advanced_settings_button->setVisible(false);
+    PasswordForm form(this);
+    if(form.exec() == QDialog::Accepted){
+        SetAdvancedSettingsVisible(true);
+        ui->advanced_settings_button->setVisible(false);
+    }
 }
