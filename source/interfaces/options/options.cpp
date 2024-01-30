@@ -5,6 +5,8 @@
 #include <QColor>
 #include <QFileDialog>
 
+#include <QMessageBox>
+
 #include <services/theme-loader/theme_loader.h>
 #include <interfaces/text-position-selector/text_position_selector.h>
 #include <interfaces/font-editor/font_editor.h>
@@ -31,6 +33,8 @@ Options::Options(QWidget *parent) :
     ui->example_2->setStyleSheet(QString("color: %1;\nfont-size: %2px;").arg(settings_buffer_.font_settings[1].color.name(QColor::HexRgb)).arg(settings_buffer_.font_settings[1].font.pixelSize()));
     ui->example_3->setFont(settings_buffer_.font_settings[2].font);
     ui->example_3->setStyleSheet(QString("color: %1;\nfont-size: %2px;").arg(settings_buffer_.font_settings[2].color.name(QColor::HexRgb)).arg(settings_buffer_.font_settings[2].font.pixelSize()));
+    ui->image_url_edit->setText(settings_buffer_.image.url.toString());
+    ui->image_format_edit->setText(settings_buffer_.image.format);
 }
 
 Options::~Options() {
@@ -81,6 +85,12 @@ void Options::on_database_edit_button_clicked() {
 }
 
 void Options::on_save_button_clicked() {
+    if(settings_manager_.GetSettings().image.url != settings_buffer_.image.url ||
+        settings_manager_.GetSettings().database.host != settings_buffer_.database.host ||
+        settings_manager_.GetSettings().database.port != settings_buffer_.database.port ||
+        settings_manager_.GetSettings().database.schema != settings_buffer_.database.schema){
+        QMessageBox::information(this, "Подсказка", "После сохранения настроек перезапустите программу!");
+    }
     settings_manager_.SetSettings(settings_buffer_);
     settings_manager_.Save();
     close();
@@ -91,10 +101,10 @@ void Options::on_path_to_edit_textChanged(const QString& text) {
 }
 
 void Options::on_image_url_edit_textChanged(const QString &text) {
-
+    settings_buffer_.image.url = text;
 }
 
 void Options::on_image_format_edit_textChanged(const QString &text) {
-
+    settings_buffer_.image.format = text;
 }
 

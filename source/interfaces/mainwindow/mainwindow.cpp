@@ -2,9 +2,10 @@
 #include <ui_mainwindow.h>
 
 #include <services/theme-loader/theme_loader.h>
+#include "../../services/image-downloader/image_downloader.h"
 
 #include <QDebug>
-#include "../../services/image-downloader/image_downloader.h"
+#include <QMessageBox>
 
 const QString DATABASE_FILE = "./database/database.db";
 
@@ -26,8 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     log_.info("Starting...");
 
     if (!database_.connect()) {
-        qDebug() << "DatabaseModel is not opened" << endl;
-        // TODO(Pavel): Добавить диалоговое окно
+        QMessageBox::critical(this, "Ошибка!", "Не удалось подключиться к базе данных");
     }
     log_.info("DatabaseModel initialized");
 
@@ -48,17 +48,16 @@ MainWindow::MainWindow(QWidget *parent)
     log_.info("DatabaseModel table_model_ set to table");
 
     if (!ImageDownloader::FetchImage(
-            "./resources/images/image." + settings_manager_.GetSettings().image.format,
+            settings_manager_.GetSettings().consts.source_image_path + "." + settings_manager_.GetSettings().image.format,
             settings_manager_.GetSettings().image.url
     )) {
-        qDebug() << "Downloading failed" << endl;
-        // TODO(Pavel): Добавить диалоговое окно
+        QMessageBox::warning(this, "Предупреждение!", "Не удалось загрузить изображение!\nНе верно указана ссылка");
     }
 
     QImage image;
 
-    if (!image.load("./resources/images/image.png")) {
-        assert(false);
+    if (!image.load(settings_manager_.GetSettings().consts.source_image_path + "." + settings_manager_.GetSettings().image.format)) {
+        QMessageBox::warning(this, "Предупреждение!", "Не удалось открыть изображение!\nНе верно указан формат изображения или ссылка");
     }
 
     text_painter_.SetImage(
