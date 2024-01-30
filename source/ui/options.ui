@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>666</width>
-    <height>471</height>
+    <height>500</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,19 +36,19 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="Line" name="line_4">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QLabel" name="general_lebel">
          <property name="toolTip">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Основные&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
@@ -97,6 +97,13 @@
       </layout>
      </item>
      <item>
+      <widget class="QPushButton" name="advanced_settings_button">
+       <property name="text">
+        <string>Расширенные настройки</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QLabel" name="formatting_label">
@@ -106,7 +113,7 @@
         </widget>
        </item>
        <item>
-        <widget class="Line" name="line_3">
+        <widget class="Line" name="formatting_line">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -187,7 +194,7 @@
       </layout>
      </item>
      <item>
-      <spacer name="verticalSpacer_4">
+      <spacer name="ex_spacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
@@ -202,14 +209,14 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
-        <widget class="QLabel" name="tex_position_label">
+        <widget class="QLabel" name="text_position_label">
          <property name="text">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Расположение текста&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="Line" name="line_5">
+        <widget class="Line" name="text_position_line">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -244,14 +251,14 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QLabel" name="label_4">
+        <widget class="QLabel" name="database_label">
          <property name="text">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;База данных&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="Line" name="database_label">
+        <widget class="Line" name="database_line">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -293,7 +300,7 @@
         </widget>
        </item>
        <item>
-        <widget class="Line" name="database_label_2">
+        <widget class="Line" name="image_line">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>

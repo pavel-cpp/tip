@@ -101,6 +101,9 @@ add_executable(
         source/interfaces/text-position-selector/text_position_selector.h
         source/interfaces/database-settings/database_settings.cpp
         source/interfaces/database-settings/database_settings.h
+        source/interfaces/password-form/password_form.cpp
+        source/interfaces/password-form/password_form.h
+        source/ui/password_form.ui
 )
 
 target_link_libraries(

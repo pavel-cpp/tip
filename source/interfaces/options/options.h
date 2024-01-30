@@ -40,7 +40,11 @@ private slots:
 
     void on_image_format_edit_textChanged(const QString& text);
 
+    void on_advanced_settings_button_clicked();
+
 private:
+
+    void SetAdvancedSettingsVisible(bool state);
 
     SettingsManager settings_manager_;
 

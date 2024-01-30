@@ -35,6 +35,8 @@ Options::Options(QWidget *parent) :
     ui->example_3->setStyleSheet(QString("color: %1;\nfont-size: %2px;").arg(settings_buffer_.font_settings[2].color.name(QColor::HexRgb)).arg(settings_buffer_.font_settings[2].font.pixelSize()));
     ui->image_url_edit->setText(settings_buffer_.image.url.toString());
     ui->image_format_edit->setText(settings_buffer_.image.format);
+
+    SetAdvancedSettingsVisible(false);
 }
 
 Options::~Options() {
@@ -108,3 +110,35 @@ void Options::on_image_format_edit_textChanged(const QString &text) {
     settings_buffer_.image.format = text;
 }
 
+void Options::SetAdvancedSettingsVisible(bool state) {
+    ui->formatting_label->setVisible(state);
+    ui->formatting_line->setVisible(state);
+    ui->example_1->setVisible(state);
+    ui->example_2->setVisible(state);
+    ui->example_3->setVisible(state);
+    ui->change_button_ex_1->setVisible(state);
+    ui->change_button_ex_2->setVisible(state);
+    ui->change_button_ex_3->setVisible(state);
+
+    ui->text_position_label->setVisible(state);
+    ui->text_position_line->setVisible(state);
+    ui->change_text_position_label->setVisible(state);
+    ui->change_text_position_button->setVisible(state);
+
+    ui->database_label->setVisible(state);
+    ui->database_line->setVisible(state);
+    ui->database_name->setVisible(state);
+    ui->database_edit_button->setVisible(state);
+
+    ui->image_line->setVisible(state);
+    ui->image_label->setVisible(state);
+    ui->image_format_label->setVisible(state);
+    ui->image_format_edit->setVisible(state);
+    ui->image_url_label->setVisible(state);
+    ui->image_url_edit->setVisible(state);
+}
+
+void Options::on_advanced_settings_button_clicked() {
+    SetAdvancedSettingsVisible(true);
+    ui->advanced_settings_button->setVisible(false);
+}
