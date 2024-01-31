@@ -1,12 +1,12 @@
 #include "password_form.h"
 #include "ui_password_form.h"
 
-
-
 #include <QMessageBox>
 
-PasswordForm::PasswordForm(QWidget *parent) :
-        QDialog(parent), ui(new Ui::PasswordForm) {
+PasswordForm::PasswordForm(const Models::Passwords& passwords, QWidget *parent) :
+        passwords_(passwords),
+        QDialog(parent),
+        ui(new Ui::PasswordForm) {
     ui->setupUi(this);
 }
 
@@ -15,7 +15,7 @@ PasswordForm::~PasswordForm() {
 }
 
 void PasswordForm::on_password_edit_returnPressed() {
-    if (ui->password_edit->text() == "test") {
+    if (passwords_.GetPasswords().contains(ui->password_edit->text())) {
         accept();
         return;
     }

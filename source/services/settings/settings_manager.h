@@ -24,6 +24,7 @@ public:
         std::array<Models::FontSettings, 3> font_settings;
         Models::Database database;
         Models::Image image;
+        Models::Passwords passwords;
 
         Settings& operator=(const Settings& other){
             output_folder = other.output_folder;
@@ -31,6 +32,7 @@ public:
             font_settings = other.font_settings;
             database = other.database;
             image = other.image;
+            passwords = other.passwords;
             return *this;
         }
 
@@ -64,6 +66,8 @@ private:
     const QString SELECT_IMAGE = "SELECT url, format FROM %1.image WHERE id = 1";
 
     const QString UPDATE_IMAGE = "UPDATE %1.image SET url = %2, format = %3 WHERE id = 1;";
+
+    const QString SELECT_PASSWORDS = "SELECT * FROM %1.advanced_settings_passwords;";
 
     const std::string SETTINGS_FILE_PATH_ = "./settings/settings.ini";
 

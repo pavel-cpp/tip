@@ -140,7 +140,7 @@ void Options::SetAdvancedSettingsVisible(bool state) {
 }
 
 void Options::on_advanced_settings_button_clicked() {
-    PasswordForm form(this);
+    PasswordForm form(settings_buffer_.passwords, this);
     if(form.exec() == QDialog::Accepted){
         SetAdvancedSettingsVisible(true);
         ui->advanced_settings_button->setVisible(false);

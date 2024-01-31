@@ -88,7 +88,8 @@ add_library(
 
 set(CONSOLE_FLAG)
 if (${CMAKE_BUILD_TYPE} MATCHES "Release")
-    set(CONSOLE_FLAG WIN32)
+    set(CONSOLE_FLAG WIN32
+            source/services/database/models/passwords_model.h)
 endif ()
 
 add_executable(

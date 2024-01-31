@@ -76,6 +76,8 @@ void SettingsManager::ReloadSettings() {
     LoadFromDatabase();
 }
 
+#include <QDebug>
+
 void SettingsManager::LoadFromDatabase() {
 
     database_.db.open();
@@ -109,9 +111,18 @@ void SettingsManager::LoadFromDatabase() {
         if (!query.next()) {
             assert(false);
         }
-        QSqlRecord rec = query.record();
-        settings_.image.url = rec.value("url").toUrl();
-        settings_.image.format = rec.value("format").toString();
+        {
+            QSqlRecord rec = query.record();
+            settings_.image.url = rec.value("url").toUrl();
+            settings_.image.format = rec.value("format").toString();
+        }
+
+        query.prepare(SELECT_PASSWORDS.arg(database_.schema));
+        assert(query.exec());
+        while(query.next()){
+
+            settings_.passwords.passwords.push_front(query.record().value("password").toString());
+        }
     }
 
     database_.db.close();
