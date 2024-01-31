@@ -30,7 +30,7 @@
 #			     					                                   #
 #if the project is going under Windows:		      		               #
 # 1. Install Qt5			     			                           #
-# 2. Specify the directory with Qt5 in the CMAKE_PREFIX_PATH field,     #
+# 2. Specify the directory with Qt5 in the CMAKE_PREFIX_PATH field,    #
 #    you can see an example below	 	     		                   #
 # 3. Change the data for the build directory (if necessary)            #
 # 4. Open the terminal and go to the directory with the project        #
@@ -52,8 +52,15 @@ set(CMAKE_PREFIX_PATH ${QT_PATH})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../build) # path/to/build_directory
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ../build)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc")
+set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ ${CMAKE_EXE_LINKER_FLAGS}")
+
+set(CMAKE_CXX_LINKER_FLAGS "-static-libgcc -static-libstdc++ ${CMAKE_CXX_LINKER_FLAGS}")
+
+if(CMAKE_BUILD_TYPE MATCHES "Debug")
+    add_definitions(-DGDB)
+endif()
+
+set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
 set(QT_COMPONENTS Core Gui Widgets Sql PrintSupport Network)
 
@@ -74,9 +81,19 @@ find_files(${UI_DIRECTORY} "ui" UI_FILES)
 
 include_directories(source)
 
+add_library(
+        image_downloader SHARED
+        source/services/image-downloader/image_downloader.cpp
+)
+
+set(CONSOLE_FLAG)
+if (${CMAKE_BUILD_TYPE} MATCHES "Release")
+    set(CONSOLE_FLAG WIN32)
+endif ()
+
 add_executable(
         ${PROJECT_NAME}
-        #        WIN32
+        ${CONSOLE_FLAG}
         source/main.cpp
         source/interfaces/font-editor/font_editor.cpp
         source/interfaces/font-editor/font_editor.h
@@ -84,36 +101,33 @@ add_executable(
         source/interfaces/options/options.h
         source/interfaces/mainwindow/mainwindow.cpp
         source/interfaces/mainwindow/mainwindow.h
-        source/services/settings/const_options.h
-        source/services/settings/settings_manager.cpp
-        source/services/settings/settings_manager.h
-        source/services/text-painter/text_painter.cpp
-        source/services/text-painter/text_painter.h
-        ${UI_FILES}
-        source/services/settings/ini-parser/inicpp.h
-        source/services/image-downloader/image_downloader.h
-        source/services/image-downloader/image_downloader.cpp
-        source/services/database/database.h
-        source/services/database/models/font_settings_model.h
-        source/services/database/models.h
-        source/services/theme-loader/theme_loader.h
         source/interfaces/text-position-selector/text_position_selector.cpp
         source/interfaces/text-position-selector/text_position_selector.h
         source/interfaces/database-settings/database_settings.cpp
         source/interfaces/database-settings/database_settings.h
         source/interfaces/password-form/password_form.cpp
         source/interfaces/password-form/password_form.h
-        source/ui/password_form.ui
+        ${UI_FILES}
+        source/services/settings/settings_manager.cpp
+        source/services/text-painter/text_painter.cpp
+        source/services/theme-loader/theme_loader.cpp
+)
+
+target_link_libraries(
+        image_downloader
+        PUBLIC
+        Qt5::Network
 )
 
 target_link_libraries(
         ${PROJECT_NAME}
+        PUBLIC
         Qt5::Core
         Qt5::Gui
         Qt5::Widgets
         Qt5::Sql
         Qt5::PrintSupport
-        Qt5::Network
+        image_downloader
 )
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)

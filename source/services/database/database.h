@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QSqlDatabase>
-#include <QDebug>
 
 #include <memory>
 #include <QCoreApplication>

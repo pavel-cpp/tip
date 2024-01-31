@@ -13,7 +13,7 @@
 #include <fstream>
 #include <istream>
 #include <map>
-#include <assert.h>
+#include <cassert>
 #include <sstream>
 #include <stdexcept>
 #include <vector>

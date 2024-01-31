@@ -4,9 +4,8 @@
 
 using std::string;
 
-#include <QDebug>
-#include <QSqlError>
 #include <QSqlQuery>
+#include <QVariant>
 
 SettingsManager::SettingsManager(const QString &connection_name) {
     LoadFromIni(connection_name);
@@ -56,10 +55,7 @@ void SettingsManager::Save() {
                             .arg(font.font.bold() ? "true" : "false")
                             .arg(index++)
             );
-            if (!query.exec()) {
-                qDebug() << query.lastError();
-                qDebug() << query.executedQuery();
-            }
+            query.exec();
         }
 
         query.prepare(
@@ -68,10 +64,7 @@ void SettingsManager::Save() {
                         .arg("\'" + settings_.image.url.toString() + "\'")
                         .arg("\'" + settings_.image.format + "\'")
         );
-        if (!query.exec()) {
-            qDebug() << query.lastError();
-            qDebug() << query.executedQuery();
-        }
+        query.exec();
     }
 
     database_.db.close();
