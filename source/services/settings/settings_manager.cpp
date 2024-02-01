@@ -6,6 +6,7 @@ using std::string;
 
 #include <QSqlQuery>
 #include <QVariant>
+#include <QDebug>
 
 SettingsManager::SettingsManager(const QString &connection_name) {
     LoadFromIni(connection_name);
@@ -117,12 +118,16 @@ void SettingsManager::LoadFromDatabase() {
             settings_.image.format = rec.value("format").toString();
         }
 
+//        qDebug() << QString("Query") << SELECT_PASSWORDS.arg(database_.schema);
         query.prepare(SELECT_PASSWORDS.arg(database_.schema));
-        assert(query.exec());
-        while(query.next()){
-
+        query.exec();
+        assert(query.executedQuery() == SELECT_PASSWORDS.arg(database_.schema));
+//        qDebug() << QString("Executed query") << query.executedQuery();
+        while (query.next()) {
+            qDebug() << query.record().value("password").toString();
             settings_.passwords.passwords.push_front(query.record().value("password").toString());
         }
+        qDebug() << settings_.passwords.passwords;
     }
 
     database_.db.close();

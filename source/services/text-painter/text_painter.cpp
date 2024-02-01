@@ -4,7 +4,6 @@
 
 TextPainter::TextPainter(const QImage &image)
         : image_(image) {
-    scene_.setSceneRect(0, 0, image_.width(), image_.height());
     scene_.addPixmap(QPixmap::fromImage(image_));
 }
 
@@ -39,16 +38,13 @@ QPixmap TextPainter::GetResultPixmap() {
     QPixmap pixmap(scene_.sceneRect().size().toSize());
     pixmap.fill(Qt::white);  // Заполняем фон белым цветом
     QPainter painter(&pixmap);
+    scene_.setSceneRect(0, 0, image_.width(), image_.height());
     scene_.render(&painter);
     return pixmap;
 }
 
 QImage TextPainter::GetResultImage() {
-    QPixmap pixmap(scene_.sceneRect().size().toSize());
-    pixmap.fill(Qt::white);  // Заполняем фон белым цветом
-    QPainter painter(&pixmap);
-    scene_.render(&painter);
-    return pixmap.toImage();
+    return GetResultPixmap().toImage();
 }
 
 QImage TextPainter::GetOriginalImage() {

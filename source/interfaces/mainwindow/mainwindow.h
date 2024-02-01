@@ -92,7 +92,7 @@ private:
     Database database_;
     std::unique_ptr<QSqlTableModel> table_model_;
 
-    bool access_;
+    bool access_{};
 
     std::unique_ptr<Ui::MainWindow> ui_;
 

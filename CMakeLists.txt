@@ -16,28 +16,28 @@
 #                                                                      #
 #                                                                      #
 ########################################################################
-#								                                       #
-#    It is recommended to use Clion to build a proct successfully      #
-#	    		     					                               #
-#If the project is going under Linux/Unix/Mac OS:		               #
-# 1. Install Qt5 						                               #
-# 2. Remove the line CMAKE_PREFIX_PATH from this file	               #
+#                                                                      #
+#    It is recommended to use Clion to build a project successfully    #
+#                                                                      #
+#If the project is going under Linux/Unix/Mac OS:                      #
+# 1. Install Qt5                                                       #
+# 2. Remove the line CMAKE_PREFIX_PATH from this file                  #
 # 3. Change the data for the build directory (if necessary)            #
 # 4. Open the terminal and go to the directory with the project        #
-# 5. Write cmake.   		     				                       #
-# 6. make			     				                               #
+# 5. Write cmake.                                                      #
+# 6. make                                                              #
 # 7. Congratulations! The project has been successfully assembled!     #
-#			     					                                   #
-#if the project is going under Windows:		      		               #
-# 1. Install Qt5			     			                           #
+#                                                                      #
+#if the project is going under Windows:                                #
+# 1. Install Qt5                                                       #
 # 2. Specify the directory with Qt5 in the CMAKE_PREFIX_PATH field,    #
-#    you can see an example below	 	     		                   #
+#    you can see an example below                                      #
 # 3. Change the data for the build directory (if necessary)            #
 # 4. Open the terminal and go to the directory with the project        #
-# 5. Write cmake . 		     				                           #
-# 6. make                 			     		                       #
+# 5. Write cmake .                                                     #
+# 6. make                                                              #
 # 7. Congratulations! The project has been successfully assembled!     #
-#			     					                                   #
+#                                                                      #
 ########################################################################
 cmake_minimum_required(VERSION 3.23)
 project(TIP CXX)
@@ -88,8 +88,7 @@ add_library(
 
 set(CONSOLE_FLAG)
 if (${CMAKE_BUILD_TYPE} MATCHES "Release")
-    set(CONSOLE_FLAG WIN32
-            source/services/database/models/passwords_model.h)
+    set(CONSOLE_FLAG WIN32)
 endif ()
 
 add_executable(
@@ -108,6 +107,8 @@ add_executable(
         source/interfaces/database-settings/database_settings.h
         source/interfaces/password-form/password_form.cpp
         source/interfaces/password-form/password_form.h
+        source/interfaces/records-amount-form/records_amount_form.cpp
+        source/interfaces/records-amount-form/records_amount_form.h
         ${UI_FILES}
         source/services/settings/settings_manager.cpp
         source/services/text-painter/text_painter.cpp
@@ -133,8 +134,6 @@ target_link_libraries(
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 set_target_properties(${PROJECT_NAME} PROPERTIES AUTOMOC ON AUTORCC ON AUTOUIC ON)
-
-#file(COPY ${CMAKE_SOURCE_DIR}/build_folder_reference/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 # Копирование содержимого папки reference в build
 add_custom_command(

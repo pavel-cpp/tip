@@ -12,6 +12,6 @@ namespace Models {
         }
     private:
         friend class ::SettingsManager;
-        QStringList passwords;
+        QStringList passwords = {"root"};
     };
 }

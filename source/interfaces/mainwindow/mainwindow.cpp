@@ -2,12 +2,13 @@
 #include <ui_mainwindow.h>
 
 #include <services/theme-loader/theme_loader.h>
-#include "../../services/image-downloader/image_downloader.h"
+#include <services/image-downloader/image_downloader.h>
+
+#include <interfaces/password-form/password_form.h>
+#include <interfaces/records-amount-form/records_amount_form.h>
 
 #include <QDebug>
 #include <QMessageBox>
-
-const QString DATABASE_FILE = "./database/database.db";
 
 const QSizeF dimensionFactor(1.686 * 1.15, 1.481 * 1.15);
 
@@ -46,6 +47,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui_->database_table_view->setModel(table_model_.get());
     ui_->database_table_view->setColumnHidden(0, true);
     log_.info("DatabaseModel table_model_ set to table");
+
+    ui_->database_table_view->addActions(ui_->menubar->actions());
 
     if (!ImageDownloader::FetchImage(
             settings_manager_.GetSettings().consts.source_image_path + "." + settings_manager_.GetSettings().image.format,
@@ -365,12 +368,24 @@ void MainWindow::on_refresh_database_action_triggered() {
 }
 
 void MainWindow::on_insert_single_record_triggered() {
-    table_model_->insertRows(table_model_->rowCount(), 1);
-    table_model_->submit();
+    if(PasswordForm(settings_manager_.GetSettings().passwords, this).exec() == QDialog::Accepted){
+        table_model_->insertRows(table_model_->rowCount(), 1);
+        table_model_->submit();
+    }
 }
 
 void MainWindow::on_insert_same_records_triggered() {
-    // TODO(Pavel): Добавить диалоговое окно
+    if(PasswordForm(settings_manager_.GetSettings().passwords, this).exec() == QDialog::Accepted){
+        int amount;
+        if(RecordsAmountForm(amount, this).exec() == QDialog::Accepted){
+            qDebug() << amount << endl;
+            QSqlQuery query(database_.db);
+            for(int i = 0; i < amount; ++i){
+                query.exec(QString("INSERT INTO %1.clients (name, phone_number, status) VALUES ('', '', false);").arg(database_.schema));
+            }
+            table_model_->select();
+        }
+    }
 }
 
 void MainWindow::SetContents(const QModelIndex &index) {
