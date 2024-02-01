@@ -43,8 +43,6 @@ private slots:
 
     void on_save_some_images_triggered();
 
-    void on_save_some_items_triggered();
-
     void on_copy_triggered();
 
     void on_settings_triggered();
@@ -77,6 +75,8 @@ private slots:
 
     void database_table_view_data_changed(const QModelIndex& index);
 
+    void preview_requested(QPrinter *);
+
 private:
 
     Logger log_ = Logger("logs");
@@ -91,8 +91,6 @@ private:
 
     Database database_;
     std::unique_ptr<QSqlTableModel> table_model_;
-
-    bool access_{};
 
     std::unique_ptr<Ui::MainWindow> ui_;
 

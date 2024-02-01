@@ -4,6 +4,7 @@
 #include <QPixmap>
 #include <QSize>
 #include <QPainter>
+#include <QPrinter>
 
 class ImagePrinter {
 public:
@@ -11,15 +12,12 @@ public:
 
     void AddPixmap(const QPixmap& pixmap);
 
-    ImagePrinter() = default;
-
-    ImagePrinter(QSize size_of_images, QPaintDevice* printer);
-
-    ImagePrinter(const ImagePrinter& other);
+    explicit ImagePrinter(QSize size_of_images, QPrinter* printer);
 
 private:
 
-    QSize size_of_images_;
+    QRect frame_;
+    QPrinter* printer_;
     QPainter painter_;
 
 };

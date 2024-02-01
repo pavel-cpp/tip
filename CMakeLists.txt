@@ -179,6 +179,10 @@ if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
                 COMMAND ${CMAKE_COMMAND} -E copy
                 "${QT_INSTALL_PATH}/plugins/sqldrivers/qsqlpsql${DEBUG_SUFFIX}.dll"
                 "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/sqldrivers/")
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_directory
+                "${QT_INSTALL_PATH}/plugins/printsupport"
+                "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/printsupport")
     endif ()
     foreach (QT_LIB ${QT_COMPONENTS})
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

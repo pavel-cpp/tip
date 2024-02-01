@@ -132,64 +132,29 @@ void MainWindow::on_save_image_triggered() {
 }
 
 void MainWindow::on_print_triggered() {
+    qDebug() << "trigger print" << endl;
     log_.info("Print triggered");
     QPrinter printer(QPrinter::HighResolution);
     printer.setOutputFormat(QPrinter::NativeFormat);
-    printer.setPrinterName("EPSON L3210 Series");
     QPrintDialog dialog(&printer, this);
+    connect(&dialog, SIGNAL(paintRequested(QPrinter *)), this, SLOT(preview_requested(QPrinter *)));
     if (dialog.exec() == QDialog::Rejected) {
         log_.info("Printer rejected");
         return;
     }
-    log_.info("Print started");
-    QPainter painter(&printer);
-    painter.setRenderHint(QPainter::SmoothPixmapTransform);
-    QModelIndexList selectedList = ui->database_table_view_->selectionModel()->selectedRows();
+    ImagePrinter image_printer({200, 200}, &printer);
+    QModelIndexList indexes = ui_->database_table_view->selectionModel()->selectedRows();
+    for(const auto& index: indexes){
+        SetContents(index);
 
-    if (!selectedList.empty()) {
-        int intervalX = 0, intervalY = -(image_.height() * dimensionFactor.height() - 100);
-        for (int i = 0; i < selectedList.size(); i++) {
-
-            log_.info("Image " + std::to_string(i) + " printed!");
-
-            if (i % 12 == 0 && i != 0) {
-                printer.newPage();
-                intervalY = -(image_.height() * dimensionFactor.height() - 100);
-                intervalX = 0;
-            }
-
-            items[0] = QString::fromStdString(std::to_string(selectedList[i].row() + 1));
-            items[1] = table_model_->index(selectedList[i].row(), 0).data().toString();
-            items[2] = table_model_->index(selectedList[i].row(), 1).data().toString();
-            draw();
-
-            table_model_->setData(
-                    table_model_->index(
-                            selectedList[i].row(),
-                            2
-                    ),
-                    "Распечатан"
-            );
-
-            if (i % 2 == 0) {
-                intervalY += image_.height() * dimensionFactor.height() + 100;
-                intervalX = 0;
-            }
-
-            painter.drawPixmap(150 + intervalX, 150 + intervalY, image_.width() * dimensionFactor.width(),
-                               image_.height() * dimensionFactor.height(),
-                               QPixmap::fromImage(*image_));
-            intervalX += image_.width() * dimensionFactor.width() + 100;
+        text_painter_.Clear();
+        for (const auto &item: items_) {
+            text_painter_.DrawText(item);
         }
-    } else {
-        table_model_->setData(
-                table_model_->index(selectedList[0].row(), 3),
-                "Распечатан"
-        );
-        painter.drawPixmap(150, 150, image_.width() * dimensionFactor.width(),
-                           image_.height() * dimensionFactor.height(), QPixmap::fromImage(*image_));
+
+        image_printer.AddPixmap(text_painter_.GetResultPixmap());
     }
-    painter.end();
+    log_.info("Print started");
 }
 
 void MainWindow::on_database_table_view_clicked(const QModelIndex &index) {
@@ -245,52 +210,6 @@ void MainWindow::on_image_scale_down_triggered() {
     current_image_size_.setWidth(current_image_size_.width() - 50);
     current_image_size_.setHeight(current_image_size_.height() - 50);
     ReDrawImage();
-}
-
-void MainWindow::on_save_some_items_triggered() {
-    /*log_.info("Save some items triggered!");
-    unsigned amount;
-    log_.info("Records amount dialog opened!");
-    RecordsAmmount dialog(&amount);
-    if (dialog.exec() == QDialog::Rejected) {
-        log_.info("Rejected!");
-        return;
-    }
-    log_.info("Accepted! Ammount: " + std::to_string(amount));
-    QList<int> list;
-    log_.info("Cells: ");
-    for (int i = 0; i < table_model_->rowCount() && list.size() < amount; ++i) {
-        if (table_model_->index(i, 0).data().toString().isEmpty() &&
-            table_model_->index(i, 1).data().toString().isEmpty()) {
-            list.push_back(i);
-            log_.info(i);
-        }
-    }
-    ui->progressBar->setMaximum(amount);
-    int maximum = amount;
-    ui->progressBar->setVisible(true);
-    if (list.isEmpty()) {
-        log_.warn("List is empty!");
-        return;
-    }
-    log_.info("Inserting data: ");
-    while (amount--) {
-        if (list.isEmpty()) break;
-        QSqlRecord record = table_model_->record();
-        record.setValue("Name", items[1]);
-        record.setValue("Phone", items[2]);
-        record.setValue("Status", " ");
-        record.setValue("Number", table_model_->index(list.first(), 3).data().toString());
-        log_.info("    Record: " + std::to_string(list.first()) + " " + items[1].toStdString() + " " +
-                   items[2].toStdString());
-        table_model_->setRecord(list.first(), record);
-        list.pop_front();
-        ui->progressBar->setValue((maximum - (amount + 1)) % maximum);
-    }
-    ui->progressBar->setVisible(false);
-    table_model_->submitAll();
-    ui->statusbar->showMessage("Запись успешно довалена!");
-    log_.info("Save some items end!");*/
 }
 
 void MainWindow::on_save_some_images_triggered() {
@@ -392,5 +311,20 @@ void MainWindow::on_insert_same_records_triggered() {
 void MainWindow::SetContents(const QModelIndex &index) {
     for (int i = 0; i < 3; ++i) {
         items_[i].content = table_model_->index(index.row(), i).data().toString();
+    }
+}
+
+void MainWindow::preview_requested(QPrinter *printer) {
+    ImagePrinter image_printer({500, 600}, printer);
+    QModelIndexList indexes = ui_->database_table_view->selectionModel()->selectedRows();
+    for(const auto& index: indexes){
+        SetContents(index);
+
+        text_painter_.Clear();
+        for (const auto &item: items_) {
+            text_painter_.DrawText(item);
+        }
+
+        image_printer.AddPixmap(text_painter_.GetResultPixmap());
     }
 }
