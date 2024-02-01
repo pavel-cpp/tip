@@ -3,6 +3,7 @@
 
 #include <services/theme-loader/theme_loader.h>
 #include <services/image-downloader/image_downloader.h>
+#include <services/image-printer/image_printer.h>
 
 #include <interfaces/password-form/password_form.h>
 #include <interfaces/records-amount-form/records_amount_form.h>
@@ -131,7 +132,7 @@ void MainWindow::on_save_image_triggered() {
 }
 
 void MainWindow::on_print_triggered() {
-    /*log_.info("Print triggered");
+    log_.info("Print triggered");
     QPrinter printer(QPrinter::HighResolution);
     printer.setOutputFormat(QPrinter::NativeFormat);
     printer.setPrinterName("EPSON L3210 Series");
@@ -188,7 +189,7 @@ void MainWindow::on_print_triggered() {
         painter.drawPixmap(150, 150, image_.width() * dimensionFactor.width(),
                            image_.height() * dimensionFactor.height(), QPixmap::fromImage(*image_));
     }
-    painter.end();*/
+    painter.end();
 }
 
 void MainWindow::on_database_table_view_clicked(const QModelIndex &index) {

@@ -113,6 +113,7 @@ add_executable(
         source/services/settings/settings_manager.cpp
         source/services/text-painter/text_painter.cpp
         source/services/theme-loader/theme_loader.cpp
+        source/services/image-printer/image_printer.cpp
 )
 
 target_link_libraries(
