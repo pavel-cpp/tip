@@ -14,7 +14,11 @@ public:
 
     explicit ImagePrinter(QSize size_of_images, QPrinter* printer);
 
+    static int FromCentimetersToPixels(int centimeters);
+
 private:
+
+    const short SPACING = 10;
 
     QRect frame_;
     QPrinter* printer_;

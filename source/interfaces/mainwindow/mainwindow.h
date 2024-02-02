@@ -75,8 +75,6 @@ private slots:
 
     void database_table_view_data_changed(const QModelIndex& index);
 
-    void preview_requested(QPrinter *);
-
 private:
 
     Logger log_ = Logger("logs");

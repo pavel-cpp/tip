@@ -10,6 +10,7 @@
 
 #include <QDebug>
 #include <QMessageBox>
+#include <QPrintPreviewDialog>
 
 const QSizeF dimensionFactor(1.686 * 1.15, 1.481 * 1.15);
 
@@ -132,18 +133,20 @@ void MainWindow::on_save_image_triggered() {
 }
 
 void MainWindow::on_print_triggered() {
-    qDebug() << "trigger print" << endl;
     log_.info("Print triggered");
     QPrinter printer(QPrinter::HighResolution);
     printer.setOutputFormat(QPrinter::NativeFormat);
+    QModelIndexList indexes = ui_->database_table_view->selectionModel()->selectedRows();
+    if(indexes.empty()){
+        QMessageBox::warning(this, "Предупреждение!", "Перед печатью выберете записи!");
+        return;
+    }
     QPrintDialog dialog(&printer, this);
-    connect(&dialog, SIGNAL(paintRequested(QPrinter *)), this, SLOT(preview_requested(QPrinter *)));
     if (dialog.exec() == QDialog::Rejected) {
         log_.info("Printer rejected");
         return;
     }
-    ImagePrinter image_printer({200, 200}, &printer);
-    QModelIndexList indexes = ui_->database_table_view->selectionModel()->selectedRows();
+    ImagePrinter image_printer({ImagePrinter::FromCentimetersToPixels(7), ImagePrinter::FromCentimetersToPixels(4)}, &printer);
     for(const auto& index: indexes){
         SetContents(index);
 
@@ -311,20 +314,5 @@ void MainWindow::on_insert_same_records_triggered() {
 void MainWindow::SetContents(const QModelIndex &index) {
     for (int i = 0; i < 3; ++i) {
         items_[i].content = table_model_->index(index.row(), i).data().toString();
-    }
-}
-
-void MainWindow::preview_requested(QPrinter *printer) {
-    ImagePrinter image_printer({500, 600}, printer);
-    QModelIndexList indexes = ui_->database_table_view->selectionModel()->selectedRows();
-    for(const auto& index: indexes){
-        SetContents(index);
-
-        text_painter_.Clear();
-        for (const auto &item: items_) {
-            text_painter_.DrawText(item);
-        }
-
-        image_printer.AddPixmap(text_painter_.GetResultPixmap());
     }
 }
