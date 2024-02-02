@@ -17,7 +17,7 @@ class TextPositionSelector : public QDialog {
 Q_OBJECT
 
 public:
-    explicit TextPositionSelector(std::array<Models::FontSettings, 3>& font_settings, QDialog *parent = nullptr);
+    explicit TextPositionSelector(std::array<Models::FontSettings, 3> &font_settings, QDialog *parent = nullptr);
 
     ~TextPositionSelector() override;
 
@@ -33,5 +33,5 @@ private:
     QGraphicsScene scene_;
     std::array<QGraphicsTextItem, 3> items_;
 
-    std::array<Models::FontSettings, 3>& font_settings_;
+    std::array<Models::FontSettings, 3> &font_settings_;
 };

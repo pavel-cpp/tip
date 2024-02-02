@@ -25,7 +25,7 @@ private slots:
 
     void on_blue_slider_valueChanged(int value);
 
-    void on_font_combo_box_currentFontChanged(const QFont& font);
+    void on_font_combo_box_currentFontChanged(const QFont &font);
 
     void on_bold_check_box_stateChanged(int value);
 
@@ -39,7 +39,7 @@ private:
 
     Models::FontSettings font_settings_buffer_;
 
-    Models::FontSettings& font_settings_;
+    Models::FontSettings &font_settings_;
 
     Ui::FontEditor *ui;
 };

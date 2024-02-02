@@ -10,7 +10,7 @@ class RecordsAmountForm : public QDialog {
 Q_OBJECT
 
 public:
-    explicit RecordsAmountForm(int& amount, QWidget *parent = nullptr);
+    explicit RecordsAmountForm(int &amount, QWidget *parent = nullptr);
 
     ~RecordsAmountForm() override;
 
@@ -20,7 +20,7 @@ private slots:
 
 private:
 
-    int& amount_;
+    int &amount_;
 
     Ui::RecordsAmountForm *ui;
 };

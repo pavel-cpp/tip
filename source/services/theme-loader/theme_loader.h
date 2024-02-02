@@ -2,6 +2,6 @@
 
 #include <QString>
 
-namespace Theme{
-    QString Load(const QString& theme_name);
+namespace Theme {
+    QString Load(const QString &theme_name);
 }

@@ -73,7 +73,7 @@ private slots:
 
     void on_insert_same_records_triggered();
 
-    void database_table_view_data_changed(const QModelIndex& index);
+    void database_table_view_data_changed(const QModelIndex &index);
 
 private:
 
@@ -90,11 +90,11 @@ private:
     Database database_;
     std::unique_ptr<QSqlTableModel> table_model_;
 
-    std::unique_ptr<Ui::MainWindow> ui_;
+    std::unique_ptr<Ui::MainWindow> ui;
 
     void ReDrawImage();
 
-    void SetContents(const QModelIndex& index);
+    void SetContents(const QModelIndex &index);
 
 };
 

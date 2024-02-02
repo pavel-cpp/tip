@@ -19,11 +19,11 @@ public:
             std::ios_base::app) {
         QStringList list = QDir((path + "/").c_str()).entryList(QDir::Files);
         QDate date;
-        for(auto i : list) {
-            if(!i.contains("log_")) continue;
+        for (auto i: list) {
+            if (!i.contains("log_")) continue;
             QStringList parse = i.split('_');
             date.setDate(parse[3].toInt(), parse[2].toInt(), parse[1].toInt());
-            if(date.addDays(7) <= QDate::currentDate()) {
+            if (date.addDays(7) <= QDate::currentDate()) {
                 system(("del " + path + "\\" + i.toStdString()).c_str());
             }
         }

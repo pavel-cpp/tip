@@ -2,7 +2,7 @@
 #include "ui_records_amount_form.h"
 
 
-RecordsAmountForm::RecordsAmountForm(int& amount, QWidget *parent) :
+RecordsAmountForm::RecordsAmountForm(int &amount, QWidget *parent) :
         amount_(amount),
         QDialog(parent),
         ui(new Ui::RecordsAmountForm) {

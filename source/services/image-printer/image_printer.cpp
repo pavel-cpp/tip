@@ -7,7 +7,6 @@ ImagePrinter::ImagePrinter(QSize size_of_images, QPrinter *printer) :
     if (printer == nullptr) {
         throw std::invalid_argument("printer is nullptr");
     }
-//    painter_.setRenderHint(QPainter::SmoothPixmapTransform);
 }
 
 void ImagePrinter::AddImage(const QImage &image) {
@@ -17,8 +16,6 @@ void ImagePrinter::AddImage(const QImage &image) {
 #include <QDebug>
 
 void ImagePrinter::AddPixmap(const QPixmap &pixmap) {
-    // TODO(Pavel): Fix warp bug
-//    qDebug() << frame_;
     painter_.drawPixmap(frame_, pixmap);
     frame_.moveLeft(frame_.left() + frame_.width() + SPACING);
     if (frame_.left() + SPACING >= painter_.device()->width()) {
@@ -30,7 +27,6 @@ void ImagePrinter::AddPixmap(const QPixmap &pixmap) {
         frame_.moveLeft(SPACING);
         frame_.moveTop(SPACING);
     }
-//    frame_.setSize(tmp);
 }
 
 int ImagePrinter::FromCentimetersToPixels(int centimeters) {

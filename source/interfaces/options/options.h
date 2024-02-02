@@ -20,7 +20,7 @@ private slots:
 
     void on_path_to_button_clicked();
 
-    void on_path_to_edit_textChanged(const QString& text);
+    void on_path_to_edit_textChanged(const QString &text);
 
     void on_theme_combo_box_currentIndexChanged(int);
 
@@ -36,9 +36,9 @@ private slots:
 
     void on_save_button_clicked();
 
-    void on_image_url_edit_textChanged(const QString& text);
+    void on_image_url_edit_textChanged(const QString &text);
 
-    void on_image_format_edit_textChanged(const QString& text);
+    void on_image_format_edit_textChanged(const QString &text);
 
     void on_advanced_settings_button_clicked();
 

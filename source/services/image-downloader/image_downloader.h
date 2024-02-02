@@ -5,5 +5,5 @@
 
 class ImageDownloader {
 public:
-    static bool FetchImage(const QString& path, const QUrl& url);
+    static bool FetchImage(const QString &path, const QUrl &url);
 };

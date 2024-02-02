@@ -1,13 +1,13 @@
 #include "text_position_selector.h"
 #include "ui_text_position_selector.h"
 
-TextPositionSelector::TextPositionSelector(std::array<Models::FontSettings, 3>& font_settings, QDialog *parent) :
-        QDialog(parent), 
+TextPositionSelector::TextPositionSelector(std::array<Models::FontSettings, 3> &font_settings, QDialog *parent) :
+        QDialog(parent),
         ui(new Ui::TextPositionSelector),
         font_settings_(font_settings),
         scene_(this) {
     ui->setupUi(this);
-    
+
     QImage img(Constants().source_image_path);
     scene_.setSceneRect(0, 0, img.width(), img.height());
     ui->graphics_view->setFixedSize(img.size());
@@ -21,7 +21,8 @@ TextPositionSelector::TextPositionSelector(std::array<Models::FontSettings, 3>& 
         items_[i].setFont(font_settings_[i].font);
         items_[i].setDefaultTextColor(font_settings_[i].color);
         QPoint top_left = font_settings_[i].position;
-        top_left.setX(top_left.x() - QFontMetrics(font_settings_[i].font).boundingRect(items_[i].toPlainText()).width() / 2);
+        top_left.setX(
+                top_left.x() - QFontMetrics(font_settings_[i].font).boundingRect(items_[i].toPlainText()).width() / 2);
         items_[i].setPos(top_left);
         items_[i].setFlag(QGraphicsTextItem::GraphicsItemFlag::ItemIsMovable);
         scene_.addItem(&items_[i]);

@@ -29,11 +29,17 @@ Options::Options(QWidget *parent) :
         ui->theme_combo_box->addItem(theme.split(".qss").front());
     }
     ui->example_1->setFont(settings_buffer_.font_settings[0].font);
-    ui->example_1->setStyleSheet(QString("color: %1;\nfont-size: %2px;").arg(settings_buffer_.font_settings[0].color.name(QColor::HexRgb)).arg(settings_buffer_.font_settings[0].font.pixelSize()));
+    ui->example_1->setStyleSheet(QString("color: %1;\nfont-size: %2px;").arg(
+            settings_buffer_.font_settings[0].color.name(QColor::HexRgb)).arg(
+            settings_buffer_.font_settings[0].font.pixelSize()));
     ui->example_2->setFont(settings_buffer_.font_settings[1].font);
-    ui->example_2->setStyleSheet(QString("color: %1;\nfont-size: %2px;").arg(settings_buffer_.font_settings[1].color.name(QColor::HexRgb)).arg(settings_buffer_.font_settings[1].font.pixelSize()));
+    ui->example_2->setStyleSheet(QString("color: %1;\nfont-size: %2px;").arg(
+            settings_buffer_.font_settings[1].color.name(QColor::HexRgb)).arg(
+            settings_buffer_.font_settings[1].font.pixelSize()));
     ui->example_3->setFont(settings_buffer_.font_settings[2].font);
-    ui->example_3->setStyleSheet(QString("color: %1;\nfont-size: %2px;").arg(settings_buffer_.font_settings[2].color.name(QColor::HexRgb)).arg(settings_buffer_.font_settings[2].font.pixelSize()));
+    ui->example_3->setStyleSheet(QString("color: %1;\nfont-size: %2px;").arg(
+            settings_buffer_.font_settings[2].color.name(QColor::HexRgb)).arg(
+            settings_buffer_.font_settings[2].font.pixelSize()));
     ui->image_url_edit->setText(settings_buffer_.image.url.toString());
     ui->image_format_edit->setText(settings_buffer_.image.format);
 
@@ -50,7 +56,7 @@ void Options::on_path_to_button_clicked() {
             tr("Выберите папку для сохранения"),
             QDir::homePath()
     );
-    if(!folder.isEmpty()){
+    if (!folder.isEmpty()) {
         ui->path_to_edit->setText(folder);
         settings_buffer_.output_folder = folder;
     }
@@ -64,19 +70,25 @@ void Options::on_theme_combo_box_currentIndexChanged(int) {
 void Options::on_change_button_ex_1_clicked() {
     FontEditor(settings_buffer_.font_settings[0], this).exec();
     ui->example_1->setFont(settings_buffer_.font_settings[0].font);
-    ui->example_1->setStyleSheet(QString("color: %1;\nfont-size: %2px;").arg(settings_buffer_.font_settings[0].color.name(QColor::HexRgb)).arg(settings_buffer_.font_settings[0].font.pixelSize()));
+    ui->example_1->setStyleSheet(QString("color: %1;\nfont-size: %2px;").arg(
+            settings_buffer_.font_settings[0].color.name(QColor::HexRgb)).arg(
+            settings_buffer_.font_settings[0].font.pixelSize()));
 }
 
 void Options::on_change_button_ex_2_clicked() {
     FontEditor(settings_buffer_.font_settings[1], this).exec();
     ui->example_2->setFont(settings_buffer_.font_settings[1].font);
-    ui->example_2->setStyleSheet(QString("color: %1;\nfont-size: %2px;").arg(settings_buffer_.font_settings[1].color.name(QColor::HexRgb)).arg(settings_buffer_.font_settings[1].font.pixelSize()));
+    ui->example_2->setStyleSheet(QString("color: %1;\nfont-size: %2px;").arg(
+            settings_buffer_.font_settings[1].color.name(QColor::HexRgb)).arg(
+            settings_buffer_.font_settings[1].font.pixelSize()));
 }
 
 void Options::on_change_button_ex_3_clicked() {
     FontEditor(settings_buffer_.font_settings[2], this).exec();
     ui->example_3->setFont(settings_buffer_.font_settings[2].font);
-    ui->example_3->setStyleSheet(QString("color: %1;\nfont-size: %2px;").arg(settings_buffer_.font_settings[2].color.name(QColor::HexRgb)).arg(settings_buffer_.font_settings[2].font.pixelSize()));
+    ui->example_3->setStyleSheet(QString("color: %1;\nfont-size: %2px;").arg(
+            settings_buffer_.font_settings[2].color.name(QColor::HexRgb)).arg(
+            settings_buffer_.font_settings[2].font.pixelSize()));
 }
 
 void Options::on_change_text_position_button_clicked() {
@@ -88,10 +100,10 @@ void Options::on_database_edit_button_clicked() {
 }
 
 void Options::on_save_button_clicked() {
-    if(settings_manager_.GetSettings().image.url != settings_buffer_.image.url ||
+    if (settings_manager_.GetSettings().image.url != settings_buffer_.image.url ||
         settings_manager_.GetSettings().database.host != settings_buffer_.database.host ||
         settings_manager_.GetSettings().database.port != settings_buffer_.database.port ||
-        settings_manager_.GetSettings().database.schema != settings_buffer_.database.schema){
+        settings_manager_.GetSettings().database.schema != settings_buffer_.database.schema) {
         QMessageBox::information(this, "Подсказка", "После сохранения настроек перезапустите программу!");
     }
     settings_manager_.SetSettings(settings_buffer_);
@@ -99,7 +111,7 @@ void Options::on_save_button_clicked() {
     close();
 }
 
-void Options::on_path_to_edit_textChanged(const QString& text) {
+void Options::on_path_to_edit_textChanged(const QString &text) {
     settings_buffer_.output_folder = text;
 }
 
@@ -141,7 +153,7 @@ void Options::SetAdvancedSettingsVisible(bool state) {
 
 void Options::on_advanced_settings_button_clicked() {
     PasswordForm form(settings_buffer_.passwords, this);
-    if(form.exec() == QDialog::Accepted){
+    if (form.exec() == QDialog::Accepted) {
         SetAdvancedSettingsVisible(true);
         ui->advanced_settings_button->setVisible(false);
     }

@@ -56,9 +56,9 @@ set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ ${CMAKE_EXE_LINKER_
 
 set(CMAKE_CXX_LINKER_FLAGS "-static-libgcc -static-libstdc++ ${CMAKE_CXX_LINKER_FLAGS}")
 
-if(CMAKE_BUILD_TYPE MATCHES "Debug")
+if (CMAKE_BUILD_TYPE MATCHES "Debug")
     add_definitions(-DGDB)
-endif()
+endif ()
 
 set(CMAKE_SHARED_LIBRARY_PREFIX "")
 

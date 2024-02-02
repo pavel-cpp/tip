@@ -4,7 +4,7 @@
 #include <QMessageBox>
 #include <QDebug>
 
-PasswordForm::PasswordForm(const Models::Passwords& passwords, QWidget *parent) :
+PasswordForm::PasswordForm(const Models::Passwords &passwords, QWidget *parent) :
         passwords_(passwords),
         QDialog(parent),
         ui(new Ui::PasswordForm) {
@@ -18,7 +18,7 @@ PasswordForm::~PasswordForm() {
 
 void PasswordForm::on_password_edit_returnPressed() {
     qDebug() << passwords_.GetPasswords() << passwords_.GetPasswords().size();
-    if(passwords_.GetPasswords().size() == 1 && passwords_.GetPasswords().last() == ui->password_edit->text()){
+    if (passwords_.GetPasswords().size() == 1 && passwords_.GetPasswords().last() == ui->password_edit->text()) {
         accept();
         return;
     }

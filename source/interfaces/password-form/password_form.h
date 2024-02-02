@@ -11,14 +11,15 @@ class PasswordForm : public QDialog {
 Q_OBJECT
 
 public:
-    explicit PasswordForm(const Models::Passwords& passwords ,QWidget *parent = nullptr);
+    explicit PasswordForm(const Models::Passwords &passwords, QWidget *parent = nullptr);
 
     ~PasswordForm() override;
 
 private slots:
+
     void on_password_edit_returnPressed();
 
 private:
-    const Models::Passwords& passwords_;
+    const Models::Passwords &passwords_;
     Ui::PasswordForm *ui;
 };

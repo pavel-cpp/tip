@@ -6,7 +6,7 @@
 #include <QEventLoop>
 #include <QFile>
 
-bool ImageDownloader::FetchImage(const QString& path, const QUrl &url) {
+bool ImageDownloader::FetchImage(const QString &path, const QUrl &url) {
     QNetworkAccessManager manager;
     QNetworkRequest request(url);
 

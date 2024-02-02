@@ -5,13 +5,15 @@
 class SettingsManager;
 
 namespace Models {
-    class Passwords{
+    class Passwords {
     public:
-        const QStringList& GetPasswords() const{
+        const QStringList &GetPasswords() const {
             return passwords;
         }
+
     private:
         friend class ::SettingsManager;
+
         QStringList passwords = {"root"};
     };
 }

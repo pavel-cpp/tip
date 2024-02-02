@@ -26,7 +26,7 @@ public:
         Models::Image image;
         Models::Passwords passwords;
 
-        Settings& operator=(const Settings& other){
+        Settings &operator=(const Settings &other) {
             output_folder = other.output_folder;
             theme = other.theme;
             font_settings = other.font_settings;
@@ -38,13 +38,13 @@ public:
 
     };
 
-    explicit SettingsManager(const QString& connection_name = "default");
+    explicit SettingsManager(const QString &connection_name = "default");
 
     void ReloadSettings();
 
     Settings GetSettings();
 
-    void SetSettings(const Settings& settings);
+    void SetSettings(const Settings &settings);
 
     void Save();
 
@@ -52,7 +52,7 @@ private:
 
     void LoadFromDatabase();
 
-    void LoadFromIni(const QString& connection_name);
+    void LoadFromIni(const QString &connection_name);
 
     Database database_;
 

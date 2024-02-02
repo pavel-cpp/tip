@@ -8,11 +8,11 @@
 
 class ImagePrinter {
 public:
-    void AddImage(const QImage& image);
+    void AddImage(const QImage &image);
 
-    void AddPixmap(const QPixmap& pixmap);
+    void AddPixmap(const QPixmap &pixmap);
 
-    explicit ImagePrinter(QSize size_of_images, QPrinter* printer);
+    explicit ImagePrinter(QSize size_of_images, QPrinter *printer);
 
     static int FromCentimetersToPixels(int centimeters);
 
@@ -21,7 +21,7 @@ private:
     const short SPACING = 10;
 
     QRect frame_;
-    QPrinter* printer_;
+    QPrinter *printer_;
     QPainter painter_;
 
 };

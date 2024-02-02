@@ -3,7 +3,7 @@
 
 #include <services/database/database.h>
 
-DatabaseSettings::DatabaseSettings(Models::Database& database_settings, QWidget *parent) :
+DatabaseSettings::DatabaseSettings(Models::Database &database_settings, QWidget *parent) :
         QDialog(parent),
         ui(new Ui::DatabaseSettings),
         database_settings_(database_settings),
@@ -47,10 +47,10 @@ void DatabaseSettings::on_schema_edit_textChanged(const QString &text) {
 
 void DatabaseSettings::on_test_button_clicked() {
     Database test_database(database_settings_buffer_, "test");
-    if(test_database.connect()){
+    if (test_database.connect()) {
         ui->status_label->setText("Статус: Ok");
         test_database.disconnect();
-    }else{
+    } else {
         ui->status_label->setText("Статус: Ошибка подключения");
     }
 }
