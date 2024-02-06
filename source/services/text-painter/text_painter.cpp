@@ -1,5 +1,6 @@
 #include "text_painter.h"
-#include <QDebug>
+
+// Qt
 #include <QGraphicsTextItem>
 
 TextPainter::TextPainter(const QImage &image)

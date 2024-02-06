@@ -1,11 +1,14 @@
 #pragma once
 
+// Qt
 #include <QDialog>
 #include <QGraphicsScene>
 #include <QGraphicsTextItem>
 
+// STL
 #include <array>
 
+// Services
 #include <services/database/models/font_settings_model.h>
 #include <services/settings/const_options.h>
 

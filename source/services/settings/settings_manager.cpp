@@ -4,9 +4,8 @@
 
 using std::string;
 
+// Qt
 #include <QSqlQuery>
-#include <QVariant>
-#include <QDebug>
 
 SettingsManager::SettingsManager(const QString &connection_name) {
     LoadFromIni(connection_name);

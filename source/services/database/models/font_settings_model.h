@@ -1,8 +1,9 @@
 #pragma once
 
-#include <QPointF>
-#include <QFont>
+// Qt
 #include <QColor>
+#include <QFont>
+#include <QPointF>
 
 namespace Models {
     struct FontSettings {

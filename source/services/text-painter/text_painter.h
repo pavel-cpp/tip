@@ -1,14 +1,19 @@
 #pragma once
 
+// QImage
 #include <QImage>
 #include <QPainter>
 
-#include <memory>
-#include <deque>
-
-#include <services/database/models/font_settings_model.h>
+// QtGraphics
 #include <QGraphicsScene>
 #include <QGraphicsTextItem>
+
+// STDLIB
+#include <deque>
+#include <memory>
+
+// Services
+#include <services/database/models/font_settings_model.h>
 
 class TextPainter {
 public:

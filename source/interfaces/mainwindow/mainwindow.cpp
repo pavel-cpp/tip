@@ -1,18 +1,21 @@
 #include "mainwindow.h"
 #include <ui_mainwindow.h>
 
-#include <services/theme-loader/theme_loader.h>
+// Services
 #include <services/image-downloader/image_downloader.h>
 #include <services/image-printer/image_printer.h>
+#include <services/theme-loader/theme_loader.h>
 
+// Interfaces
 #include <interfaces/password-form/password_form.h>
 #include <interfaces/records-amount-form/records_amount_form.h>
 
-#include <QDebug>
+// Qt
+#include <QClipboard>
 #include <QMessageBox>
-#include <QPrintPreviewDialog>
-
-const QSizeF dimensionFactor(1.686 * 1.15, 1.481 * 1.15);
+#include <QPrintDialog>
+#include <QPrinter>
+#include <QSqlQuery>
 
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent), ui(std::make_unique<Ui::MainWindow>()),
@@ -27,19 +30,19 @@ MainWindow::MainWindow(QWidget *parent)
     ui->screen->addAction(ui->image_scale_up);
     ui->screen->addAction(ui->image_scale_down);
 
-    log_.info("Starting...");
+    log_.Info("Starting...");
 
     if (!database_.connect()) {
         QMessageBox::critical(this, "Ошибка!", "Не удалось подключиться к базе данных");
     }
-    log_.info("DatabaseModel initialized");
+    log_.Info("DatabaseModel initialized");
 
     table_model_ = std::make_unique<QSqlTableModel>(this, database_.db);
     table_model_->setTable(database_.schema + ".clients");
     table_model_->select();
     table_model_->sort(0, Qt::SortOrder::AscendingOrder);
 
-    log_.info("DatabaseModel table_model_ initialized");
+    log_.Info("DatabaseModel table_model_ initialized");
 
     connect(table_model_.get(), SIGNAL(dataChanged(
                                                const QModelIndex &, const QModelIndex &, const QVector<int> &)),
@@ -48,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->database_table_view->setModel(table_model_.get());
     ui->database_table_view->setColumnHidden(0, true);
-    log_.info("DatabaseModel table_model_ set to table");
+    log_.Info("DatabaseModel table_model_ set to table");
 
     ui->database_table_view->addActions(ui->menubar->actions());
 
@@ -80,24 +83,24 @@ MainWindow::MainWindow(QWidget *parent)
         text_painter_.DrawText(item);
     }
 
-    current_image_size_ = default_image_size_ = text_painter_.GetOriginalImage().size();
+    current_image_size_ = text_painter_.GetOriginalImage().size();
 
     ui->progress_bar->setVisible(false);
 
     ui->screen->setPixmap(text_painter_.GetResultPixmap());
 
-    log_.info("Initializing done!");
+    log_.Info("Initializing done!");
 }
 
 MainWindow::~MainWindow() {
-    log_.info("Closed!");
+    log_.Info("Closed!");
 }
 
 void MainWindow::on_copy_triggered() {
     QClipboard *clipboard = QGuiApplication::clipboard();
     clipboard->setImage(text_painter_.GetResultImage(), QClipboard::Clipboard);
     ui->statusbar->showMessage("Картинка успешно скопирована в буфер обмена!");
-    log_.info("Image successfully copied");
+    log_.Info("Image successfully copied");
 }
 
 void MainWindow::on_settings_triggered() {
@@ -109,7 +112,7 @@ void MainWindow::on_settings_triggered() {
     ReDrawImage();
     this->setStyleSheet(Theme::Load(settings_manager_.GetSettings().theme));
     ui->statusbar->showMessage("Настройки сохранены!");
-    log_.info("Settings saved");
+    log_.Info("Settings saved");
 }
 
 void MainWindow::on_save_image_triggered() {
@@ -130,13 +133,11 @@ void MainWindow::on_save_image_triggered() {
                                    + " успешно сохранена!");
     } else {
         ui->statusbar->showMessage("Ошибка сохранения картинки!");
-        qDebug() << settings_manager_.GetSettings().image.url << endl
-                 << settings_manager_.GetSettings().image.format << endl;
     }
 }
 
 void MainWindow::on_print_triggered() {
-    log_.info("Print triggered");
+    log_.Info("Print triggered");
     QPrinter printer(QPrinter::HighResolution);
     printer.setOutputFormat(QPrinter::NativeFormat);
     QModelIndexList indexes = ui->database_table_view->selectionModel()->selectedRows();
@@ -146,10 +147,11 @@ void MainWindow::on_print_triggered() {
     }
     QPrintDialog dialog(&printer, this);
     if (dialog.exec() == QDialog::Rejected) {
-        log_.info("Printer rejected");
+        log_.Info("Printer rejected");
         return;
     }
-    ImagePrinter image_printer({ImagePrinter::FromCentimetersToPixels(7), ImagePrinter::FromCentimetersToPixels(4)},
+    ImagePrinter image_printer({ImagePrinter::FromCentimetersToPixels(7, printer.resolution()),
+                                ImagePrinter::FromCentimetersToPixels(4, printer.resolution())},
                                &printer);
     for (const auto &index: indexes) {
         SetContents(index);
@@ -161,21 +163,21 @@ void MainWindow::on_print_triggered() {
 
         image_printer.AddPixmap(text_painter_.GetResultPixmap());
     }
-    log_.info("Print started");
+    log_.Info("Print started");
 }
 
 void MainWindow::on_database_table_view_clicked(const QModelIndex &index) {
-    log_.info("On table clicked");
+    log_.Info("On table clicked");
     SetContents(index);
     ReDrawImage();
 }
 
 void MainWindow::on_database_search_textChanged() {
-    log_.info("Searching " + ui->database_search->text().toStdString());
+    log_.Info("Searching " + ui->database_search->text().toStdString());
     for (int i = 0; i <= table_model_->rowCount(); i++) {
         for (int j = 0; j <= table_model_->columnCount(); j++) {
             if (table_model_->index(i, j).data().toString().contains(ui->database_search->text())) {
-                log_.info("Found: " + table_model_->index(i, j).data().toString().toStdString());
+                log_.Info("Found: " + table_model_->index(i, j).data().toString().toStdString());
                 if (ui->database_table_view->isRowHidden(i)) ui->database_table_view->showRow(i);
                 break;
             } else {
@@ -186,41 +188,41 @@ void MainWindow::on_database_search_textChanged() {
 }
 
 void MainWindow::on_show_database_triggered() {
-    log_.info("DatabaseModel visible: true");
+    log_.Info("DatabaseModel visible: true");
     ui->database_dock->setVisible(true);
 }
 
 void MainWindow::on_hide_database_triggered() {
-    log_.info("DatabaseModel visible: false");
+    log_.Info("DatabaseModel visible: false");
     ui->database_dock->setVisible(false);
 }
 
 void MainWindow::on_show_image_triggered() {
-    log_.info("Image visible: true");
+    log_.Info("Image visible: true");
     ui->database_dock->setVisible(true);
 }
 
 void MainWindow::on_hide_image_triggered() {
-    log_.info("Image visible: false");
+    log_.Info("Image visible: false");
     ui->database_dock->setVisible(false);
 }
 
 void MainWindow::on_image_scale_up_triggered() {
-    log_.info("Image scaled up");
+    log_.Info("Image scaled up");
     current_image_size_.setWidth(current_image_size_.width() + 50);
     current_image_size_.setHeight(current_image_size_.height() + 50);
     ReDrawImage();
 }
 
 void MainWindow::on_image_scale_down_triggered() {
-    log_.info("Image scaled down");
+    log_.Info("Image scaled down");
     current_image_size_.setWidth(current_image_size_.width() - 50);
     current_image_size_.setHeight(current_image_size_.height() - 50);
     ReDrawImage();
 }
 
 void MainWindow::on_save_some_images_triggered() {
-    log_.info("Save some images triggered!");
+    log_.Info("Save some images triggered!");
     QModelIndexList selected_rows = ui->database_table_view->selectionModel()->selectedRows();
     if (selected_rows.empty()) {
         ui->statusbar->showMessage("Вы не выделили строки!");
@@ -305,7 +307,6 @@ void MainWindow::on_insert_same_records_triggered() {
     if (PasswordForm(settings_manager_.GetSettings().passwords, this).exec() == QDialog::Accepted) {
         int amount;
         if (RecordsAmountForm(amount, this).exec() == QDialog::Accepted) {
-            qDebug() << amount << endl;
             QSqlQuery query(database_.db);
             for (int i = 0; i < amount; ++i) {
                 query.exec(QString("INSERT INTO %1.clients (name, phone_number, status) VALUES ('', '', false);").arg(

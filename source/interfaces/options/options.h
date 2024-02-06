@@ -1,7 +1,9 @@
 #pragma once
 
+// Qt
 #include <QDialog>
 
+// Services
 #include <services/settings/settings_manager.h>
 
 namespace Ui {

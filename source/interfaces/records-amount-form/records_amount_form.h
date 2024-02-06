@@ -1,5 +1,6 @@
 #pragma once
 
+// Qt
 #include <QDialog>
 
 QT_BEGIN_NAMESPACE

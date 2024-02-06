@@ -1,10 +1,13 @@
 #include "image_downloader.h"
 
+// Qt
+#include <QEventLoop>
+#include <QFile>
+
+// QtNetwork
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
-#include <QEventLoop>
-#include <QFile>
 
 bool ImageDownloader::FetchImage(const QString &path, const QUrl &url) {
     QNetworkAccessManager manager;

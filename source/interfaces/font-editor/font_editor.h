@@ -1,8 +1,10 @@
 #pragma once
 
-#include <QDialog>
+// Qt
 #include <QColor>
+#include <QDialog>
 
+// Services
 #include <services/database/models/font_settings_model.h>
 
 namespace Ui {

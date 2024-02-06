@@ -1,10 +1,11 @@
 #pragma once
 
+// Qt
 #include <QImage>
-#include <QPixmap>
-#include <QSize>
 #include <QPainter>
+#include <QPixmap>
 #include <QPrinter>
+#include <QSize>
 
 class ImagePrinter {
 public:
@@ -14,7 +15,7 @@ public:
 
     explicit ImagePrinter(QSize size_of_images, QPrinter *printer);
 
-    static int FromCentimetersToPixels(int centimeters);
+    static int FromCentimetersToPixels(int centimeters, int dpi);
 
 private:
 

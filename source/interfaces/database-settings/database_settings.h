@@ -1,6 +1,9 @@
 #pragma once
 
+// Qt
 #include <QDialog>
+
+// Services
 #include <services/database/models/database_options_model.h>
 
 QT_BEGIN_NAMESPACE

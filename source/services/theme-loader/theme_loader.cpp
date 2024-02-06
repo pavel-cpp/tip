@@ -1,4 +1,6 @@
 #include "theme_loader.h"
+
+// Qt
 #include <QFile>
 
 QString Theme::Load(const QString &theme_name) {

@@ -1,30 +1,20 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
+// Qt
 #include <QMainWindow>
 #include <QMenu>
-#include <QPainter>
-#include <QImage>
-#include <QClipboard>
-#include <QTableWidget>
-#include <QProgressBar>
-#include <QPrinter>
-#include <QPrintDialog>
-
-#include <QSqlDriver>
-#include <QSqlDriverCreator>
-#include <QSqlDatabase>
-#include <QSqlQuery>
 #include <QSqlTableModel>
-#include <QSqlRecord>
+#include <QTableWidget>
 
-#include <services/settings/settings_manager.h>
+// Services
 #include <services/logger/logger.h>
+#include <services/settings/settings_manager.h>
 #include <services/text-painter/text_painter.h>
 
+// Interfaces
 #include <interfaces/options/options.h>
 
-#include <string>
+// STL
 #include <array>
 
 QT_BEGIN_NAMESPACE
@@ -80,7 +70,6 @@ private:
     Logger log_ = Logger("logs");
 
     QSize current_image_size_;
-    QSize default_image_size_;
 
     std::array<TextPainter::ContentTemplate, 3> items_;
 
@@ -97,5 +86,3 @@ private:
     void SetContents(const QModelIndex &index);
 
 };
-
-#endif // MAINWINDOW_H

@@ -1,5 +1,6 @@
 #pragma once
 
+// Qt
 #include <QString>
 
 struct Constants {

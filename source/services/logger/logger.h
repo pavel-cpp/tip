@@ -1,21 +1,23 @@
-#ifndef TIP_LOGGER_H
-#define TIP_LOGGER_H
+#pragma once
 
+// STDLIB
 #include <fstream>
 #include <string>
-#include <QStringList>
-#include <QDir>
+
+// Qt
 #include <QDate>
+#include <QDir>
+#include <QStringList>
 
 class Logger : public std::ofstream {
 
 public:
 
-    Logger(const std::string &path) : std::ofstream(
+    explicit Logger(const std::string &path) : std::ofstream(
             path + "/log_" +
             std::to_string(QDate::currentDate().day()) + "_" +
             std::to_string(QDate::currentDate().month()) + "_" +
-            std::to_string(QDate::currentDate().year()) + "_" + ".log_",
+            std::to_string(QDate::currentDate().year()) + "_" + ".log",
             std::ios_base::app) {
         QStringList list = QDir((path + "/").c_str()).entryList(QDir::Files);
         QDate date;
@@ -29,36 +31,34 @@ public:
         }
     };
 
-    std::string time() const {
+    static std::string Time() {
         return "[" + QTime::currentTime().toString().toStdString() + "]";
     }
 
     template<class T>
-    void critical(const T &message) {
-        static_cast<std::ofstream &>(*this) << this->time() << " [CRITICAL]: " << message << std::endl;
+    void Critical(const T &message) {
+        static_cast<std::ofstream &>(*this) << Logger::Time() << " [CRITICAL]: " << message << std::endl;
     }
 
     template<class T>
-    void info(const T &message) {
-        static_cast<std::ofstream &>(*this) << this->time() << " [INFO]: " << message << std::endl;
+    void Info(const T &message) {
+        static_cast<std::ofstream &>(*this) << Logger::Time() << " [INFO]: " << message << std::endl;
     }
 
     template<class T>
-    void warn(const T &message) {
-        static_cast<std::ofstream &>(*this) << this->time() << " [WARN]: " << message << std::endl;
+    void Warn(const T &message) {
+        static_cast<std::ofstream &>(*this) << Logger::Time() << " [WARN]: " << message << std::endl;
     }
 
     template<class T>
-    void error(const T &message) {
-        static_cast<std::ofstream &>(*this) << this->time() << " [ERROR]: " << message << std::endl;
+    void Error(const T &message) {
+        static_cast<std::ofstream &>(*this) << Logger::Time() << " [ERROR]: " << message << std::endl;
     }
 
     template<class T>
     Logger &operator<<(const T &object) {
-        static_cast<std::ofstream &>(*this) << this->time() << object << std::endl;
+        static_cast<std::ofstream &>(*this) << Logger::Time() << object << std::endl;
         return *this;
     }
 
 };
-
-#endif //TIP_LOGGER_H

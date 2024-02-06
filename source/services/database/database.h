@@ -1,10 +1,13 @@
 #pragma once
 
+// Qt
+#include <QCoreApplication>
 #include <QSqlDatabase>
 
+// STDLIB
 #include <memory>
-#include <QCoreApplication>
 
+// Local
 #include "models/database_options_model.h"
 
 struct Database {

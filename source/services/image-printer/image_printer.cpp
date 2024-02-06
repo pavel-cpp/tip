@@ -29,6 +29,6 @@ void ImagePrinter::AddPixmap(const QPixmap &pixmap) {
     }
 }
 
-int ImagePrinter::FromCentimetersToPixels(int centimeters) {
-    return centimeters * (300 / 2.54);
+int ImagePrinter::FromCentimetersToPixels(int centimeters, int dpi) {
+    return centimeters * (dpi / 2.54);
 }

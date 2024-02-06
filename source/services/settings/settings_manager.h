@@ -1,16 +1,20 @@
 #pragma once
 
+// STDLIB
 #include <array>
 #include <cstddef>
 
-#include <QString>
-#include <QPointF>
-#include <QFont>
+// Qt
 #include <QColor>
+#include <QFont>
+#include <QPointF>
+#include <QString>
 
-#include "ini-parser/inicpp.h"
+// Local
 #include "const_options.h"
+#include "ini-parser/inicpp.h"
 
+// Services
 #include <services/database/database.h>
 #include <services/database/models.h>
 

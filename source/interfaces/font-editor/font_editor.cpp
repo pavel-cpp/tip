@@ -1,8 +1,6 @@
 #include "font_editor.h"
 #include <ui_font_editor.h>
 
-#include <QDebug>
-
 FontEditor::FontEditor(Models::FontSettings &font_settings, QWidget *parent) :
         QDialog(parent),
         ui(new Ui::FontEditor),

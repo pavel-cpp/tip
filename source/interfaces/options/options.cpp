@@ -1,17 +1,20 @@
 #include "options.h"
 #include <ui_options.h>
 
-#include <Qdir>
+// Qt
 #include <QColor>
+#include <QDir>
 #include <QFileDialog>
-
 #include <QMessageBox>
 
+// Services
 #include <services/theme-loader/theme_loader.h>
-#include <interfaces/text-position-selector/text_position_selector.h>
-#include <interfaces/font-editor/font_editor.h>
+
+// Interfaces
 #include <interfaces/database-settings/database_settings.h>
+#include <interfaces/font-editor/font_editor.h>
 #include <interfaces/password-form/password_form.h>
+#include <interfaces/text-position-selector/text_position_selector.h>
 
 Options::Options(QWidget *parent) :
         QDialog(parent),
