@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>TIP: Font</string>
+   <string>TIP: Настройки шрифта</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>

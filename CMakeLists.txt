@@ -114,6 +114,7 @@ add_executable(
         source/services/text-painter/text_painter.cpp
         source/services/theme-loader/theme_loader.cpp
         source/services/image-printer/image_printer.cpp
+        source/resources/icon.rc
 )
 
 target_link_libraries(
@@ -144,10 +145,6 @@ add_custom_command(
         ${CMAKE_SOURCE_DIR}/build_folder_reference/
         ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 )
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory
-        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/bin")
 
 # Qt autoDLL
 if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)

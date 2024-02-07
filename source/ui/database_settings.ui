@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>База данных</string>
+   <string>TIP: База данных</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_8">
    <item>
