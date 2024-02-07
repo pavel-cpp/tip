@@ -16,29 +16,7 @@
 #                                                                      #
 #                                                                      #
 ########################################################################
-#                                                                      #
-#    It is recommended to use Clion to build a project successfully    #
-#                                                                      #
-#If the project is going under Linux/Unix/Mac OS:                      #
-# 1. Install Qt5                                                       #
-# 2. Remove the line CMAKE_PREFIX_PATH from this file                  #
-# 3. Change the data for the build directory (if necessary)            #
-# 4. Open the terminal and go to the directory with the project        #
-# 5. Write cmake.                                                      #
-# 6. make                                                              #
-# 7. Congratulations! The project has been successfully assembled!     #
-#                                                                      #
-#if the project is going under Windows:                                #
-# 1. Install Qt5                                                       #
-# 2. Specify the directory with Qt5 in the CMAKE_PREFIX_PATH field,    #
-#    you can see an example below                                      #
-# 3. Change the data for the build directory (if necessary)            #
-# 4. Open the terminal and go to the directory with the project        #
-# 5. Write cmake .                                                     #
-# 6. make                                                              #
-# 7. Congratulations! The project has been successfully assembled!     #
-#                                                                      #
-########################################################################
+
 cmake_minimum_required(VERSION 3.23)
 project(TIP CXX)
 
@@ -46,19 +24,12 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_AUTOUIC_SEARCH_PATHS "source/ui")
 
-set(QT_PATH "E:/Development/CPP/Libraries/Qt/5.14.2/mingw73_64")
-set(CMAKE_PREFIX_PATH ${QT_PATH})
-
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../build) # path/to/build_directory
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ../build)
 
 set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ ${CMAKE_EXE_LINKER_FLAGS}")
 
 set(CMAKE_CXX_LINKER_FLAGS "-static-libgcc -static-libstdc++ ${CMAKE_CXX_LINKER_FLAGS}")
-
-if (CMAKE_BUILD_TYPE MATCHES "Debug")
-    add_definitions(-DGDB)
-endif ()
 
 set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
