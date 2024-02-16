@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1269</width>
-    <height>734</height>
+    <height>706</height>
    </rect>
   </property>
   <property name="contextMenuPolicy">
@@ -83,9 +83,11 @@
     <property name="title">
      <string>База данных</string>
     </property>
+    <addaction name="refresh_database_action"/>
+    <addaction name="separator"/>
     <addaction name="insert_single_record"/>
     <addaction name="insert_same_records"/>
-    <addaction name="refresh_database_action"/>
+    <addaction name="clear_database"/>
    </widget>
    <addaction name="file_menu"/>
    <addaction name="settings_menu"/>
@@ -145,7 +147,7 @@
      <item>
       <widget class="QTableView" name="database_table_view">
        <property name="contextMenuPolicy">
-        <enum>Qt::CustomContextMenu</enum>
+        <enum>Qt::DefaultContextMenu</enum>
        </property>
        <property name="styleSheet">
         <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
@@ -481,6 +483,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="clear_database">
+   <property name="text">
+    <string>Очистить базу данных</string>
    </property>
   </action>
  </widget>

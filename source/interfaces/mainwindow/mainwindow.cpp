@@ -16,6 +16,10 @@
 #include <QPrintDialog>
 #include <QPrinter>
 #include <QSqlQuery>
+#include <QSqlRecord>
+
+#include <QDebug>
+#include <QSqlError>
 
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent), ui(std::make_unique<Ui::MainWindow>()),
@@ -154,6 +158,18 @@ void MainWindow::on_print_triggered() {
                                 ImagePrinter::FromCentimetersToPixels(4, printer.resolution())},
                                &printer);
     for (const auto &index: indexes) {
+
+        table_model_->setData(
+                table_model_->index(index.row(), table_model_->fieldIndex("status")),
+                true,
+                Qt::EditRole
+        );
+        if (!table_model_->submit()) {
+            QMessageBox::critical(this, "Ошибка!",
+                                  "Ошибка при отправке изменений в базу данных:" + table_model_->lastError().text());
+            break;
+        }
+
         SetContents(index);
 
         text_painter_.Clear();
@@ -321,4 +337,8 @@ void MainWindow::SetContents(const QModelIndex &index) {
     for (int i = 0; i < 3; ++i) {
         items_[i].content = table_model_->index(index.row(), i).data().toString();
     }
+}
+
+void MainWindow::on_clear_database_triggered() {
+
 }

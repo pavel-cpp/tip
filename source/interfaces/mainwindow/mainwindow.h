@@ -63,6 +63,8 @@ private slots:
 
     void on_insert_same_records_triggered();
 
+    void on_clear_database_triggered();
+
     void database_table_view_data_changed(const QModelIndex &index);
 
 private:
