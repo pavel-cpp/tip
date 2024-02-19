@@ -158,10 +158,12 @@ if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
                 "${QT_INSTALL_PATH}/bin/Qt5${QT_LIB}${DEBUG_SUFFIX}.dll"
                 "$<TARGET_FILE_DIR:${PROJECT_NAME}>")
     endforeach (QT_LIB)
-    set(DEPLOY_COMMAND deployment/deploy_windows.bat ${DEPLOY_DEPENDENCY})
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${DEPLOY_COMMAND}
-            COMMENT "Running Inno Setup Compiler"
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    )
+    if (${DEPLOY_DEPENDENCY})
+        set(DEPLOY_COMMAND deployment/deploy_windows.bat ${DEPLOY_DEPENDENCY})
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${DEPLOY_COMMAND}
+                COMMENT "Running Inno Setup Compiler"
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        )
+    endif ()
 endif ()

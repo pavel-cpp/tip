@@ -1,48 +1,48 @@
 ![TIP](icon.png)
 
-# TextModel Insertion Program
+# Text Insertion Program
 
 ---
 
-### _Purpose_
-This program is designed to create and using a database of clients and
-generation of unique pictures (_tickets_) corresponding to each client.
-This software can be used in both **commercial**,
-and for **non-commercial** purposes.
+### **_Purpose_**
+This program is designed to create and manage a database of clients<br>
+and generate unique pictures (_tickets_) corresponding to each client.<br>
+This software can be used for both **commercial** and **non-commercial** purposes.<br>
 
-### _Functional_
+### **_Functionalities_**
 * Generation of pictures (_tickets_)
-* Create a database of any size
-* Edit database like in Excel
+* Database creation of any size
+* Database editing similar to Excel
 * Printing pictures (_tickets_)
-* Save pictures on your computer
-* Copy pictures to clipboard
-* Customize _fonts_ and text _colors_
+* Saving pictures on your computer
+* Copying pictures to clipboard
+* Customization of _fonts_ and text _colors_
 
-### _How to install or compile?_
-    It is recommended to use Clion to build a proct successfully	   
-											     					   
-#### If the project is going under Linux / Unix / MacOS:
-1. Install **[Qt5][4]** 									     			   
-2. **Remove** the line **CMAKE_PREFIX_PATH** from this file			       
-3. Change the data for the build directory (if necessary)            
-4. Open the terminal and go to the directory with the project        
-5. Write `cmake .` 								     				   
-6. `make`										     				   
-7. **Congratulations!** The project has been successfully assembled!     
+### **_How to Build_**
+1. Download & Install **[Qt5][4]**
 
-#### if the project is going under Windows:
-1. Install **[Qt5][4]**
-2. Specify the directory with **[Qt5][4]** in the **CMAKE_PREFIX_PATH** field
-3. Change the data for the build directory (if necessary)
-4. Open the terminal and go to the directory with the project
-5. Write `cmake .`
-6. `make`
-7. **Congratulations!** The project has been successfully assembled!
+#### **Configuring**
+To configure the project, add the following flags:
+   ```
+   "-DCMAKE_PREFIX_PATH=path/to/Qt5"
+   ```
+
+#### **Deployment**
+1. Install **[Inno Setup][5]**
+2. Install **[Inno Download Plugin][6]**
+3. To activate deployment mode, add the following flag to the CMake configuration:
+   ```
+   "-DDEPLOY_DEPENDENCY=\"path/to/idp.iss\""
+   ```
+   or run [windows_deploy.bat][8] after building the project and enter `"path/to/idp.iss"` as an argument.
+
+#### **Database**
+To enable the program to function, you need to deploy a PostgreSQL database.<br>
+Requests for creating the necessary structure are located in the [database][7] folder.
 
 ---
 
-#### Contacts
+#### **Contacts**
 
 [VK][1], [Telegram][2], [Discord][3]
 
@@ -50,3 +50,7 @@ and for **non-commercial** purposes.
 [2]: https://t.me/pavel_cpp
 [3]: https://discordapp.com/users/427479608321900545/
 [4]: https://cybersoft.ru/razrabotka/redaktory/208-qt.html
+[5]: https://jrsoftware.org/isinfo.php
+[6]: https://mitrichsoftware.wordpress.com/inno-setup-tools/inno-download-plugin/
+[7]: ./deployment/database
+[8]: ./deployment/deploy_windows.bat
