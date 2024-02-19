@@ -49,6 +49,7 @@ private:
     void SetAdvancedSettingsVisible(bool state);
 
     SettingsManager settings_manager_;
+    int save_type_ = SettingsManager::SaveType::SAVE_NONE;
 
     SettingsManager::Settings settings_buffer_;
 

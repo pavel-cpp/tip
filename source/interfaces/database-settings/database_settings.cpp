@@ -58,6 +58,6 @@ void DatabaseSettings::on_test_button_clicked() {
 
 void DatabaseSettings::on_save_button_clicked() {
     database_settings_ = database_settings_buffer_;
-    close();
+    accept();
 }
 

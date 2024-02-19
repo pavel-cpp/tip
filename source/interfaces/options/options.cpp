@@ -62,44 +62,59 @@ void Options::on_path_to_button_clicked() {
     if (!folder.isEmpty()) {
         ui->path_to_edit->setText(folder);
         settings_buffer_.output_folder = folder;
+        save_type_ |= SettingsManager::SaveType::SAVE_GENERAL;
     }
 }
 
 void Options::on_theme_combo_box_currentIndexChanged(int) {
     settings_buffer_.theme = ui->theme_combo_box->currentText();
     setStyleSheet(Theme::Load(settings_buffer_.theme));
+    save_type_ |= SettingsManager::SaveType::SAVE_GENERAL;
 }
 
 void Options::on_change_button_ex_1_clicked() {
-    FontEditor(settings_buffer_.font_settings[0], this).exec();
+    if(FontEditor(settings_buffer_.font_settings[0], this).exec() != QDialog::Accepted){
+        return;
+    }
     ui->example_1->setFont(settings_buffer_.font_settings[0].font);
     ui->example_1->setStyleSheet(QString("color: %1;\nfont-size: %2px;").arg(
             settings_buffer_.font_settings[0].color.name(QColor::HexRgb)).arg(
             settings_buffer_.font_settings[0].font.pixelSize()));
+    save_type_ |= SettingsManager::SaveType::SAVE_SYNCING;
 }
 
 void Options::on_change_button_ex_2_clicked() {
-    FontEditor(settings_buffer_.font_settings[1], this).exec();
+    if(FontEditor(settings_buffer_.font_settings[1], this).exec() != QDialog::Accepted){
+        return;
+    }
     ui->example_2->setFont(settings_buffer_.font_settings[1].font);
     ui->example_2->setStyleSheet(QString("color: %1;\nfont-size: %2px;").arg(
             settings_buffer_.font_settings[1].color.name(QColor::HexRgb)).arg(
             settings_buffer_.font_settings[1].font.pixelSize()));
+    save_type_ |= SettingsManager::SaveType::SAVE_SYNCING;
 }
 
 void Options::on_change_button_ex_3_clicked() {
-    FontEditor(settings_buffer_.font_settings[2], this).exec();
+    if(FontEditor(settings_buffer_.font_settings[2], this).exec() != QDialog::Accepted){
+        return;
+    }
     ui->example_3->setFont(settings_buffer_.font_settings[2].font);
     ui->example_3->setStyleSheet(QString("color: %1;\nfont-size: %2px;").arg(
             settings_buffer_.font_settings[2].color.name(QColor::HexRgb)).arg(
             settings_buffer_.font_settings[2].font.pixelSize()));
+    save_type_ |= SettingsManager::SaveType::SAVE_SYNCING;
 }
 
 void Options::on_change_text_position_button_clicked() {
-    TextPositionSelector(settings_buffer_.font_settings, this).exec();
+    if(TextPositionSelector(settings_buffer_.font_settings, this).exec()){
+        save_type_ |= SettingsManager::SaveType::SAVE_SYNCING;
+    }
 }
 
 void Options::on_database_edit_button_clicked() {
-    DatabaseSettings(settings_buffer_.database, this).exec();
+    if(DatabaseSettings(settings_buffer_.database, this).exec() == QDialog::Accepted){
+        save_type_ |= SettingsManager::SaveType::SAVE_DATABASE;
+    }
 }
 
 void Options::on_save_button_clicked() {
@@ -110,20 +125,23 @@ void Options::on_save_button_clicked() {
         QMessageBox::information(this, "Подсказка", "После сохранения настроек перезапустите программу!");
     }
     settings_manager_.SetSettings(settings_buffer_);
-    settings_manager_.Save();
+    settings_manager_.Save(save_type_);
     close();
 }
 
 void Options::on_path_to_edit_textChanged(const QString &text) {
     settings_buffer_.output_folder = text;
+    save_type_ |= SettingsManager::SaveType::SAVE_GENERAL;
 }
 
 void Options::on_image_url_edit_textChanged(const QString &text) {
     settings_buffer_.image.url = text;
+    save_type_ |= SettingsManager::SaveType::SAVE_SYNCING;
 }
 
 void Options::on_image_format_edit_textChanged(const QString &text) {
     settings_buffer_.image.format = text;
+    save_type_ |= SettingsManager::SaveType::SAVE_SYNCING;
 }
 
 void Options::SetAdvancedSettingsVisible(bool state) {

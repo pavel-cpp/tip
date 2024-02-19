@@ -21,6 +21,15 @@
 class SettingsManager {
 public:
 
+    enum SaveType {
+        SAVE_NONE = 0b000,
+        SAVE_DATABASE = 0b001,
+        SAVE_SYNCING = 0b010,
+        SAVE_GENERAL = 0b100,
+        SAVE_LOCAL = SAVE_DATABASE | SAVE_GENERAL,
+        SAVE_ALL = SAVE_LOCAL | SAVE_SYNCING
+    };
+
     struct Settings {
         const Constants consts;
         QString output_folder;
@@ -50,7 +59,7 @@ public:
 
     void SetSettings(const Settings &settings);
 
-    void Save();
+    void Save(int type = SaveType::SAVE_ALL);
 
 private:
 

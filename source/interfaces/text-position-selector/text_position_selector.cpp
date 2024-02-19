@@ -35,7 +35,7 @@ TextPositionSelector::~TextPositionSelector() {
 }
 
 void TextPositionSelector::on_button_box_rejected() {
-    close();
+    reject();
 }
 
 void TextPositionSelector::on_button_box_accepted() {
@@ -44,5 +44,5 @@ void TextPositionSelector::on_button_box_accepted() {
         text_pos.setX(text_pos.x() + items_[i].sceneBoundingRect().width() / 2);
         font_settings_[i].position = text_pos;
     }
-    close();
+    accept();
 }

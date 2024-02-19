@@ -1,6 +1,8 @@
 #include "settings_manager.h"
 
 #include <QSqlRecord>
+#include <QString>
+#include <QVariant>
 
 using std::string;
 
@@ -20,19 +22,29 @@ void SettingsManager::SetSettings(const SettingsManager::Settings &settings) {
     settings_ = settings;
 }
 
-void SettingsManager::Save() {
-    settings_file_["general"]["path_to"] = settings_.output_folder.toStdString();
-    settings_file_["general"]["theme"] = settings_.theme.toStdString();
+void SettingsManager::Save(int type) {
+    if(type == SaveType::SAVE_NONE){
+        return;
+    }
+    if (~(type ^ SaveType::SAVE_GENERAL)) {
+        settings_file_["general"]["path_to"] = settings_.output_folder.toStdString();
+        settings_file_["general"]["theme"] = settings_.theme.toStdString();
+    }
 
-    settings_file_["database"]["host"] = settings_.database.host.toStdString();
-    settings_file_["database"]["port"] = settings_.database.port;
-    settings_file_["database"]["username"] = settings_.database.username.toStdString();
-    settings_file_["database"]["password"] = settings_.database.password.toStdString();
-    settings_file_["database"]["name"] = settings_.database.name.toStdString();
-    settings_file_["database"]["schema"] = settings_.database.schema.toStdString();
+    if (~(type ^ SaveType::SAVE_DATABASE)) {
+        settings_file_["database"]["host"] = settings_.database.host.toStdString();
+        settings_file_["database"]["port"] = settings_.database.port;
+        settings_file_["database"]["username"] = settings_.database.username.toStdString();
+        settings_file_["database"]["password"] = settings_.database.password.toStdString();
+        settings_file_["database"]["name"] = settings_.database.name.toStdString();
+        settings_file_["database"]["schema"] = settings_.database.schema.toStdString();
+    }
 
     settings_file_.save(SETTINGS_FILE_PATH_);
 
+    if(!(~(type ^ SaveType::SAVE_DATABASE))){
+        return;
+    }
     database_.db.open();
 
     if (!database_.connect()) {
@@ -76,8 +88,6 @@ void SettingsManager::ReloadSettings() {
     LoadFromDatabase();
 }
 
-#include <QDebug>
-
 void SettingsManager::LoadFromDatabase() {
 
     database_.db.open();
@@ -117,16 +127,16 @@ void SettingsManager::LoadFromDatabase() {
             settings_.image.format = rec.value("format").toString();
         }
 
-//        qDebug() << QString("Query") << SELECT_PASSWORDS.arg(database_.schema);
         query.prepare(SELECT_PASSWORDS.arg(database_.schema));
         query.exec();
         assert(query.executedQuery() == SELECT_PASSWORDS.arg(database_.schema));
-//        qDebug() << QString("Executed query") << query.executedQuery();
+
+        settings_.passwords.passwords.clear();
+        settings_.passwords.passwords.push_front("root");
+
         while (query.next()) {
-            qDebug() << query.record().value("password").toString();
             settings_.passwords.passwords.push_front(query.record().value("password").toString());
         }
-        qDebug() << settings_.passwords.passwords;
     }
 
     database_.db.close();

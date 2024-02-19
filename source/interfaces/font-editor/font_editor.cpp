@@ -75,6 +75,6 @@ void FontEditor::on_size_spin_box_valueChanged(int value) {
 
 void FontEditor::on_save_button_clicked() {
     font_settings_ = font_settings_buffer_;
-    close();
+    accept();
 }
 

@@ -18,8 +18,11 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 
-#include <QDebug>
 #include <QSqlError>
+
+QString operator ""_qs(const char *text, size_t len) {
+    return {text};
+}
 
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent), ui(std::make_unique<Ui::MainWindow>()),
@@ -340,5 +343,26 @@ void MainWindow::SetContents(const QModelIndex &index) {
 }
 
 void MainWindow::on_clear_database_triggered() {
+    if (PasswordForm(settings_manager_.GetSettings().passwords, this).exec() != QDialog::Accepted){
+        return;
+    }
+    QSqlQuery query(database_.db);
+    QString drop_table("DROP TABLE IF EXISTS %1.%2;");
+    QString create_table("CREATE TABLE IF NOT EXISTS %1.%2\n"
+                         "(\n"
+                         "    ID           SERIAL\n"
+                         "        PRIMARY KEY,\n"
+                         "    name         VARCHAR(255),\n"
+                         "    phone_number VARCHAR(255),\n"
+                         "    status       BOOLEAN DEFAULT false\n"
+                         ");");
+    query.exec(drop_table.arg(database_.schema).arg("clients_backup"));
+    query.exec(create_table.arg(database_.schema).arg("clients_backup"));
 
+    query.exec("INSERT INTO %1.clients_backup (id, name, phone_number, status) "
+               "SELECT * FROM %1.clients"_qs.arg(database_.schema));
+
+    query.exec(drop_table.arg(database_.schema).arg("clients"));
+    query.exec(create_table.arg(database_.schema).arg("clients"));
+    table_model_->select();
 }
