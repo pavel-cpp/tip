@@ -1,3 +1,22 @@
+#[[
+"Text Insertion Program (TIP)" is a software
+for client management and generating unique images for each client.
+Copyright (C) 2024  Pavel Remdenok
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+]]
+
 ########################################################################
 #                                               .:^7^                  #
 #                                         :^!?Y5PGGBG~77               #
@@ -110,7 +129,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES AUTOMOC ON AUTORCC ON AUTOUIC O
 
 # Копирование содержимого папки reference в build
 add_custom_command(
-        TARGET ${PROJECT_NAME}  # Укажите вашу цель
+        TARGET ${PROJECT_NAME}
         POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/build_folder_reference/
@@ -158,7 +177,7 @@ if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
                 "${QT_INSTALL_PATH}/bin/Qt5${QT_LIB}${DEBUG_SUFFIX}.dll"
                 "$<TARGET_FILE_DIR:${PROJECT_NAME}>")
     endforeach (QT_LIB)
-    if (${DEPLOY_DEPENDENCY})
+    if (DEFINED  DEPLOY_DEPENDENCY)
         set(DEPLOY_COMMAND deployment/deploy_windows.bat ${DEPLOY_DEPENDENCY})
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${DEPLOY_COMMAND}
