@@ -66,6 +66,6 @@ procedure InitializeWizard();
 begin
     idpAddFile('https://aka.ms/vs/17/release/vc_redist.x86.exe', ExpandConstant('{tmp}\vcredist_x86.exe'));
     idpAddFile('https://aka.ms/vs/17/release/vc_redist.x64.exe', ExpandConstant('{tmp}\vcredist_x64.exe'));
-    idpAddFile('https://slproweb.com/download/Win32OpenSSL-1_1_1w.exe', ExpandConstant('{tmp}\Win64OpenSSL-1_1_1w.exe'));
+    idpAddFile('https://slproweb.com/download/Win64OpenSSL-1_1_1w.exe', ExpandConstant('{tmp}\Win64OpenSSL-1_1_1w.exe'));
     idpDownloadAfter(wpReady);
 end;
