@@ -61,7 +61,7 @@ void SettingsManager::Save(int type) {
 
     settings_file_.save(SETTINGS_FILE_PATH_);
 
-    if(!(~(type ^ SaveType::SAVE_DATABASE))){
+    if(!(~(type ^ SaveType::SAVE_SYNCING))){
         return;
     }
     database_.db.open();
