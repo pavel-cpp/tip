@@ -94,7 +94,7 @@ MainWindow::MainWindow(QWidget *parent)
     if (!image.load(settings_manager_.GetSettings().consts.source_image_path + "." +
                     settings_manager_.GetSettings().image.format)) {
         QMessageBox::warning(this, "Предупреждение!",
-                             "Не удалось открыть изображение!\nНе верно указан формат изображения или ссылка");
+                             "Не удалось открыть изображение!\nНе верно указан формат изображения или ссылка" );
     }
 
     text_painter_.SetImage(
