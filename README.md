@@ -5,6 +5,7 @@
 ---
 
 ### **Overview**
+> [!NOTE]
 > This program is designed to create and manage a database of clients<br>
 > and generate unique pictures (<font color='ee82ee'>_tickets_</font>) corresponding to each client.<br>
 > This software can be used for both **commercial** and **non-commercial** purposes.<br>
