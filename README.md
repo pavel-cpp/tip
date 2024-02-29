@@ -38,6 +38,7 @@
    or run [windows_deploy.bat][8] after building the project and enter `"path/to/idp.iss"` as an argument.
 
 #### **Database**
+> [!IMPORTANT]
 > To enable the program to function, you need to deploy a PostgreSQL database.<br>
 > Requests for creating the necessary structure are located in the [database][7] folder.
 
