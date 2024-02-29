@@ -346,11 +346,16 @@ void MainWindow::on_insert_same_records_triggered() {
         int amount;
         if (RecordsAmountForm(amount, this).exec() == QDialog::Accepted) {
             QSqlQuery query(database_.db);
+            ui->progress_bar->setMaximum(amount - 1);
+            ui->progress_bar->setVisible(true);
             for (int i = 0; i < amount; ++i) {
                 query.exec(QString("INSERT INTO %1.clients (name, phone_number, status) VALUES ('', '', false);").arg(
                         database_.schema));
+                ui->progress_bar->setValue(i);
+                QCoreApplication::processEvents();
             }
             table_model_->select();
+            ui->progress_bar->setVisible(false);
         }
     }
 }

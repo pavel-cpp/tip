@@ -39,7 +39,6 @@
     </property>
     <addaction name="save_image"/>
     <addaction name="save_some_images"/>
-    <addaction name="save_some_items"/>
     <addaction name="separator"/>
     <addaction name="copy"/>
     <addaction name="print"/>

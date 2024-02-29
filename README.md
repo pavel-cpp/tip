@@ -24,7 +24,7 @@
 2. Download & Install **[Qt5][4]**
 3. ```sh
    cmake -DCMAKE_BUILD_TYPE={type} -DCMAKE_PREFIX_PATH=path/to/Qt5 -G {generator} -B ./cmake-build-{type} 
-   cmake --build ./cmake-build-debug --target TIP -j 14
+   cmake --build ./cmake-build-{type} --target TIP -j 14
    ```
 
 #### **Deployment**
@@ -33,7 +33,7 @@
 3. To activate deployment mode, add the following flag to the CMake configuration:
    ```sh
    cmake -DCMAKE_BUILD_TYPE={type} -DCMAKE_PREFIX_PATH=path/to/Qt5 "-DDEPLOY_DEPENDENCY=\"path/to/idp.iss\"" -G {generator} -B ./cmake-build-{type} 
-   cmake --build ./cmake-build-debug --target TIP -j 14
+   cmake --build ./cmake-build-{type} --target TIP -j 14
    ```
    or run [windows_deploy.bat][8] after building the project and enter `"path/to/idp.iss"` as an argument.
 
