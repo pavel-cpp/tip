@@ -4,12 +4,12 @@
 
 ---
 
-### **_Purpose_**
-This program is designed to create and manage a database of clients<br>
-and generate unique pictures (_tickets_) corresponding to each client.<br>
-This software can be used for both **commercial** and **non-commercial** purposes.<br>
+### **Overview**
+> This program is designed to create and manage a database of clients<br>
+> and generate unique pictures (<font color='ee82ee'>_tickets_</font>) corresponding to each client.<br>
+> This software can be used for both **commercial** and **non-commercial** purposes.<br>
 
-### **_Functionalities_**
+### **Functionalities**
 * Generation of pictures (_tickets_)
 * Database creation of any size
 * Database editing similar to Excel
@@ -18,27 +18,27 @@ This software can be used for both **commercial** and **non-commercial** purpose
 * Copying pictures to clipboard
 * Customization of _fonts_ and text _colors_
 
-### **_How to Build_**
-1. Download & Install **[Qt5][4]**
-
-#### **Configuring**
-To configure the project, add the following flags:
-   ```
-   "-DCMAKE_PREFIX_PATH=path/to/Qt5"
+### **How to Build**
+1. Install Cmake
+2. Download & Install **[Qt5][4]**
+3. ```sh
+   cmake -DCMAKE_BUILD_TYPE={type} -DCMAKE_PREFIX_PATH=path/to/Qt5 -G {generator} -B ./cmake-build-{type} 
+   cmake --build ./cmake-build-debug --target TIP -j 14
    ```
 
 #### **Deployment**
 1. Install **[Inno Setup][5]**
 2. Install **[Inno Download Plugin][6]**
 3. To activate deployment mode, add the following flag to the CMake configuration:
-   ```
-   "-DDEPLOY_DEPENDENCY=\"path/to/idp.iss\""
+   ```sh
+   cmake -DCMAKE_BUILD_TYPE={type} -DCMAKE_PREFIX_PATH=path/to/Qt5 "-DDEPLOY_DEPENDENCY=\"path/to/idp.iss\"" -G {generator} -B ./cmake-build-{type} 
+   cmake --build ./cmake-build-debug --target TIP -j 14
    ```
    or run [windows_deploy.bat][8] after building the project and enter `"path/to/idp.iss"` as an argument.
 
 #### **Database**
-To enable the program to function, you need to deploy a PostgreSQL database.<br>
-Requests for creating the necessary structure are located in the [database][7] folder.
+> To enable the program to function, you need to deploy a PostgreSQL database.<br>
+> Requests for creating the necessary structure are located in the [database][7] folder.
 
 ---
 
