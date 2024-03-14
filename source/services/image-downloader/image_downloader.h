@@ -23,7 +23,20 @@
 #include <QString>
 #include <QUrl>
 
+/**
+ * @class ImageDownloader
+ * @brief The ImageDownloader class provides a static method for downloading images.
+ *
+ * This class provides a static method for downloading images from a given URL and saving them to a specified path.
+ */
 class ImageDownloader {
 public:
+    /**
+     * @brief Fetch an image from a URL and save it to a specified path.
+     *
+     * @param path The path where the image will be saved.
+     * @param url The URL from which the image will be downloaded.
+     * @return true if the image was successfully downloaded and saved, false otherwise.
+     */
     static bool FetchImage(const QString &path, const QUrl &url);
 };

@@ -16,7 +16,6 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-
 #pragma once
 
 // Qt
@@ -29,19 +28,40 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class PasswordForm; }
 QT_END_NAMESPACE
 
+/**
+ * @class PasswordForm
+ * @brief The PasswordForm class provides a dialog for managing passwords.
+ *
+ * This class provides a QDialog with a field for the user to input a password.
+ * It also provides a button to submit the password.
+ */
 class PasswordForm : public QDialog {
 Q_OBJECT
 
 public:
+    /**
+     * @brief Construct a new Password Form object
+     *
+     * @param passwords Reference to a Passwords object where the password will be stored.
+     * @param parent Pointer to the parent QWidget. Default is nullptr.
+     */
     explicit PasswordForm(const Models::Passwords &passwords, QWidget *parent = nullptr);
 
+    /**
+     * @brief Destroy the Password Form object
+     */
     ~PasswordForm() override;
 
 private slots:
 
+    /**
+     * @brief Slot for handling the returnPressed event of the password edit field.
+     *
+     * This function submits the entered password.
+     */
     void on_password_edit_returnPressed();
 
 private:
-    const Models::Passwords &passwords_;
-    Ui::PasswordForm *ui;
+    const Models::Passwords &passwords_; ///< Reference to the Passwords object where the password is stored.
+    Ui::PasswordForm *ui; ///< Pointer to the UI object for this dialog.
 };

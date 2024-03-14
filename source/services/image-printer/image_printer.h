@@ -26,22 +26,50 @@
 #include <QPrinter>
 #include <QSize>
 
+/**
+ * @class ImagePrinter
+ * @brief The ImagePrinter class provides methods for adding images and pixmaps to a printer.
+ *
+ * This class provides methods for adding images and pixmaps to a printer. It also provides a method for converting centimeters to pixels.
+ */
 class ImagePrinter {
 public:
+    /**
+     * @brief Add an image to the printer.
+     *
+     * @param image The image to be added.
+     */
     void AddImage(const QImage &image);
 
+    /**
+     * @brief Add a pixmap to the printer.
+     *
+     * @param pixmap The pixmap to be added.
+     */
     void AddPixmap(const QPixmap &pixmap);
 
+    /**
+     * @brief Construct a new Image Printer object
+     *
+     * @param size_of_images The size of the images to be added.
+     * @param printer The printer to which the images will be added.
+     */
     explicit ImagePrinter(QSize size_of_images, QPrinter *printer);
 
+    /**
+     * @brief Convert centimeters to pixels.
+     *
+     * @param centimeters The number of centimeters to be converted.
+     * @param dpi The dots per inch (DPI) for the conversion.
+     * @return The number of pixels equivalent to the given number of centimeters.
+     */
     static int FromCentimetersToPixels(int centimeters, int dpi);
 
 private:
 
-    const short SPACING = 10;
+    const short SPACING = 10; ///< The spacing between images.
 
-    QRect frame_;
-    QPrinter *printer_;
-    QPainter painter_;
-
+    QRect frame_; ///< The frame for the images.
+    QPrinter *printer_; ///< The printer to which the images will be added.
+    QPainter painter_; ///< The painter for the images.
 };

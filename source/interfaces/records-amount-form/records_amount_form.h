@@ -26,21 +26,42 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class RecordsAmountForm; }
 QT_END_NAMESPACE
 
+/**
+ * @class RecordsAmountForm
+ * @brief The RecordsAmountForm class provides a dialog for specifying the amount of records.
+ *
+ * This class provides a QDialog with a field for the user to input the amount of records.
+ * It also provides a button to submit the amount.
+ */
 class RecordsAmountForm : public QDialog {
 Q_OBJECT
 
 public:
+    /**
+     * @brief Construct a new Records Amount Form object
+     *
+     * @param amount Reference to an integer where the amount will be stored.
+     * @param parent Pointer to the parent QWidget. Default is nullptr.
+     */
     explicit RecordsAmountForm(int &amount, QWidget *parent = nullptr);
 
+    /**
+     * @brief Destroy the Records Amount Form object
+     */
     ~RecordsAmountForm() override;
 
 private slots:
 
+    /**
+     * @brief Slot for handling the add_button click event.
+     *
+     * This function submits the entered amount.
+     */
     void on_add_button_clicked();
 
 private:
 
-    int &amount_;
+    int &amount_; ///< Reference to the integer where the amount is stored.
 
-    Ui::RecordsAmountForm *ui;
+    Ui::RecordsAmountForm *ui; ///< Pointer to the UI object for this dialog.
 };
