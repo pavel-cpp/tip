@@ -92,7 +92,7 @@ void Options::on_theme_combo_box_currentIndexChanged(int) {
 }
 
 void Options::on_change_button_ex_1_clicked() {
-    if(FontEditor(settings_buffer_.font_settings[0], this).exec() != QDialog::Accepted){
+    if (FontEditor(settings_buffer_.font_settings[0], this).exec() != QDialog::Accepted) {
         return;
     }
     ui->example_1->setFont(settings_buffer_.font_settings[0].font);
@@ -103,7 +103,7 @@ void Options::on_change_button_ex_1_clicked() {
 }
 
 void Options::on_change_button_ex_2_clicked() {
-    if(FontEditor(settings_buffer_.font_settings[1], this).exec() != QDialog::Accepted){
+    if (FontEditor(settings_buffer_.font_settings[1], this).exec() != QDialog::Accepted) {
         return;
     }
     ui->example_2->setFont(settings_buffer_.font_settings[1].font);
@@ -114,7 +114,7 @@ void Options::on_change_button_ex_2_clicked() {
 }
 
 void Options::on_change_button_ex_3_clicked() {
-    if(FontEditor(settings_buffer_.font_settings[2], this).exec() != QDialog::Accepted){
+    if (FontEditor(settings_buffer_.font_settings[2], this).exec() != QDialog::Accepted) {
         return;
     }
     ui->example_3->setFont(settings_buffer_.font_settings[2].font);
@@ -125,13 +125,13 @@ void Options::on_change_button_ex_3_clicked() {
 }
 
 void Options::on_change_text_position_button_clicked() {
-    if(TextPositionSelector(settings_buffer_.font_settings, this).exec()){
+    if (TextPositionSelector(settings_buffer_.font_settings, this).exec()) {
         save_type_ |= SettingsManager::SaveType::SAVE_SYNCING;
     }
 }
 
 void Options::on_database_edit_button_clicked() {
-    if(DatabaseSettings(settings_buffer_.database, this).exec() == QDialog::Accepted){
+    if (DatabaseSettings(settings_buffer_.database, this).exec() == QDialog::Accepted) {
         save_type_ |= SettingsManager::SaveType::SAVE_DATABASE;
     }
 }

@@ -35,7 +35,7 @@ AllowNoIcons=yes
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=commandline
 OutputDir=..\..\installer
-OutputBaseFilename=tip_setup
+OutputBaseFilename=tip_setup_offline
 SetupIconFile=..\..\source\resources\icon.ico
 Compression=lzma
 SolidCompression=yes
@@ -56,16 +56,16 @@ Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{tmp}\vcredist_x86.exe"; Parameters: "/S"; StatusMsg: "Installing vcredist_x86..."; Flags: waituntilterminated
-Filename: "{tmp}\vcredist_x64.exe"; Parameters: "/S"; StatusMsg: "Installing vcredist_x64..."; Flags: waituntilterminated
-Filename: "{tmp}\Win64OpenSSL-1_1_1w.exe"; Parameters: "/S"; StatusMsg: "Installing OpenSSL..."; Flags: waituntilterminated
+; Filename: "{tmp}\vcredist_x86.exe"; Parameters: "/S"; StatusMsg: "Installing vcredist_x86..."; Flags: waituntilterminated
+; Filename: "{tmp}\vcredist_x64.exe"; Parameters: "/S"; StatusMsg: "Installing vcredist_x64..."; Flags: waituntilterminated
+; Filename: "{tmp}\Win64OpenSSL-1_1_1w.exe"; Parameters: "/S"; StatusMsg: "Installing OpenSSL..."; Flags: waituntilterminated
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
-[Code]
-procedure InitializeWizard();
-begin
-    idpAddFile('https://aka.ms/vs/17/release/vc_redist.x86.exe', ExpandConstant('{tmp}\vcredist_x86.exe'));
-    idpAddFile('https://aka.ms/vs/17/release/vc_redist.x64.exe', ExpandConstant('{tmp}\vcredist_x64.exe'));
-    idpAddFile('https://slproweb.com/download/Win64OpenSSL-1_1_1w.exe', ExpandConstant('{tmp}\Win64OpenSSL-1_1_1w.exe'));
-    idpDownloadAfter(wpReady);
-end;
+; [Code]
+; procedure InitializeWizard();
+; begin
+;     idpAddFile('https://aka.ms/vs/17/release/vc_redist.x86.exe', ExpandConstant('{tmp}\vcredist_x86.exe'));
+;     idpAddFile('https://aka.ms/vs/17/release/vc_redist.x64.exe', ExpandConstant('{tmp}\vcredist_x64.exe'));
+;     idpAddFile('https://slproweb.com/download/Win64OpenSSL-1_1_1w.exe', ExpandConstant('{tmp}\Win64OpenSSL-1_1_1w.exe'));
+;     idpDownloadAfter(wpReady);
+; end;

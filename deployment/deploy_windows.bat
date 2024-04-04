@@ -30,4 +30,5 @@ IF "%~1"=="" (
     exit /b 1
 )
 mkdir installer
-iscc /J"%~1" ./deployment/windows_installer/tip_setup.iss
+iscc  /J"%~1" ./deployment/windows_installer/tip_setup_online.iss
+iscc  /J"%~1" ./deployment/windows_installer/tip_setup_offline.iss
