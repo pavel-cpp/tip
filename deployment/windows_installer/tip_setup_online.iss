@@ -16,7 +16,7 @@
 ;     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #define MyAppName "TIP"
-#define MyAppVersion "8.0"
+#define MyAppVersion "8.1"
 #define MyAppPublisher "Pavel Remdenok"
 #define MyAppURL "https://github.com/pavel-cpp"
 #define MyAppExeName "TIP.exe"
