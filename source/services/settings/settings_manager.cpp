@@ -19,6 +19,8 @@
 
 #include "settings_manager.h"
 
+#include <QDir>
+#include <qfileinfo.h>
 #include <QSqlRecord>
 #include <QString>
 #include <QVariant>
@@ -28,7 +30,7 @@ using std::string;
 // Qt
 #include <QSqlQuery>
 
-SettingsManager::SettingsManager(const QString &connection_name) {
+SettingsManager::SettingsManager(const QString& connection_name) {
     LoadFromIni(connection_name);
     LoadFromDatabase();
 }
@@ -37,12 +39,12 @@ SettingsManager::Settings SettingsManager::GetSettings() {
     return settings_;
 }
 
-void SettingsManager::SetSettings(const SettingsManager::Settings &settings) {
+void SettingsManager::SetSettings(const SettingsManager::Settings& settings) {
     settings_ = settings;
 }
 
 void SettingsManager::Save(int type) {
-    if(type == SaveType::SAVE_NONE){
+    if (type == SaveType::SAVE_NONE) {
         return;
     }
     if (~(type ^ SaveType::SAVE_GENERAL)) {
@@ -61,7 +63,7 @@ void SettingsManager::Save(int type) {
 
     settings_file_.save(SETTINGS_FILE_PATH_);
 
-    if(!(~(type ^ SaveType::SAVE_SYNCING))){
+    if (!(~(type ^ SaveType::SAVE_SYNCING))) {
         return;
     }
     database_.db.open();
@@ -75,31 +77,30 @@ void SettingsManager::Save(int type) {
     {
         QSqlQuery query(database_.db);
         QString sql_request = UPDATE_FONT_SETTINGS.arg(database_.schema);
-        for (const auto &font: settings_.font_settings) {
+        for (const auto& font : settings_.font_settings) {
             query.prepare(
-                    sql_request
-                            .arg("\'" + font.font.family() + "\'")
-                            .arg("\'" + font.color.name(QColor::HexRgb) + "\'")
-                            .arg(font.position.x())
-                            .arg(font.position.y())
-                            .arg(font.font.pixelSize())
-                            .arg(font.font.bold() ? "true" : "false")
-                            .arg(index++)
+                sql_request
+                .arg("\'" + font.font.family() + "\'")
+                .arg("\'" + font.color.name(QColor::HexRgb) + "\'")
+                .arg(font.position.x())
+                .arg(font.position.y())
+                .arg(font.font.pixelSize())
+                .arg(font.font.bold() ? "true" : "false")
+                .arg(index++)
             );
             query.exec();
         }
 
         query.prepare(
-                UPDATE_IMAGE
-                        .arg(database_.schema)
-                        .arg("\'" + settings_.image.url.toString() + "\'")
-                        .arg("\'" + settings_.image.format + "\'")
+            UPDATE_IMAGE
+            .arg(database_.schema)
+            .arg("\'" + settings_.image.url.toString() + "\'")
+            .arg("\'" + settings_.image.format + "\'")
         );
         query.exec();
     }
 
     database_.db.close();
-
 }
 
 void SettingsManager::ReloadSettings() {
@@ -108,7 +109,6 @@ void SettingsManager::ReloadSettings() {
 }
 
 void SettingsManager::LoadFromDatabase() {
-
     database_.db.open();
 
     if (!database_.connect()) {
@@ -122,7 +122,7 @@ void SettingsManager::LoadFromDatabase() {
         if (!query.exec()) {
             assert(false);
         }
-        for (auto &item: settings_.font_settings) {
+        for (auto& item : settings_.font_settings) {
             if (!query.next()) {
                 break;
             }
@@ -159,22 +159,28 @@ void SettingsManager::LoadFromDatabase() {
     }
 
     database_.db.close();
-
 }
 
-void SettingsManager::LoadFromIni(const QString &connection_name) {
+void SettingsManager::LoadFromIni(const QString& connection_name) {
+    QFileInfo file_info(QString::fromStdString(SETTINGS_FILE_PATH_));
+    if (!file_info.exists()) {
+        file_info.dir().mkdir(file_info.absolutePath());
+        std::ofstream file(SETTINGS_FILE_PATH_);
+        file << DEFAULT_SETTINGS_;
+    }
+
     settings_file_.load(SETTINGS_FILE_PATH_);
 
     settings_.output_folder = QString::fromStdString(settings_file_["general"]["path_to"].as<string>());
     settings_.theme = QString::fromStdString(settings_file_["general"]["theme"].as<string>());
 
     settings_.database = {
-            QString::fromStdString(settings_file_["database"]["host"].as<string>()),
-            settings_file_["database"]["port"].as<uint16_t>(),
-            QString::fromStdString(settings_file_["database"]["username"].as<string>()),
-            QString::fromStdString(settings_file_["database"]["password"].as<string>()),
-            QString::fromStdString(settings_file_["database"]["name"].as<string>()),
-            QString::fromStdString(settings_file_["database"]["schema"].as<string>())
+        QString::fromStdString(settings_file_["database"]["host"].as<string>()),
+        settings_file_["database"]["port"].as<uint16_t>(),
+        QString::fromStdString(settings_file_["database"]["username"].as<string>()),
+        QString::fromStdString(settings_file_["database"]["password"].as<string>()),
+        QString::fromStdString(settings_file_["database"]["name"].as<string>()),
+        QString::fromStdString(settings_file_["database"]["schema"].as<string>())
     };
 
     database_ = Database(settings_.database, connection_name);

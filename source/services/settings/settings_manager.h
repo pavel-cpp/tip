@@ -39,7 +39,6 @@
 
 class SettingsManager {
 public:
-
     enum SaveType {
         SAVE_NONE = 0b000,
         SAVE_DATABASE = 0b001,
@@ -58,7 +57,7 @@ public:
         Models::Image image;
         Models::Passwords passwords;
 
-        Settings &operator=(const Settings &other) {
+        Settings& operator=(const Settings& other) {
             output_folder = other.output_folder;
             theme = other.theme;
             font_settings = other.font_settings;
@@ -67,24 +66,22 @@ public:
             passwords = other.passwords;
             return *this;
         }
-
     };
 
-    explicit SettingsManager(const QString &connection_name = "default");
+    explicit SettingsManager(const QString& connection_name = "default");
 
     void ReloadSettings();
 
     Settings GetSettings();
 
-    void SetSettings(const Settings &settings);
+    void SetSettings(const Settings& settings);
 
     void Save(int type = SaveType::SAVE_ALL);
 
 private:
-
     void LoadFromDatabase();
 
-    void LoadFromIni(const QString &connection_name);
+    void LoadFromIni(const QString& connection_name);
 
     Database database_;
 
@@ -93,7 +90,8 @@ private:
 
     const QString SELECT_FONT_SETTINGS = "SELECT * FROM %1.font_settings;";
 
-    const QString UPDATE_FONT_SETTINGS = "UPDATE %1.font_settings SET font = %2, color = %3, position_x = %4, position_y = %5, size = %6, bold = %7 WHERE id = %8;";
+    const QString UPDATE_FONT_SETTINGS =
+        "UPDATE %1.font_settings SET font = %2, color = %3, position_x = %4, position_y = %5, size = %6, bold = %7 WHERE id = %8;";
 
     const QString SELECT_IMAGE = "SELECT url, format FROM %1.image WHERE id = 1;";
 
@@ -103,6 +101,16 @@ private:
 
     const std::string SETTINGS_FILE_PATH_ = "./settings/settings.ini";
 
+    const std::string DEFAULT_SETTINGS_ = {
+        "[general]\n"
+        "path_to=default\n"
+        "theme=Darkeum\n\n"
+        "[database]\n"
+        "host=localhost\n"
+        "port=5432\n"
+        "username=postgres\n"
+        "password=root\n"
+        "name=tip\n"
+        "schema=main\n"
+    };
 };
-
-
