@@ -31,22 +31,25 @@
 
 // Qt
 #include <QClipboard>
+#include <QFileDialog>
 #include <QMessageBox>
 #include <QPrintDialog>
 #include <QPrinter>
+#include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
 
-#include <QSqlError>
+// XLSX
+#include <OpenXLSX.hpp>
 
 QString operator ""_qs(const char *text, size_t len) {
     return {text};
 }
 
 MainWindow::MainWindow(QWidget *parent)
-        : QMainWindow(parent), ui(std::make_unique<Ui::MainWindow>()),
-          settings_manager_("mainwindow"),
-          database_(settings_manager_.GetSettings().database) {
+    : QMainWindow(parent), ui(std::make_unique<Ui::MainWindow>()),
+      settings_manager_("mainwindow"),
+      database_(settings_manager_.GetSettings().database) {
     ui->setupUi(this);
 
     this->setStyleSheet(Theme::Load(settings_manager_.GetSettings().theme));
@@ -70,10 +73,18 @@ MainWindow::MainWindow(QWidget *parent)
 
     log_.Info("DatabaseModel table_model_ initialized");
 
-    connect(table_model_.get(), SIGNAL(dataChanged(
-                                               const QModelIndex &, const QModelIndex &, const QVector<int> &)),
-            this, SLOT(database_table_view_data_changed(
-                               const QModelIndex&)));
+    connect(
+        table_model_.get(),
+        SIGNAL(
+            dataChanged(
+                const QModelIndex &, const QModelIndex &, const QVector<int> &)
+        ),
+        this,
+        SLOT(
+            database_table_view_data_changed(
+                const QModelIndex&)
+        )
+    );
 
     ui->database_table_view->setModel(table_model_.get());
     ui->database_table_view->setColumnHidden(0, true);
@@ -82,30 +93,33 @@ MainWindow::MainWindow(QWidget *parent)
     ui->database_table_view->addActions(ui->menubar->actions());
 
     if (!ImageDownloader::FetchImage(
-            settings_manager_.GetSettings().consts.source_image_path + "." +
-            settings_manager_.GetSettings().image.format,
-            settings_manager_.GetSettings().image.url
+        settings_manager_.GetSettings().consts.source_image_path + "." +
+        settings_manager_.GetSettings().image.format,
+        settings_manager_.GetSettings().image.url
     )) {
         QMessageBox::warning(this, "Предупреждение!", "Не удалось загрузить изображение!\nНе верно указана ссылка");
     }
 
     QImage image;
 
-    if (!image.load(settings_manager_.GetSettings().consts.source_image_path + "." +
-                    settings_manager_.GetSettings().image.format)) {
-        QMessageBox::warning(this, "Предупреждение!",
-                             "Не удалось открыть изображение!\nНе верно указан формат изображения или ссылка" );
+    if (!image.load(
+        settings_manager_.GetSettings().consts.source_image_path + "." +
+        settings_manager_.GetSettings().image.format
+    )) {
+        QMessageBox::warning(
+            this,
+            "Предупреждение!",
+            "Не удалось открыть изображение!\nНе верно указан формат изображения или ссылка"
+        );
     }
 
-    text_painter_.SetImage(
-            image
-    );
+    text_painter_.SetImage(image);
 
     for (int i = 0; i < 3; ++i) {
         items_[i].options = settings_manager_.GetSettings().font_settings[i];
     }
 
-    for (const auto &item: items_) {
+    for (const auto& item : items_) {
         text_painter_.DrawText(item);
     }
 
@@ -147,16 +161,18 @@ void MainWindow::on_save_image_triggered() {
         return;
     }
     bool status = text_painter_.GetResultImage().save(
-            settings_manager_.GetSettings().output_folder
-            + "/image_"
-            + items_[0].content
-            + "."
-            + settings_manager_.GetSettings().image.format
+        settings_manager_.GetSettings().output_folder
+        + "/image_"
+        + items_[0].content
+        + "."
+        + settings_manager_.GetSettings().image.format
     );
     if (status) {
-        ui->statusbar->showMessage("image_"
-                                   + items_[0].content
-                                   + " успешно сохранена!");
+        ui->statusbar->showMessage(
+            "image_"
+            + items_[0].content
+            + " успешно сохранена!"
+        );
     } else {
         ui->statusbar->showMessage("Ошибка сохранения картинки!");
     }
@@ -176,26 +192,32 @@ void MainWindow::on_print_triggered() {
         log_.Info("Printer rejected");
         return;
     }
-    ImagePrinter image_printer({ImagePrinter::FromCentimetersToPixels(7, printer.resolution()),
-                                ImagePrinter::FromCentimetersToPixels(4, printer.resolution())},
-                               &printer);
-    for (const auto &index: indexes) {
-
+    ImagePrinter image_printer(
+        {
+            ImagePrinter::FromCentimetersToPixels(7, printer.resolution()),
+            ImagePrinter::FromCentimetersToPixels(4, printer.resolution())
+        },
+        &printer
+    );
+    for (const auto& index : indexes) {
         table_model_->setData(
-                table_model_->index(index.row(), table_model_->fieldIndex("status")),
-                true,
-                Qt::EditRole
+            table_model_->index(index.row(), table_model_->fieldIndex("status")),
+            true,
+            Qt::EditRole
         );
         if (!table_model_->submit()) {
-            QMessageBox::critical(this, "Ошибка!",
-                                  "Ошибка при отправке изменений в базу данных:" + table_model_->lastError().text());
+            QMessageBox::critical(
+                this,
+                "Ошибка!",
+                "Ошибка при отправке изменений в базу данных:" + table_model_->lastError().text()
+            );
             break;
         }
 
         SetContents(index);
 
         text_painter_.Clear();
-        for (const auto &item: items_) {
+        for (const auto& item : items_) {
             text_painter_.DrawText(item);
         }
 
@@ -204,7 +226,7 @@ void MainWindow::on_print_triggered() {
     log_.Info("Print started");
 }
 
-void MainWindow::on_database_table_view_clicked(const QModelIndex &index) {
+void MainWindow::on_database_table_view_clicked(const QModelIndex& index) {
     log_.Info("On table clicked");
     SetContents(index);
     ReDrawImage();
@@ -276,32 +298,36 @@ void MainWindow::on_save_some_images_triggered() {
     ui->progress_bar->setVisible(true);
 
     int progress_index = 0;
-    for (const auto &selected_row: selected_rows) {
+    for (const auto& selected_row : selected_rows) {
         ui->progress_bar->setValue(progress_index);
         QCoreApplication::processEvents();
 
         SetContents(selected_row);
 
         text_painter_.Clear();
-        for (const auto &item: items_) {
+        for (const auto& item : items_) {
             text_painter_.DrawText(item);
         }
 
         if (text_painter_.GetResultImage().save(
-                settings_manager_.GetSettings().output_folder
-                + "/image_"
-                + items_[0].content
-                + "."
-                + settings_manager_.GetSettings().image.format
+            settings_manager_.GetSettings().output_folder
+            + "/image_"
+            + items_[0].content
+            + "."
+            + settings_manager_.GetSettings().image.format
         )) {
-            ui->statusbar->showMessage("image_"
-                                       + items_[0].content
-                                       + " успешно сохранена!");
+            ui->statusbar->showMessage(
+                "image_"
+                + items_[0].content
+                + " успешно сохранена!"
+            );
             ++progress_index;
         } else {
-            ui->statusbar->showMessage("image_"
-                                       + items_[0].content
-                                       + " не сохранена!");
+            ui->statusbar->showMessage(
+                "image_"
+                + items_[0].content
+                + " не сохранена!"
+            );
         }
     }
 
@@ -317,13 +343,46 @@ void MainWindow::on_save_some_images_triggered() {
 
 void MainWindow::ReDrawImage() {
     text_painter_.Clear();
-    for (const auto &item: items_) {
+    for (const auto& item : items_) {
         text_painter_.DrawText(item);
     }
     ui->screen->setPixmap(text_painter_.GetResultPixmap().scaled(current_image_size_, Qt::KeepAspectRatioByExpanding));
 }
 
-void MainWindow::database_table_view_data_changed(const QModelIndex &index) {
+void MainWindow::on_export_database_triggered() {
+    QFileInfo file_info = QFileDialog::getSaveFileName(
+        this,
+        tr("Экспортировать"),
+        "",
+        "Excel(*.xlsx);"
+    );
+    if(file_info.absoluteFilePath().isEmpty()) {
+        return;
+    }
+    try {
+        OpenXLSX::XLDocument document;
+        document.create(file_info.absoluteFilePath().toStdString());
+        document.workbook().addWorksheet("Report");
+        document.workbook().deleteSheet("Sheet1");
+        auto worksheet = document.workbook().worksheet("Report");
+
+        size_t rows = table_model_->rowCount();
+        size_t cols = table_model_->columnCount();
+        for (size_t row = 0; row < rows; ++row) {
+            for (size_t col = 0; col < cols; ++col) {
+                worksheet.cell(row + 1, col + 1).value() = table_model_->index(row, col).data().toString().toStdString();
+            }
+        }
+
+        document.save();
+        ui->statusbar->showMessage("Таблица успешно экспортирована");
+    } catch (const std::exception& e) {
+        // Обработать исключение (например, показать сообщение об ошибке)
+        QMessageBox::warning(this, "Ошибка!", tr("Ошибка: ")  + e.what());
+    }
+}
+
+void MainWindow::database_table_view_data_changed(const QModelIndex& index) {
     table_model_->submit();
     table_model_->select();
     SetContents(index);
@@ -349,8 +408,11 @@ void MainWindow::on_insert_same_records_triggered() {
             ui->progress_bar->setMaximum(amount - 1);
             ui->progress_bar->setVisible(true);
             for (int i = 0; i < amount; ++i) {
-                query.exec(QString("INSERT INTO %1.clients (name, phone_number, status) VALUES ('', '', false);").arg(
-                        database_.schema));
+                query.exec(
+                    QString("INSERT INTO %1.clients (name, phone_number, status) VALUES ('', '', false);").arg(
+                        database_.schema
+                    )
+                );
                 ui->progress_bar->setValue(i);
                 QCoreApplication::processEvents();
             }
@@ -360,31 +422,35 @@ void MainWindow::on_insert_same_records_triggered() {
     }
 }
 
-void MainWindow::SetContents(const QModelIndex &index) {
+void MainWindow::SetContents(const QModelIndex& index) {
     for (int i = 0; i < 3; ++i) {
         items_[i].content = table_model_->index(index.row(), i).data().toString();
     }
 }
 
 void MainWindow::on_clear_database_triggered() {
-    if (PasswordForm(settings_manager_.GetSettings().passwords, this).exec() != QDialog::Accepted){
+    if (PasswordForm(settings_manager_.GetSettings().passwords, this).exec() != QDialog::Accepted) {
         return;
     }
     QSqlQuery query(database_.db);
     QString drop_table("DROP TABLE IF EXISTS %1.%2;");
-    QString create_table("CREATE TABLE IF NOT EXISTS %1.%2\n"
-                         "(\n"
-                         "    ID           SERIAL\n"
-                         "        PRIMARY KEY,\n"
-                         "    name         VARCHAR(255),\n"
-                         "    phone_number VARCHAR(255),\n"
-                         "    status       BOOLEAN DEFAULT false\n"
-                         ");");
+    QString create_table(
+        "CREATE TABLE IF NOT EXISTS %1.%2\n"
+        "(\n"
+        "    ID           SERIAL\n"
+        "        PRIMARY KEY,\n"
+        "    name         VARCHAR(255),\n"
+        "    phone_number VARCHAR(255),\n"
+        "    status       BOOLEAN DEFAULT false\n"
+        ");"
+    );
     query.exec(drop_table.arg(database_.schema).arg("clients_backup"));
     query.exec(create_table.arg(database_.schema).arg("clients_backup"));
 
-    query.exec("INSERT INTO %1.clients_backup (id, name, phone_number, status) "
-               "SELECT * FROM %1.clients"_qs.arg(database_.schema));
+    query.exec(
+        "INSERT INTO %1.clients_backup (id, name, phone_number, status) "
+        "SELECT * FROM %1.clients"_qs.arg(database_.schema)
+    );
 
     query.exec(drop_table.arg(database_.schema).arg("clients"));
     query.exec(create_table.arg(database_.schema).arg("clients"));

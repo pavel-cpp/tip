@@ -87,6 +87,7 @@
     <addaction name="insert_single_record"/>
     <addaction name="insert_same_records"/>
     <addaction name="clear_database"/>
+    <addaction name="export_database"/>
    </widget>
    <addaction name="file_menu"/>
    <addaction name="settings_menu"/>
@@ -487,6 +488,11 @@
   <action name="clear_database">
    <property name="text">
     <string>Очистить базу данных</string>
+   </property>
+  </action>
+  <action name="export_database">
+   <property name="text">
+    <string>Экспортировать</string>
    </property>
   </action>
  </widget>
