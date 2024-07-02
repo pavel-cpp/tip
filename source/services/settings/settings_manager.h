@@ -26,6 +26,7 @@
 // Qt
 #include <QColor>
 #include <QFont>
+#include <QImage>
 #include <QPointF>
 #include <QString>
 
@@ -54,7 +55,7 @@ public:
         QString theme;
         std::array<Models::FontSettings, 3> font_settings;
         Models::Database database;
-        Models::Image image;
+        QImage image;
         Models::Passwords passwords;
 
         Settings& operator=(const Settings& other) {
@@ -93,9 +94,9 @@ private:
     const QString UPDATE_FONT_SETTINGS =
         "UPDATE %1.font_settings SET font = %2, color = %3, position_x = %4, position_y = %5, size = %6, bold = %7 WHERE id = %8;";
 
-    const QString SELECT_IMAGE = "SELECT url, format FROM %1.image WHERE id = 1;";
+    const QString SELECT_IMAGE = "SELECT base64 FROM %1.image WHERE id = 1;";
 
-    const QString UPDATE_IMAGE = "UPDATE %1.image SET url = %2, format = %3 WHERE id = 1;";
+    const QString UPDATE_IMAGE = "UPDATE %1.image SET base64 = :img WHERE id = 1;";
 
     const QString SELECT_PASSWORDS = "SELECT * FROM %1.advanced_settings_passwords;";
 

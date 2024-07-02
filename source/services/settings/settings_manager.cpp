@@ -19,8 +19,10 @@
 
 #include "settings_manager.h"
 
+#include <QBuffer>
 #include <QDir>
 #include <qfileinfo.h>
+#include <QPixmap>
 #include <QSqlRecord>
 #include <QString>
 #include <QVariant>
@@ -29,6 +31,8 @@ using std::string;
 
 // Qt
 #include <QSqlQuery>
+
+constexpr char EXTENSION[] = "WEBP";
 
 SettingsManager::SettingsManager(const QString& connection_name) {
     LoadFromIni(connection_name);
@@ -91,12 +95,14 @@ void SettingsManager::Save(int type) {
             query.exec();
         }
 
+        QByteArray image_as_bytes;
+        QBuffer buffer(&image_as_bytes);
+        buffer.open(QIODevice::WriteOnly);
+        settings_.image.save(&buffer, EXTENSION);
         query.prepare(
-            UPDATE_IMAGE
-            .arg(database_.schema)
-            .arg("\'" + settings_.image.url.toString() + "\'")
-            .arg("\'" + settings_.image.format + "\'")
+            UPDATE_IMAGE.arg(settings_.database.schema)
         );
+        query.bindValue(":img", image_as_bytes);
         query.exec();
     }
 
@@ -140,11 +146,10 @@ void SettingsManager::LoadFromDatabase() {
         if (!query.next()) {
             assert(false);
         }
-        {
-            QSqlRecord rec = query.record();
-            settings_.image.url = rec.value("url").toUrl();
-            settings_.image.format = rec.value("format").toString();
-        }
+        settings_.image.loadFromData(
+            query.value("base64").toByteArray(),
+            EXTENSION
+        );
 
         query.prepare(SELECT_PASSWORDS.arg(database_.schema));
         query.exec();

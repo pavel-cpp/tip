@@ -106,18 +106,9 @@ private slots:
     void on_save_button_clicked();
 
     /**
-     * @brief Slot for handling changes in the image_url_edit field.
-     *
-     * @param text The new text in the image_url_edit field.
+     * @brief Slot for handling the upload_button click event.
      */
-    void on_image_url_edit_textChanged(const QString &text);
-
-    /**
-     * @brief Slot for handling changes in the image_format_edit field.
-     *
-     * @param text The new text in the image_format_edit field.
-     */
-    void on_image_format_edit_textChanged(const QString &text);
+    void on_upload_button_clicked();
 
     /**
      * @brief Slot for handling the advanced_settings_button click event.

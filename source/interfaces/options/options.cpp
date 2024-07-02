@@ -62,8 +62,6 @@ Options::Options(QWidget *parent) :
     ui->example_3->setStyleSheet(QString("color: %1;\nfont-size: %2px;").arg(
             settings_buffer_.font_settings[2].color.name(QColor::HexRgb)).arg(
             settings_buffer_.font_settings[2].font.pixelSize()));
-    ui->image_url_edit->setText(settings_buffer_.image.url.toString());
-    ui->image_format_edit->setText(settings_buffer_.image.format);
 
     SetAdvancedSettingsVisible(false);
 }
@@ -137,7 +135,7 @@ void Options::on_database_edit_button_clicked() {
 }
 
 void Options::on_save_button_clicked() {
-    if (settings_manager_.GetSettings().image.url != settings_buffer_.image.url ||
+    if (settings_manager_.GetSettings().image != settings_buffer_.image ||
         settings_manager_.GetSettings().database.host != settings_buffer_.database.host ||
         settings_manager_.GetSettings().database.port != settings_buffer_.database.port ||
         settings_manager_.GetSettings().database.schema != settings_buffer_.database.schema) {
@@ -148,19 +146,30 @@ void Options::on_save_button_clicked() {
     close();
 }
 
+void Options::on_upload_button_clicked() {
+    QString path = QFileDialog::getOpenFileName(
+            this,
+            "Загрузить изображение",
+            QDir::homePath(),
+            "All files(*.*);;"
+            "JPEG(*.jpg *.jpeg);;"
+            "PNG(*.png);;"
+            "BITMAP(*.bmp);;"
+            "WEBP(*.webp)"
+        );
+    if (path.isEmpty()) {
+        return;
+    }
+    if (!settings_buffer_.image.load(path)) {
+        QMessageBox::critical(this, "Ошибка", "Файл не загружен."
+                                              "\nНе верно указан путь."
+                                              "\nИли не верное имя файла.");
+    };
+}
+
 void Options::on_path_to_edit_textChanged(const QString &text) {
     settings_buffer_.output_folder = text;
     save_type_ |= SettingsManager::SaveType::SAVE_GENERAL;
-}
-
-void Options::on_image_url_edit_textChanged(const QString &text) {
-    settings_buffer_.image.url = text;
-    save_type_ |= SettingsManager::SaveType::SAVE_SYNCING;
-}
-
-void Options::on_image_format_edit_textChanged(const QString &text) {
-    settings_buffer_.image.format = text;
-    save_type_ |= SettingsManager::SaveType::SAVE_SYNCING;
 }
 
 void Options::SetAdvancedSettingsVisible(bool state) {
@@ -185,10 +194,7 @@ void Options::SetAdvancedSettingsVisible(bool state) {
 
     ui->image_line->setVisible(state);
     ui->image_label->setVisible(state);
-    ui->image_format_label->setVisible(state);
-    ui->image_format_edit->setVisible(state);
-    ui->image_url_label->setVisible(state);
-    ui->image_url_edit->setVisible(state);
+    ui->upload_button->setVisible(state);
 }
 
 void Options::on_advanced_settings_button_clicked() {

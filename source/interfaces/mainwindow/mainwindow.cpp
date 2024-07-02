@@ -21,7 +21,6 @@
 #include <ui_mainwindow.h>
 
 // Services
-#include <services/image-downloader/image_downloader.h>
 #include <services/image-printer/image_printer.h>
 #include <services/theme-loader/theme_loader.h>
 
@@ -92,28 +91,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->database_table_view->addActions(ui->menubar->actions());
 
-    if (!ImageDownloader::FetchImage(
-        settings_manager_.GetSettings().consts.source_image_path + "." +
-        settings_manager_.GetSettings().image.format,
-        settings_manager_.GetSettings().image.url
-    )) {
-        QMessageBox::warning(this, "Предупреждение!", "Не удалось загрузить изображение!\nНе верно указана ссылка");
-    }
-
-    QImage image;
-
-    if (!image.load(
-        settings_manager_.GetSettings().consts.source_image_path + "." +
-        settings_manager_.GetSettings().image.format
-    )) {
-        QMessageBox::warning(
-            this,
-            "Предупреждение!",
-            "Не удалось открыть изображение!\nНе верно указан формат изображения или ссылка"
-        );
-    }
-
-    text_painter_.SetImage(image);
+    text_painter_.SetImage(settings_manager_.GetSettings().image);
 
     for (int i = 0; i < 3; ++i) {
         items_[i].options = settings_manager_.GetSettings().font_settings[i];
@@ -164,8 +142,7 @@ void MainWindow::on_save_image_triggered() {
         settings_manager_.GetSettings().output_folder
         + "/image_"
         + items_[0].content
-        + "."
-        + settings_manager_.GetSettings().image.format
+        + ".jpeg"
     );
     if (status) {
         ui->statusbar->showMessage(
@@ -313,8 +290,7 @@ void MainWindow::on_save_some_images_triggered() {
             settings_manager_.GetSettings().output_folder
             + "/image_"
             + items_[0].content
-            + "."
-            + settings_manager_.GetSettings().image.format
+            + ".jpeg"
         )) {
             ui->statusbar->showMessage(
                 "image_"
