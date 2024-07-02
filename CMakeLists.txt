@@ -106,7 +106,6 @@ add_executable(
     source/services/text-painter/text_painter.cpp
     source/services/theme-loader/theme_loader.cpp
     source/services/image-printer/image_printer.cpp
-    source/services/image-downloader/image_downloader.cpp
     source/resources/icon.rc
 )
 
@@ -178,6 +177,21 @@ if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
             "${QT_INSTALL_PATH}/plugins/printsupport"
             "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/printsupport")
     endif ()
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+        "${QT_INSTALL_PATH}/plugins/imageformats/qjpeg.dll"
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/imageformats/qjpeg.dll"
+    )
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+        "${QT_INSTALL_PATH}/plugins/imageformats/qwbmp.dll"
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/imageformats/qwbmp.dll"
+    )
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+        "${QT_INSTALL_PATH}/plugins/imageformats/qwebp.dll"
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/imageformats/qwebp.dll"
+    )
     foreach (QT_LIB ${QT_COMPONENTS})
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy
