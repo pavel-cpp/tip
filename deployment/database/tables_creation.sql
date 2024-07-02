@@ -30,11 +30,10 @@ create table if not exists main.font_settings
 
 create table if not exists main.image
 (
-    url    text,
+    base64    bytea,
     id     serial
         constraint image_pk
             primary key,
-    format text
 );
 
 create table if not exists main.advanced_settings_passwords
