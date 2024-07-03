@@ -23,7 +23,7 @@
 1. Install Cmake
 2. Download & Install **[Qt5][4]**
 3. ```sh
-   cmake -DCMAKE_BUILD_TYPE={type} -DCMAKE_PREFIX_PATH=path/to/Qt5 -G {generator} -B ./cmake-build-{type} 
+   cmake -DCMAKE_BUILD_TYPE={type} -QT5_DIR=path/to/Qt5 -DOPEN_XLSX_DIR=path/to/OpenXLSX -G {generator} -B ./cmake-build-{type} 
    cmake --build ./cmake-build-{type} --target TIP -j 14
    ```
 
@@ -32,7 +32,7 @@
 2. Install **[Inno Download Plugin][6]**
 3. To activate deployment mode, add the following flag to the CMake configuration:
    ```sh
-   cmake -DCMAKE_BUILD_TYPE={type} -DCMAKE_PREFIX_PATH=path/to/Qt5 "-DDEPLOY_DEPENDENCY=\"path/to/idp.iss\"" -G {generator} -B ./cmake-build-{type} 
+   cmake -DCMAKE_BUILD_TYPE={type} -QT5_DIR=path/to/Qt5 -DOPEN_XLSX_DIR=path/to/OpenXLSX "-DDEPLOY_DEPENDENCY=\"path/to/idp.iss\"" -G {generator} -B ./cmake-build-{type} 
    cmake --build ./cmake-build-{type} --target TIP -j 14
    ```
    or run [windows_deploy.bat][8] after building the project and enter `"path/to/idp.iss"` as an argument.
