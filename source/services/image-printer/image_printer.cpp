@@ -19,6 +19,8 @@
 
 #include "image_printer.h"
 
+#include <stdexcept>
+
 ImagePrinter::ImagePrinter(QSize size_of_images, QPrinter *printer) :
         frame_(SPACING, SPACING, size_of_images.width(), size_of_images.height()),
         printer_(printer),

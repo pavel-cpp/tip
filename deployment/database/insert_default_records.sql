@@ -20,5 +20,5 @@ VALUES (DEFAULT, 'Arial', '#000000', 0, 0, 50, false),
        (DEFAULT, 'Arial', '#000000', 100, 100, 50, false),
        (DEFAULT, 'Arial', '#000000', 200, 200, 50, false);
 
-INSERT INTO main.image (url, id, format)
-VALUES (null, DEFAULT, null);
+INSERT INTO main.image (base64, id)
+VALUES (null, DEFAULT);

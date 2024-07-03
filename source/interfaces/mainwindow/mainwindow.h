@@ -152,6 +152,8 @@ private slots:
      */
     void on_clear_database_triggered();
 
+    void on_export_database_triggered();
+
     /**
      * @brief Slot for handling changes in the database table view data.
      *
