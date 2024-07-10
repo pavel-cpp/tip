@@ -33,7 +33,7 @@ create table if not exists main.image
     base64    bytea,
     id     serial
         constraint image_pk
-            primary key,
+            primary key
 );
 
 create table if not exists main.advanced_settings_passwords
