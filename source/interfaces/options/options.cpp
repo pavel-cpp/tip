@@ -123,7 +123,7 @@ void Options::on_change_button_ex_3_clicked() {
 }
 
 void Options::on_change_text_position_button_clicked() {
-    if (TextPositionSelector(settings_buffer_.font_settings, this).exec()) {
+    if (TextPositionSelector(settings_buffer_.font_settings, settings_buffer_.image, this).exec()) {
         save_type_ |= SettingsManager::SaveType::SAVE_SYNCING;
     }
 }

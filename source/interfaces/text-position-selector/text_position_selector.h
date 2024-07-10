@@ -52,7 +52,7 @@ public:
      * @param font_settings Reference to an array of FontSettings objects where the settings will be stored.
      * @param parent Pointer to the parent QWidget. Default is nullptr.
      */
-    explicit TextPositionSelector(std::array<Models::FontSettings, 3> &font_settings, QDialog *parent = nullptr);
+    explicit TextPositionSelector(std::array<Models::FontSettings, 3> &font_settings, const QImage& img, QDialog *parent = nullptr);
 
     /**
      * @brief Destroy the Text Position Selector object
@@ -82,6 +82,5 @@ private:
     QGraphicsScene scene_; ///< QGraphicsScene object for displaying the graphical interface.
 
     std::array<QGraphicsTextItem, 3> items_; ///< Array of QGraphicsTextItem objects for displaying the text items.
-
     std::array<Models::FontSettings, 3> &font_settings_; ///< Reference to the array of FontSettings objects where the settings are stored.
 };

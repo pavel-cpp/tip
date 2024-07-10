@@ -20,14 +20,12 @@
 #include "text_position_selector.h"
 #include "ui_text_position_selector.h"
 
-TextPositionSelector::TextPositionSelector(std::array<Models::FontSettings, 3> &font_settings, QDialog *parent) :
+TextPositionSelector::TextPositionSelector(std::array<Models::FontSettings, 3> &font_settings, const QImage& img, QDialog *parent) :
         QDialog(parent),
         ui(new Ui::TextPositionSelector),
         font_settings_(font_settings),
         scene_(this) {
     ui->setupUi(this);
-
-    QImage img(Constants().source_image_path);
     scene_.setSceneRect(0, 0, img.width(), img.height());
     ui->graphics_view->setFixedSize(img.size());
     scene_.addPixmap(QPixmap::fromImage(img));
